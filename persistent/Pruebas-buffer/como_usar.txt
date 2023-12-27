@@ -1,0 +1,2 @@
+Mientras corre el radio.py, si se ejecuta este script se van recibiendo muestras de a una cantidad dada por el tamaño del buffer. El tamaño del buffer no es exactamante la cantidad de muestras que se están recibiendo. Hay que ver cual es la correspondencia con el tmaño del buffer y la cantidad de muestras que agarra (cuando es 2 millones en el buffer agarra 1517). 
+El script tiene que ejcutarse antes de que se complete el buffer porque sino se corta la ejecución del radio.py (porque no se consume el buffer). 

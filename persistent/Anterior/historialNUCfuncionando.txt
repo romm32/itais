@@ -1,0 +1,5 @@
+    1  osmocom_fft
+    2  .gr-ais/apps/ais_rx / s osmocom
+    3  /.gr-ais/apps/ais_rx -s osmocom
+    4  ./gr-ais/apps/ais_rx -s osmocom
+    5  history > historialNUCfuncionando.txt 
