@@ -1,0 +1,562 @@
+options:
+  parameters:
+    author: gnuradio
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: sensado
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Not titled yet
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '32000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 12]
+    rotation: 0
+    state: enabled
+- name: analog_noise_source_x_0
+  id: analog_noise_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '0.001'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    noise_type: analog.GR_GAUSSIAN
+    seed: '42'
+    type: complex
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 284.0]
+    rotation: 0
+    state: true
+- name: analog_sig_source_x_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '0.001'
+    comment: ''
+    freq: '1000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_TRI_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 60.0]
+    rotation: 0
+    state: disabled
+- name: blocks_complex_to_mag_0_0
+  id: blocks_complex_to_mag
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 208.0]
+    rotation: 0
+    state: true
+- name: blocks_null_sink_0
+  id: blocks_null_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_sink: '[[0,],]'
+    comment: ''
+    num_inputs: '1'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 232.0]
+    rotation: 0
+    state: true
+- name: blocks_null_sink_0_0
+  id: blocks_null_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_sink: '[[0,],]'
+    comment: ''
+    num_inputs: '1'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 328.0]
+    rotation: 0
+    state: true
+- name: epy_block_1
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\nimport pmt\nimport zmq\nimport numpy as np\nimport\
+      \ math\nfrom datetime import datetime, timedelta\nimport numpy as np\n\n\nclass\
+      \ blk(gr.sync_block):  \n    \"\"\"Embedded Python Block example - a simple\
+      \ multiply const\"\"\"\n\n    def __init__(self, designator=\"A\"):  #\xA1\xA1\
+      \xA1 capaz hay que hacer algo distinto cuando tenemos un canal de cuando tenemos\
+      \ dos canales!!!\n        \"\"\"arguments to this function show up as parameters\
+      \ in GRC\"\"\"\n        gr.sync_block.__init__(\n            self,\n       \
+      \     name='potumbral',   # will show up in GRC\n            in_sig=[np.complex64],\n\
+      \            out_sig=[(np.complex64,1), (np.complex64,1), (np.float32,2)] #[(np.complex64,2)]\
+      \ para probar, dado que tenemos una salida con dos valores\n        )\n    \
+      \    self.N_A = 1000 #Cantidad de muestras correspondiente a 20ms\n        self.subintervalos_A\
+      \ = 0\n        self.N_muestras_A = []\n        self.pow_4s_A = np.zeros(200)\n\
+      \        \n        self.N_B = 1000 #Cantidad de muestras correspondiente a 20ms\n\
+      \        self.subintervalos_B = 0\n        self.N_muestras_B = []\n        self.pow_4s_B\
+      \ = np.zeros(200)\n        \n        self.pow_minuto_A = np.full(15, 2e-14)\
+      \ #Se inicializa el arreglo para que el umbral de -107dBm=2e-14\n        self.pow_minuto_B\
+      \ = np.full(15, 2e-14) #Se inicializa el arreglo para que el umbral de -107dBm=2e-14\
+      \ \n        \n        self.arr_pow_actual_A = np.full(5, 2e-14) #Se inicializa\
+      \ el arreglo que determina la potencia actual con el promedio. Se toma un promedio\
+      \ movil del ultimo ms (5 muestras) iniciando con una potencia inicial igual\
+      \ al umbral minimo  \n        self.arr_pow_actual_B = np.full(5, 2e-14) #Se\
+      \ inicializa el arreglo que determina la potencia actual con el promedio. Se\
+      \ toma un promedio movil del ultimo ms (5 muestras) iniciando con una potencia\
+      \ inicial igual al umbral minimo  \n        \n        self.umbral_A = 2e-14\n\
+      \        self.umbral_B = 2e-14\n        \n        self.umb_y_pow_actual_A =\
+      \ np.zeros(2) #Se crea este arreglo que es lo que se le pasa al transmisor.\
+      \ Un umbral y una potencia actual en ese orden para que sepa interpretarlo.\n\
+      \        self.salida_db_A = np.zeros(2) #Se crea este arreglo que es lo que\
+      \ se le pasa al transmisor. Un umbral y una potencia actual en ese orden para\
+      \ que sepa interpretarlo.\n        \n        self.umb_y_pow_actual_B = np.zeros(2)\
+      \ #Se crea este arreglo que es lo que se le pasa al transmisor. Un umbral y\
+      \ una potencia actual en ese orden para que sepa interpretarlo.\n        self.salida_db_B\
+      \ = np.zeros(2) #Se crea este arreglo que es lo que se le pasa al transmisor.\
+      \ Un umbral y una potencia actual en ese orden para que sepa interpretarlo.\n\
+      \        self.slots_per_minute = 2250\n        self.slot_duration = 60/2250\n\
+      \        self.samples_per_slot = int(self.slot_duration*50000)\n        \n \
+      \       \n        self.designator = designator\n        \n        self.pow_actual_A\
+      \ = 1\n        self.umbral_actual_A = 1\n        \n        self.pow_actual_B\
+      \ = 1\n        self.umbral_actual_B = 1\n        \n        self.salida_A = np.zeros(2)\n\
+      \        self.salida_B = np.zeros(2)\n        \n        self.power_A = 2e-7\n\
+      \        self.power_B = 2e-7\n        \n        self.pow_avg_A = 2e-7\n    \
+      \    self.pow_avg_B = 2e-7\n        \n        self.slot_actual_A = 0 #Variable\
+      \ que se utiliza para saber en qu\xE9 slot del frame actual se est\xE1\n   \
+      \     self.slot_actual_B = 0 #Variable que se utiliza para saber en qu\xE9 slot\
+      \ del frame actual se est\xE1\n        \n        self.contador_muestra_A = 0\
+      \ #Variable que permite determinar qu\xE9 muestra del slot actual se est\xE1\
+      \ procesando  \n        self.contador_muestra_B = 0 #Variable que permite determinar\
+      \ qu\xE9 muestra del slot actual se est\xE1 procesando\n        \n        self.intervalo_evaluado_A\
+      \ = np.full(11, False) #Se define el arreglo que contendr\xE1 los \xFAltimos\
+      \ 11 intervalos de 100 microsegundos (0,1 ms). Esta es la cantidad de intervalos\
+      \ que entra en el rango donde se debe medir la potencia. Se toman intervalos\
+      \ de esa longitud pues es la longitud que se usa para calcular la potencia (la\
+      \ potencia es el promedio de los \xFAltimos 100 microsegundos).\n        self.intervalo_evaluado_B\
+      \ = np.full(11, False) #Se define el arreglo que contendr\xE1 los \xFAltimos\
+      \ 11 intervalos de 100 microsegundos (0,1 ms). Esta es la cantidad de intervalos\
+      \ que entra en el rango donde se debe medir la potencia. Se toman intervalos\
+      \ de esa longitud pues es la longitud que se usa para calcular la potencia (la\
+      \ potencia es el promedio de los \xFAltimos 100 microsegundos).\n        \n\
+      \        self.puedo_usar_A = -1 #Variable que determina si puede utilizarse\
+      \ o no el slot actual, inicializada con -1 (no se puede transmitir)\n      \
+      \  self.puedo_usar_B = -1 #Variable que determina si puede utilizarse o no el\
+      \ slot actual, inicializada con -1 (no se puede transmitir)\n        \n    \
+      \    self.salida_slot_A = np.zeros(2) #Tupla usada para indicar si en e canal\
+      \ el slot actual puede usarse para transmitir o no\n        self.salida_slot_B\
+      \ = np.zeros(2) #Tupla usada para indicar si en e canal el slot actual puede\
+      \ usarse para transmitir o no\n                \n        self.slots_candidatos_A\
+      \ = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] #Arreglo con los slots donde el\
+      \ transmisor desea transmitir\n        self.slots_candidatos_B = [10, 11, 12,\
+      \ 13, 14, 15, 16, 17, 18, 19] #Arreglo con los slots donde el transmisor desea\
+      \ transmitir\n        \n        self.slots_recibidos = []\n        \n    def\
+      \ work(self, input_items, output_items):\n        \"\"\"example: multiply with\
+      \ constant\"\"\"\n        current_utc_time = datetime.utcnow()\n        start_of_minute\
+      \ = current_utc_time.replace(second=0, microsecond=0)\n        time_elapsed\
+      \ = current_utc_time - start_of_minute\n        milliseconds_elapsed = time_elapsed.total_seconds()\
+      \ * 1000\n        slot_index = (milliseconds_elapsed)*self.slots_per_minute/60000\
+      \ #Cantidad de slots desde que empez\xF3 el minuto.\n\n        #print(\"slot\
+      \ actual: \", self.slot_actual_A)\n        #print(\"contador: \", self.contador_muestra_A)\n\
+      \        \n        if milliseconds_elapsed > 59750:\n        \tprint(len(self.slots_recibidos))\n\
+      \        \tself.slots_recibidos = []\n        \n        num_taps = len(input_items[0])\
+      \  # Get the number of taps received\n        \n        if (self.designator\
+      \ == \"A\"):\n        \tself.slot_actual_A = int(slot_index) #Se guarda el slot\
+      \ actual donde estamos parados\n        \tself.slots_recibidos.append(self.slot_actual_A)\n\
+      \        \tself.contador_muestra_A = int((slot_index-self.slot_actual_A)*self.samples_per_slot)\
+      \ #Cantidad de tiempo que pas\xF3 desde que empez\xF3 el slot en cantidad de\
+      \ muestras. Es decir si 1 sot son 1333 muestras, se guarda cuantas muestras\
+      \ hay en 0.(algo) slots.\n        \tfor i in range(0, len(input_items[0])):\n\
+      \        \t\tself.contador_muestra_A += 1\n        \t\tmuestra_actual = input_items[0][i]\n\
+      \        \t\tself.power_A = np.abs(muestra_actual)**2 #Paso la muestra actual\
+      \ compleja a un real con la potencia del complejo. Esto permite acumular las\
+      \ muestras por un periodo de tiempo arbitrario (que definimos como 0,1ms o 100\
+      \ micro) y luego tomar un promedio para obtener la potencia atual del canal.\n\
+      \        \t\t#Para tomar el promedio de la potencia actual en el canal se toma\
+      \ un \"promedio movil\". En el for se rotan los valores del arreglo un lugar\
+      \ para la derecha excepto el primero que se va a sobreescribir. Si por ejemplo\
+      \ en el arreglo teniamos arr=[1, 2, 3, 4] despues del for va a quedar arr=[1,1,2,3].\
+      \ Despu\xE9s se sobreescribe el primer elemento y se vuelve a calcular el promedio.\n\
+      \        \t\t\n        \t\tfor j in range(len(self.arr_pow_actual_A) - 1, 0,\
+      \ -1): \n        \t\t\tself.arr_pow_actual_A[j] = self.arr_pow_actual_A[j -\
+      \ 1]\t\n        \t\t\n        \t\tself.arr_pow_actual_A[0] = self.power_A\n\
+      \        \t\tself.pow_actual_A = np.mean(self.arr_pow_actual_A) #La potencia\
+      \ actual del canal es el promedio de la potencia del ultimo ms del canal\n \
+      \       \t\tself.umbral_actual_A = (10*math.log10(self.umbral_A/0.001)) + 10\
+      \ #Se le suma 10dB al umbral, el umbral actual es el ultimo calculado que se\
+      \ actualiza cada 4s. \n        \t\t\n        \t\tself.umb_y_pow_actual_A[0]\
+      \ = self.umbral_actual_A\n        \t\tself.umb_y_pow_actual_A[1] = self.pow_actual_A\n\
+      \        \t\t\n        \t\tself.salida_A = self.umb_y_pow_actual_A #Se setea\
+      \ el parametro que se utilizara como salida, se saca siempre un arreglo con\
+      \ 2 elementos, umbral y potencia actuales (en ese orden). \n        \t\tself.salida_db_A[0]\
+      \ = self.umbral_actual_A #*\n        \t\tif self.pow_actual_A == 0:\n      \
+      \  \t\t\tself.pow_actual_A = 1e-20\n        \t\t\n        \t\tself.salida_db_A[1]\
+      \ = 10*math.log10(self.pow_actual_A/0.001) # preguntar si va en dbm o no\n \
+      \       \t\t\n        \t\tself.N_muestras_A = np.append(self.N_muestras_A, self.power_A)\
+      \ #Se acumulan las 1000 muestras para formar los 20ms, esto se acumula independientemente\
+      \ del calculo de la potencia actual del canal.\n        \t\tself.N_A = self.N_A\
+      \ - 1\n        \t\tif self.N_A == 0: #Si ya acumule la potencia de los ultimos\
+      \ 20 ms.\n        \t\t\tself.pow_avg_A = np.mean(self.N_muestras_A) #Los 200\
+      \ valores de potencia que se acumulan para formar los 4s es el promedio de los\
+      \ 20ms.\n        \t\t\tself.N_muestras_A = []\n        \t\t\tself.N_A = 1000\n\
+      \        \t\t\tself.pow_4s_A[self.subintervalos_A] = self.pow_avg_A #Se acumulan\
+      \ los 200 valores de potencia para llegar a 4s.\n        \t\t\tself.subintervalos_A\
+      \ += 1\n        \t\t\t#print(self.subintervalos_A)\n        \t\tif self.subintervalos_A\
+      \ == 200: #Si complet\xE9 los 200 subintervalos de 20ms tengo 4s y agarro el\
+      \ m\xEDnimo de eso.\n        \t\t\tpo_4_A = np.min(self.pow_4s_A)\n        \t\
+      \t\t#El umbral del canal se actualiza cada 4s y esto se hace tomando el minimo\
+      \ entre los ultimos 15 valores de 4s de potencia que se acumularon. En otras\
+      \ palabras, en el ultimo minuto se acumulan 15 muestras de potencia de 4s, se\
+      \ toma entonces el minimo de esas 15 como el nuevo valor de umbral. Para actualizar\
+      \ cuales son los ultimos 15 valores de 4s, se hace el mismo procedimiento con\
+      \ el for que con arr_pow_actual, o sea, se shiftea todo el arreglo un lugar\
+      \ para la derecha excepto la primera posicion y se sobreescribe dicho valor.\n\
+      \        \t\t\tfor t in range(len(self.pow_minuto_A) - 1, 0, -1):\n        \t\
+      \t\t\tself.pow_minuto_A[t] = self.pow_minuto_A[t - 1]\n        \t\t\tself.pow_minuto_A[0]\
+      \ = po_4_A\n        \t\t\tself.umbral_A = np.min(self.pow_minuto_A)\n      \
+      \  \t\t\tif self.umbral_A < 2e-14: #Si la potencia es menor a -107dBm se pone\
+      \ en -107dBm.\n        \t\t\t\tself.umbral_A = 2e-14\n        \t\t\telif self.umbral_A\
+      \ > 1.9e-5: #Si la potencia es mayor a -17dBm se pone en -17dBm (porque se suma\
+      \ 10dB despu\xE9s).\n        \t\t\t\tself.umbral_A = 1.9e-5\n        \t\t\t\
+      self.subintervalos_A = 0 \n        \t\t\n        \t\tif self.slot_actual_A in\
+      \ self.slots_candidatos_A: #Nos fijamos si estamos en un slot en donde se desee\
+      \ transmitir.\n        \t\t\tif self.contador_muestra_A >= 41 and self.contador_muestra_A\
+      \ < 99: #Nos fijamos si estamos en una muestra donde se debe medir el canal\
+      \ para determinar si el slot est\xE1 libre o en uso.\n        \t\t\t\tfor r\
+      \ in range(len(self.intervalo_evaluado_A) - 1, 0, -1):\n        \t\t\t\t\tself.intervalo_evaluado_A[r]\
+      \ = self.intervalo_evaluado_A[r - 1]\n        \t\t\t\tself.intervalo_evaluado_A[0]\
+      \ = self.salida_db_A[1] < self.salida_db_A[0]\n        \t\t\t\t\n        \t\t\
+      \telif self.contador_muestra_A == 99: #Si ya se recorrieron todas las muestras\
+      \ donde se debe evaluar el slot, ya se actualizaron las 11 entradas del arreglo\
+      \ y se puede determinar si el slot est\xE1 libre o no.\n        \t\t\t\tself.puedo_usar_A\
+      \ = np.sum(self.intervalo_evaluado_A) == 11 #Si las 11 entradas son True (suma\
+      \ 11), la potencia es menor al umbral en todo el tramo y se puede usar ese slot,\
+      \ est\xE1 libre.\n        \t\t\t\t\n        \t\t\telif self.contador_muestra_A\
+      \ == 120:\n        \t\t\t\tself.puedo_usar_A = -1\n        \t\t\tself.salida_slot_A[1]\
+      \ = self.puedo_usar_A #Se fija si el slot est\xE1 libre o no en la salida.\n\
+      \        \t\t\tself.salida_slot_A[0] = self.slot_actual_A #Se fija el numero\
+      \ de slot en la salida\n        \t\t\t#if self.contador_muestra_A == 99:\n \
+      \       \t\t\t#\tprint(\"u \", self.salida_db_A[0], \"ints \", self.intervalo_evaluado_A,\
+      \ \"sal \", self.salida_slot_A)\n        \t\t\t\n        \t\tif self.contador_muestra_A\
+      \ == self.samples_per_slot: #Si la muestra es la \xFAltima muestra del slot,\
+      \ se debe aumentar en 1 el slot y poner la muestra actual en 0.\n        \t\t\
+      \tself.contador_muestra_A = 0\n        \t\t\tif self.slot_actual_A == 2250:\
+      \ #Si estamos en la \xFAltima muestra del \xFAltimo slot, en vez de aumentar\
+      \ en uno el slot actual, debemos volver a 0 el slot.\n        \t\t\t\tself.slot_actual_A\
+      \ = 0\n        \t\t\telse:\n        \t\t\t\tself.slot_actual_A += 1\n      \
+      \  \t\t\tself.slots_recibidos.append(self.slot_actual_A)\n        \t\t\t\t\n\
+      \t\t\t\n        \t\toutput_items[0][i] = self.salida_db_A[0]\n        \t\toutput_items[1][i]\
+      \ = self.salida_db_A[1]\n        \t\toutput_items[2][i] = self.salida_slot_A\n\
+      \        \n        \n        \n        if (self.designator == \"B\"):\n    \
+      \    \tself.slot_actual_B = int(slot_index) #Se guarda el slot actual donde\
+      \ estamos parados\n        \tself.contador_muestra_B = int((slot_index-self.slot_actual_B)*self.samples_per_slot)\
+      \ #Cantidad de tiempo que pas\xF3 desde que empez\xF3 el slot en cantidad de\
+      \ muestras. Es decir si 1 sot son 1333 muestras, se guarda cuantas muestras\
+      \ hay en 0.(algo) slots.\n        \tfor i in range(0, len(input_items[0])):\n\
+      \        \t\tself.contador_muestra_B += 1\n        \t\tmuestra_actual = input_items[0][i]\n\
+      \        \t\tself.power_B = np.abs(muestra_actual)**2 #Paso la muestra actual\
+      \ compleja a un real con la potencia del complejo. Esto permite acumular las\
+      \ muestras por un periodo de tiempo arbitrario (que definimos como 0,1ms o 100\
+      \ micro) y luego tomar un promedio para obtener la potencia atual del canal.\n\
+      \        \t\t#Para tomar el promedio de la potencia actual en el canal se toma\
+      \ un \"promedio movil\". En el for se rotan los valores del arreglo un lugar\
+      \ para la derecha excepto el primero que se va a sobreescribir. Si por ejemplo\
+      \ en el arreglo teniamos arr=[1, 2, 3, 4] despues del for va a quedar arr=[1,1,2,3].\
+      \ Despu\xE9s se sobreescribe el primer elemento y se vuelve a calcular el promedio.\n\
+      \        \t\t\n        \t\tfor j in range(len(self.arr_pow_actual_B) - 1, 0,\
+      \ -1): \n        \t\t\tself.arr_pow_actual_B[j] = self.arr_pow_actual_B[j -\
+      \ 1]\t\n        \t\t\n        \t\tself.arr_pow_actual_B[0] = self.power_B\n\
+      \        \t\tself.pow_actual_B = np.mean(self.arr_pow_actual_B) #La potencia\
+      \ actual del canal es el promedio de la potencia del ultimo ms del canal\n \
+      \       \t\tself.umbral_actual_B = (10*math.log10(self.umbral_B/0.001)) + 10\
+      \ #Se le suma 10dB al umbral, el umbral actual es el ultimo calculado que se\
+      \ actualiza cada 4s. \n        \t\t\n        \t\tself.umb_y_pow_actual_B[0]\
+      \ = self.umbral_actual_B\n        \t\tself.umb_y_pow_actual_B[1] = self.pow_actual_B\n\
+      \        \t\t\n        \t\tself.salida_B = self.umb_y_pow_actual_B #Se setea\
+      \ el parametro que se utilizara como salida, se saca siempre un arreglo con\
+      \ 2 elementos, umbral y potencia actuales (en ese orden). \n        \t\tself.salida_db_B[0]\
+      \ = self.umbral_actual_B #*\n        \t\tif self.pow_actual_B == 0:\n      \
+      \  \t\t\tself.pow_actual_B = 1e-20\n        \t\t\n        \t\tself.salida_db_B[1]\
+      \ = 10*math.log10(self.pow_actual_B/0.001) # preguntar si va en dbm o no\n \
+      \       \t\t\n        \t\tself.N_muestras_B = np.append(self.N_muestras_B, self.power_B)\
+      \ #Se acumulan las 1000 muestras para formar los 20ms, esto se acumula independientemente\
+      \ del calculo de la potencia actual del canal.\n        \t\tself.N_B = self.N_B\
+      \ - 1\n        \t\tif self.N_B == 0: #Si ya acumule la potencia de los ultimos\
+      \ 20 ms.\n        \t\t\tself.pow_avg_B = np.mean(self.N_muestras_B) #Los 200\
+      \ valores de potencia que se acumulan para formar los 4s es el promedio de los\
+      \ 20ms.\n        \t\t\tself.N_muestras_B = []\n        \t\t\tself.N_B = 1000\n\
+      \        \t\t\tself.pow_4s_B[self.subintervalos_B] = self.pow_avg_B #Se acumulan\
+      \ los 200 valores de potencia para llegar a 4s.\n        \t\t\tself.subintervalos_B\
+      \ += 1\n        \t\t\t#print(self.subintervalos_B)\n        \t\tif self.subintervalos_B\
+      \ == 200: #Si complet\xE9 los 200 subintervalos de 20ms tengo 4s y agarro el\
+      \ m\xEDnimo de eso.\n        \t\t\tpo_4_B = np.min(self.pow_4s_B)\n        \t\
+      \t\t#El umbral del canal se actualiza cada 4s y esto se hace tomando el minimo\
+      \ entre los ultimos 15 valores de 4s de potencia que se acumularon. En otras\
+      \ palabras, en el ultimo minuto se acumulan 15 muestras de potencia de 4s, se\
+      \ toma entonces el minimo de esas 15 como el nuevo valor de umbral. Para actualizar\
+      \ cuales son los ultimos 15 valores de 4s, se hace el mismo procedimiento con\
+      \ el for que con arr_pow_actual, o sea, se shiftea todo el arreglo un lugar\
+      \ para la derecha excepto la primera posicion y se sobreescribe dicho valor.\n\
+      \        \t\t\tfor t in range(len(self.pow_minuto_B) - 1, 0, -1):\n        \t\
+      \t\t\tself.pow_minuto_B[t] = self.pow_minuto_B[t - 1]\n        \t\t\tself.pow_minuto_B[0]\
+      \ = po_4_B\n        \t\t\tself.umbral_B = np.min(self.pow_minuto_B)\n      \
+      \  \t\t\tif self.umbral_B < 2e-14: #Si la potencia es menor a -107dBm se pone\
+      \ en -107dBm.\n        \t\t\t\tself.umbral_B = 2e-14\n        \t\t\telif self.umbral_B\
+      \ > 1.9e-5: #Si la potencia es mayor a -17dBm se pone en -17dBm (porque se suma\
+      \ 10dB despu\xE9s).\n        \t\t\t\tself.umbral_B = 1.9e-5\n        \t\t\t\
+      self.subintervalos_B = 0 \n        \t\t\n        \t\tif self.slot_actual_B in\
+      \ self.slots_candidatos_B: #Nos fijamos si estamos en un slot en donde se desee\
+      \ transmitir.\n        \t\t\tif self.contador_muestra_B >= 41 and self.contador_muestra_B\
+      \ < 99: #Nos fijamos si estamos en una muestra donde se debe medir el canal\
+      \ para determinar si el slot est\xE1 libre o en uso.\n        \t\t\t\tfor r\
+      \ in range(len(self.intervalo_evaluado_B) - 1, 0, -1):\n        \t\t\t\t\tself.intervalo_evaluado_B[r]\
+      \ = self.intervalo_evaluado_B[r - 1]\n        \t\t\t\tself.intervalo_evaluado_B[0]\
+      \ = self.salida_db_B[1] < self.salida_db_B[0]\n        \t\t\t\t\n        \t\t\
+      \telif self.contador_muestra_B == 99: #Si ya se recorrieron todas las muestras\
+      \ donde se debe evaluar el slot, ya se actualizaron las 11 entradas del arreglo\
+      \ y se puede determinar si el slot est\xE1 libre o no.\n        \t\t\t\tself.puedo_usar_B\
+      \ = np.sum(self.intervalo_evaluado_B) == 11 #Si las 11 entradas son True (suma\
+      \ 11), la potencia es menor al umbral en todo el tramo y se puede usar ese slot,\
+      \ est\xE1 libre.\n        \t\t\t\t\n        \t\t\telif self.contador_muestra_B\
+      \ == 120:\n        \t\t\t\tself.puedo_usar_B = -1\n        \t\t\tself.salida_slot_B[1]\
+      \ = self.puedo_usar_B #Se fija si el slot est\xE1 libre o no en la salida.\n\
+      \        \t\t\tself.salida_slot_B[0] = self.slot_actual_B #Se fija el numero\
+      \ de slot en la salida\n        \t\t\tif self.contador_muestra_B == 99:\n  \
+      \      \t\t\t\tprint(\"u \", self.salida_db_B[0], \"ints \", self.intervalo_evaluado_B,\
+      \ \"sal \", self.salida_slot_B)\n        \t\t\t\n        \t\tif self.contador_muestra_B\
+      \ == self.samples_per_slot: #Si la muestra es la \xFAltima muestra del slot,\
+      \ se debe aumentar en 1 el slot y poner la muestra actual en 0.\n        \t\t\
+      \tself.contador_muestra_B = 0\n        \t\t\tif self.slot_actual_B == 2250:\
+      \ #Si estamos en la \xFAltima muestra del \xFAltimo slot, en vez de aumentar\
+      \ en uno el slot actual, debemos volver a 0 el slot.\n        \t\t\t\tself.slot_actual_B\
+      \ = 0\n        \t\t\telse:\n        \t\t\t\tself.slot_actual_B += 1\n      \
+      \  \t\t\t\t\n        \t\tif self.contador_muestra_B == 0:\n        \t\t\tprint(\"\
+      salida\", self.salida_slot_B)\n\t\t\t\n        \t\toutput_items[0][i] = self.salida_db_B[0]\n\
+      \        \t\toutput_items[1][i] = self.salida_db_B[1]\n        \t\toutput_items[2][i]\
+      \ = self.salida_slot_B\n        \t\t\n        return len(output_items[0]) \n\
+      \        \n        \n        \n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    designator: '''A'''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('potumbral', 'blk', [('designator', "'A'")], [('0', 'complex', 1)],
+      [('0', 'complex', 1), ('1', 'complex', 1), ('2', 'float', 2)], 'Embedded Python
+      Block example - a simple multiply const', ['designator'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [536, 292.0]
+    rotation: 0
+    state: true
+- name: qtgui_number_sink_0
+  id: qtgui_number_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    autoscale: 'True'
+    avg: '0'
+    color1: ("black", "black")
+    color10: ("black", "black")
+    color2: ("black", "black")
+    color3: ("black", "black")
+    color4: ("black", "black")
+    color5: ("black", "black")
+    color6: ("black", "black")
+    color7: ("black", "black")
+    color8: ("black", "black")
+    color9: ("black", "black")
+    comment: ''
+    factor1: '1'
+    factor10: '1'
+    factor2: '1'
+    factor3: '1'
+    factor4: '1'
+    factor5: '1'
+    factor6: '1'
+    factor7: '1'
+    factor8: '1'
+    factor9: '1'
+    graph_type: qtgui.NUM_GRAPH_HORIZ
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    max: '10'
+    min: '-10'
+    name: '"ruido"'
+    nconnections: '1'
+    type: float
+    unit1: ''
+    unit10: ''
+    unit2: ''
+    unit3: ''
+    unit4: ''
+    unit5: ''
+    unit6: ''
+    unit7: ''
+    unit8: ''
+    unit9: ''
+    update_time: '0.10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 180.0]
+    rotation: 0
+    state: true
+- name: qtgui_vector_sink_f_0
+  id: qtgui_vector_sink_f
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'True'
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '1'
+    ref_level: '0'
+    showports: 'False'
+    update_time: '0.10'
+    vlen: '2'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    x_axis_label: '"x-Axis"'
+    x_start: '0'
+    x_step: '50'
+    x_units: '""'
+    y_axis_label: '"y-Axis"'
+    y_units: '""'
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [888, 356.0]
+    rotation: 0
+    state: true
+
+connections:
+- [analog_noise_source_x_0, '0', blocks_complex_to_mag_0_0, '0']
+- [analog_noise_source_x_0, '0', epy_block_1, '0']
+- [analog_sig_source_x_0, '0', epy_block_1, '0']
+- [blocks_complex_to_mag_0_0, '0', qtgui_number_sink_0, '0']
+- [epy_block_1, '0', blocks_null_sink_0, '0']
+- [epy_block_1, '1', blocks_null_sink_0_0, '0']
+- [epy_block_1, '2', qtgui_vector_sink_f_0, '0']
+
+metadata:
+  file_format: 1

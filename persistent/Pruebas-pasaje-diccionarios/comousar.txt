@@ -1,0 +1,3 @@
+En esta carpeta se tiene un script de Python que abre un socket y, cada 5 segundos, publica un diccionario en el mismo. Por otro lado, se tiene un flograph de GNU Radio con un bloque de Python escrito por nosotros. Dicho bloque se limita a subscribirse al socket e imprimir el mensaje recibido en pantalla. 
+
+Esta prueba se realizó para comprobar que era posible recibir un diccionario en un ambiente de GNU Radio desde un script de Python que esté por fuera. Esto es lo que se buscará replicar al tener un script get_gps.py que se comunique con el módulo GPS y publique en un socket la información recibida. Desde GNU Radio, se tendrá un Python block sub_gps que se subscribe a dicho socket y envía por sus salidas la información relevante.

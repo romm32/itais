@@ -1,0 +1,12 @@
+En esta carpeta se hicieron pruebas para el sensado del canal en el intervalo que especifica la norma (entre  las muestras 41 y 98). Se duplicó y modificó el Embeded Python Block de potumbral para agregarle estas funcionalidades. Dicho bloque recibe como entrada (las muestras), complejos de un Noise Source. Además se probó la sincronización con UTC y determinar corrctamente el slot y la muestra actual según la hora UTC recibida.  
+
+El bloque potumbral modificado tiene fijos los slots donde "desea" transmitir para simplificar las pruebas. En un caso de uso real, el bloque debe recibir como entrada dichos slots. Para cada slot candidato, el scritp procesa las muestras desde la 41 a la 98, promediando la potencia de a intervalos de 5 muestras. En otras palabras, cada 5 muestras se tendrá un valor de umbral y de potencia que permitirán determinar si el canal está libre u ocupado. Si en os 11 intervalos de 5 muestras que entran entre la muestra 41 y 98, la potenica actual es menor al umbral, el canal podrá utilizarse; en caso de que esto no suceda, el canal se toma como ocupado. La salida del bloque será, umbral actual, potencia actual y un vector compuesto por [slot actual, 1/0/-1 (puedo transmitir/no puedo transmitir/ no corresponde medir el canal en ese instante)].
+
+CONSIDERACIONES:
+	-Se asume que el Embeded Python Block ya tiene los slots candidatos.
+	-Se fijó la amplitud del Noise Source en un valor bajo para que la potencia sea menor al umbral y ver si se puede transmitir o no. 
+	-La duración de los slots, la muestra actual, la cantidad de muestras en un slots y las muestras donde medir el canal son valores redondeados hacia abajo. 
+	-Con algunos "prints" se reciben de a 3 slots y se saltean 4 (no se procesan). Por ejemplo, si se reciben muestras de los slots 1, 2 y 3, las siguientes muestras que se reciben son de los slots 7, 8 y 9. Esto se cree que se debe a la lentidtud del código y el agregado de los "prints" que lleva a no precesar la mitad de los slots. 
+	-Sin ningún print, se reciben muestras de ??? slots por minuto real, del total de 2250.
+	-Como se procesan la mitad de las muestras, el valor del umbral demora poco más de dos minutos en actualizarse (cuando debería demorar 1). Esto se debe principalmente a que el umbral se actualiza con una cantidad de muestras correspondiente a 1 slot de muestras completo, al procesarse la mitad de los slots, se precisará el doble de ellos para que se actualice.  
+	    

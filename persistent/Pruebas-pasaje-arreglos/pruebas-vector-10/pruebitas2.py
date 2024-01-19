@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: prueba_tags
+# Title: prueba2
 # GNU Radio version: 3.8.5.0
 
 from distutils.version import StrictVersion
@@ -20,7 +20,6 @@ if __name__ == '__main__':
         except:
             print("Warning: failed to XInitThreads()")
 
-from gnuradio import analog
 from gnuradio import blocks
 from gnuradio import gr
 from gnuradio.filter import firdes
@@ -35,12 +34,12 @@ import epy_block_0
 
 from gnuradio import qtgui
 
-class taggeando(gr.top_block, Qt.QWidget):
+class pruebitas2(gr.top_block, Qt.QWidget):
 
     def __init__(self):
-        gr.top_block.__init__(self, "prueba_tags")
+        gr.top_block.__init__(self, "prueba2")
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("prueba_tags")
+        self.setWindowTitle("prueba2")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -58,7 +57,7 @@ class taggeando(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "taggeando")
+        self.settings = Qt.QSettings("GNU Radio", "pruebitas2")
 
         try:
             if StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
@@ -76,22 +75,20 @@ class taggeando(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
-        self.zeromq_sub_source_1 = zeromq.sub_source(gr.sizeof_float, 1, 'tcp://127.0.0.1:5590', 100, False, -1)
+        self.zeromq_pub_sink_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 10, 'tcp://127.0.0.1:5605', 100, False, -1)
         self.epy_block_0 = epy_block_0.blk(example_param=1.0)
-        self.blocks_null_sink_0 = blocks.null_sink(gr.sizeof_gr_complex*1)
-        self.analog_sig_source_x_0 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, 1000, 1, 0, 0)
+        self.blocks_vector_to_stream_0 = blocks.vector_to_stream(gr.sizeof_gr_complex*10, 1)
 
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.analog_sig_source_x_0, 0), (self.epy_block_0, 0))
-        self.connect((self.epy_block_0, 0), (self.blocks_null_sink_0, 0))
-        self.connect((self.zeromq_sub_source_1, 0), (self.epy_block_0, 1))
+        self.connect((self.blocks_vector_to_stream_0, 0), (self.zeromq_pub_sink_0, 0))
+        self.connect((self.epy_block_0, 0), (self.blocks_vector_to_stream_0, 0))
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("GNU Radio", "taggeando")
+        self.settings = Qt.QSettings("GNU Radio", "pruebitas2")
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
 
@@ -100,13 +97,12 @@ class taggeando(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.analog_sig_source_x_0.set_sampling_freq(self.samp_rate)
 
 
 
 
 
-def main(top_block_cls=taggeando, options=None):
+def main(top_block_cls=pruebitas2, options=None):
 
     if StrictVersion("4.5.0") <= StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
         style = gr.prefs().get_string('qtgui', 'style', 'raster')

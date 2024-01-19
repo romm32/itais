@@ -8,7 +8,7 @@ be the parameters. All of them are required to have default values!
 
 import numpy as np
 from gnuradio import gr
-
+import zmq
 
 class blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
     """Embedded Python Block example - a simple multiply const"""
@@ -19,18 +19,19 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
             self,
             name='Embedded Python Block',   # will show up in GRC
             in_sig=[],
-            out_sig=[(np.complex64, 10)]
+            out_sig=[np.complex64]
         )
         # if an attribute with the same name as a parameter is found,
         # a callback is registered (properties work, too).
         self.example_param = example_param
-        self.lim = 5
-        self.arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     def work(self, input_items, output_items):
         """example: multiply with constant"""
-        output_items[0][:] = self.arr
-        if self.lim > 0:
-                print("pub: ", self.arr)
-                self.lim = self.lim-1
-        return 10
+        context = zmq.Context()
+        subscriber = context.socket(zmq.SUB)
+        subscriber.connect("tcp://127.0.0.1:5600")  # Connect to the same port as in your GNU Radio script
+        subscriber.setsockopt_string(zmq.SUBSCRIBE, "")
+        msj = subscriber.recv_string()
+        print(msj)
+        
+        return 100

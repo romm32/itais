@@ -63,9 +63,26 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [152, 260.0]
+    coordinate: [160, 188.0]
     rotation: 0
-    state: true
+    state: enabled
+- name: blocks_null_sink_0
+  id: blocks_null_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_sink: '[[0,],]'
+    comment: ''
+    num_inputs: '1'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [616, 80.0]
+    rotation: 0
+    state: enabled
 - name: blocks_tag_gate_0
   id: blocks_tag_gate
   parameters:
@@ -92,27 +109,58 @@ blocks:
       \ GRC will instantiate the first class it finds\nto get ports and parameters\
       \ of your block. The arguments to __init__  will\nbe the parameters. All of\
       \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
-      from gnuradio import gr\nimport pmt\n\nclass blk(gr.sync_block):  # other base\
-      \ classes are basic_block, decim_block, interp_block\n    \"\"\"Embedded Python\
-      \ Block example - a simple multiply const\"\"\"\n\n    def __init__(self, example_param=1.0):\
-      \  # only default arguments here\n        \"\"\"arguments to this function show\
-      \ up as parameters in GRC\"\"\"\n        gr.sync_block.__init__(\n         \
-      \   self,\n            name='Embedded Python Block',   # will show up in GRC\n\
-      \            in_sig=[np.complex64],\n            out_sig=[np.complex64]\n  \
-      \      )\n        # if an attribute with the same name as a parameter is found,\n\
-      \        # a callback is registered (properties work, too).\n        self.example_param\
-      \ = example_param\n        self.contador = 0\n        self.inicio = 41\n   \
-      \     self.final = 99\n\n    def work(self, input_items, output_items):\n  \
-      \      \"\"\"example: multiply with constant\"\"\"\n        for i in range(0,\
-      \ len(input_items[0])):\n        \tself.contador = self.contador + 1\n     \
-      \   \tif self.inicio <= i and i <= self.final:\n        \t\t#tag_value = 42\
-      \ \n        \t\tvalue = pmt.intern(\"42\")\n        \t\ttag_offset = i\n   \
-      \     \t\tkey = pmt.intern(\"sensando\")\n        \t\t#tag_key =  \"sensando\"\
-      \n        \t\tself.add_item_tag(0, # Write to output port 0\n              \
-      \            tag_offset, # Index of the tag in absolute terms\n            \
-      \              key, # Key of the tag\n                          value) # Value\
-      \ of the tag \n        \tif self.contador == 1356:\n        \t\tself.contador\
-      \ = 0\n        output_items[0][:] = input_items[0]\n        return len(output_items[0])\n"
+      from gnuradio import gr\nimport pmt\nimport zmq\nimport struct\nfrom datetime\
+      \ import datetime\n\nclass blk(gr.sync_block):  # other base classes are basic_block,\
+      \ decim_block, interp_block\n    \"\"\"Embedded Python Block example - a simple\
+      \ multiply const\"\"\"\n\n    def __init__(self, example_param=1.0):  # only\
+      \ default arguments here\n        \"\"\"arguments to this function show up as\
+      \ parameters in GRC\"\"\"\n        gr.sync_block.__init__(\n            self,\n\
+      \            name='Embedded Python Block',   # will show up in GRC\n       \
+      \     in_sig=[np.complex64, np.float32],\n            out_sig=[np.complex64]\n\
+      \        )\n        #context = zmq.Context() # no es posible definir el socket\
+      \ arriba del todo, y definirlo una sola vez. gnu radio no funciona.\n      \
+      \  #socket = context.socket(zmq.PUB)\n        #socket.bind(\"tcp://127.0.0.1:5580\"\
+      )\n        \n        self.topic = \"valores_umbral_potencia\"\n        \n  \
+      \      # if an attribute with the same name as a parameter is found,\n     \
+      \   # a callback is registered (properties work, too).\n        self.example_param\
+      \ = example_param\n        \n        self.contador = 1\n        self.inicio\
+      \ = 41\n        self.final = 99\n        self.cant_muestras_enviadas = 0\n \
+      \       \n        self.rangoinf = False\n        self.rangosup = False\n   \
+      \     self.recibi = False\n\n    def work(self, input_items, output_items):\n\
+      \    \tin_buf = input_items[0]\n    \tout_buf = output_items[0]\n    \t\n  \
+      \  \t# subscriptor para cuando el transmisor avisa que necesita las muestras.\n\
+      \    \t#context = zmq.Context()\n    \t#subscriber = context.socket(zmq.SUB)\n\
+      \    \t#subscriber.connect(\"tcp://127.0.0.1:5590\")  # Connect to the same\
+      \ port as in your GNU Radio script\n    \t#subscriber.setsockopt_string(zmq.SUBSCRIBE,\
+      \ \"\")\n    \t\n    \t#msj = subscriber.recv_string()\n    \t#print(\"esperando\
+      \ mensaje\")\n    \tmsj = input_items[1][0]\n    \tmsj = struct.unpack('!f',\
+      \ msj)[0]\n    \t#print(\"msg: \", msj)\n    \tif msj == 1:\n    \t\tself.recibi\
+      \ = True\n    \t\t#print(\"llego mensaje, enviando\")\n    \t\t#print(\"len\
+      \ input items0:\", len(input_items[0]))\n    \t\t#print(\"len input items1:\"\
+      , len(input_items[1]))\n    \t\n    \t\n    \tif self.recibi:\n    \t\t#print(\"\
+      recibi len input items0:\", len(input_items[0]))\n    \t\t#print(\"recibi len\
+      \ input items1:\", len(input_items[1]))\n    \t\n    \t\tcontext = zmq.Context()\n\
+      \    \t\tsocket = context.socket(zmq.PUB)\n    \t\tsocket.bind(\"tcp://127.0.0.1:5580\"\
+      )\n\n    \t\t\n    \t\tfor i in range(0, len(input_items[0])):\n    \t\t\t\n\
+      \    \t\t\tif 41 <= self.contador and self.contador <= 99 and ((not self.rangoinf)\
+      \ or (not self.rangosup)):\n    \t\t\t\tif self.contador == 41:\n    \t\t\t\t\
+      \tself.rangoinf = True\n    \t\t\t\tif self.contador == 99:\n    \t\t\t\t\t\
+      self.rangosup = True\n    \t\t\t\tdatos = {\"num_muestra\": self.contador, \"\
+      umbral\": in_buf[0], \"potencia_actual\": in_buf[0]*2}\n    \t\t\t\tmessage_info\
+      \ = f\"{self.topic} {datos}\"#.encode('utf-8')\n    \t\t\t\tsocket.send_string(message_info)\n\
+      \    \t\t\t\tself.cant_muestras_enviadas += 1\n    \t\t\t\t#print(\"enviada\
+      \ muestra: \", self.contador)\n    \t\t\tself.contador = self.contador + 1\n\
+      \    \t\t\tif self.contador == 1356:\n    \t\t\t\tself.contador = 1\n    \t\t\
+      \t\tself.rangoinf = False\n    \t\t\t\tself.rangosup = False\n    \t\t\t\tself.recibi\
+      \ = False\n    \t\t\tif self.cant_muestras_enviadas >= 500 and self.cant_muestras_enviadas\
+      \ < 510:\n    \t\t\t\tif self.cant_muestras_enviadas == 500:\n    \t\t\t\t\t\
+      current_time = datetime.now()\n    \t\t\t\t\tformatted_time = current_time.strftime(\"\
+      %Y-%m-%d %H:%M:%S\")\n    \t\t\t\t\tprint(\"rx llego a 500\", formatted_time)\n\
+      \    \t\t\t\t\t\n\t    \t\n\t    \t\t\n\n\t    \tsocket.close()\n\t    \tcontext.term()\n\
+      \t    \t#print(\"cerrando socket\")\n\t    \t\n    \toutput_items[0][:] = input_items[0]\n\
+      \    \t#self.set_output_multiple(100)\n    \treturn 100\n        \n        \n\
+      \        \n        \n        \n        \n        \n        \n        \n    \
+      \    \n        \n"
     affinity: ''
     alias: ''
     comment: ''
@@ -121,14 +169,208 @@ blocks:
     minoutbuf: '0'
   states:
     _io_cache: ('Embedded Python Block', 'blk', [('example_param', '1.0')], [('0',
-      'complex', 1)], [('0', 'complex', 1)], 'Embedded Python Block example - a simple
-      multiply const', ['example_param'])
+      'complex', 1), ('1', 'float', 1)], [('0', 'complex', 1)], 'Embedded Python Block
+      example - a simple multiply const', ['example_param'])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 300.0]
+    coordinate: [416, 304.0]
     rotation: 0
-    state: true
+    state: enabled
+- name: qtgui_time_sink_x_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label1: Signal 1
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"Sink PUB"'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [680, 436.0]
+    rotation: 0
+    state: disabled
+- name: qtgui_time_sink_x_1
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label1: Signal 1
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"Sink SUB"'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [992, 396.0]
+    rotation: 0
+    state: disabled
 - name: zeromq_pub_sink_0
   id: zeromq_pub_sink
   parameters:
@@ -147,11 +389,57 @@ blocks:
     bus_structure: null
     coordinate: [664, 284.0]
     rotation: 0
+    state: disabled
+- name: zeromq_sub_source_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5555
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'True'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [840, 220.0]
+    rotation: 0
+    state: disabled
+- name: zeromq_sub_source_1
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5590
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'False'
+    timeout: '100'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 324.0]
+    rotation: 0
     state: true
 
 connections:
 - [analog_sig_source_x_0, '0', epy_block_0, '0']
+- [epy_block_0, '0', blocks_null_sink_0, '0']
+- [epy_block_0, '0', qtgui_time_sink_x_0, '0']
 - [epy_block_0, '0', zeromq_pub_sink_0, '0']
+- [zeromq_sub_source_0, '0', qtgui_time_sink_x_1, '0']
+- [zeromq_sub_source_1, '0', epy_block_0, '1']
 
 metadata:
   file_format: 1

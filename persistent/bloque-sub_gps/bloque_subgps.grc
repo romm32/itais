@@ -1,0 +1,126 @@
+options:
+  parameters:
+    author: ''
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: bloquesubgps
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: bloque
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '32000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 12]
+    rotation: 0
+    state: enabled
+- name: blocks_null_sink_0
+  id: blocks_null_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_sink: '[[0,],]'
+    comment: salida de lat, lon, sog, cog, hacia bloque de mensajes
+    num_inputs: '1'
+    type: float
+    vlen: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 156.0]
+    rotation: 0
+    state: true
+- name: blocks_null_sink_1
+  id: blocks_null_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_sink: '[[0,],]'
+    comment: salida de velocidad actual, hacia el transmisor
+    num_inputs: '1'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 280.0]
+    rotation: 0
+    state: true
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\nimport zmq\n\nclass sub_gps(gr.sync_block):\n\n   \
+      \ def __init__(self):\n        \n        gr.sync_block.__init__(\n         \
+      \   self,\n            name='SUBGPS',   # will show up in GRC\n            in_sig=[],\n\
+      \            out_sig=[(np.float32, 4), np.float32] # se tiene una salida que\
+      \ es un arreglo con los valores relevantes para armar el mensaje, y otra salida\
+      \ que es \xFAnicamente la velocidad actual. \n        )\n        self.lim =\
+      \ 3 # limitamos a que se imprima solo tres veces la salida\n        self.arr\
+      \ = [0, 0, 0, 0] # se inicializa el arreglo en cero\n\n    def work(self, input_items,\
+      \ output_items):\n    \t\n    \tcontext = zmq.Context()\n    \tsubscriber =\
+      \ context.socket(zmq.SUB)\n    \tsubscriber.connect(\"tcp://127.0.0.1:5600\"\
+      )  # Connect to the same port as in your GNU Radio script\n    \tsubscriber.setsockopt_string(zmq.SUBSCRIBE,\
+      \ \"\")\n    \t\n    \tmsj = subscriber.recv_string()\n    \tdata_dict = eval(msj)\n\
+      \    \t\n    \tself.arr[0] = data_dict[\"long\"]\n    \tself.arr[1] = data_dict[\"\
+      lat\"]\n    \tself.arr[2] = data_dict[\"sog\"]\n    \tself.arr[3] = data_dict[\"\
+      cog\"]\n    \t\n    \toutput_items[0][:] = self.arr\n    \toutput_items[1][:]\
+      \ = data_dict[\"sog\"]\n    \t\n    \tif self.lim > 0:\n    \t\tprint(\"out0:\
+      \ \", output_items[0][:])\n    \t\tprint(\"out1: \", output_items[1][:])\n \
+      \   \t\tself.lim = self.lim-1\n    \t\t\n    \treturn 100\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('SUBGPS', 'sub_gps', [], [], [('0', 'float', 4), ('1', 'float', 1)],
+      '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 160.0]
+    rotation: 0
+    state: true
+
+connections:
+- [epy_block_0, '0', blocks_null_sink_0, '0']
+- [epy_block_0, '1', blocks_null_sink_1, '0']
+
+metadata:
+  file_format: 1
