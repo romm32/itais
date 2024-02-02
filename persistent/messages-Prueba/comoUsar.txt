@@ -1,0 +1,6 @@
+En esta carpeta se define el embedded python block donde se generan los mensajes 18, 24A y 24B. En este caso, se generan los mensajes en bits, tal como debe recibirlo el Build_Frame para poder hacer las transformaciones (flags, nrzi, etc) y después enviarlo. 
+
+El embedded python block tiene 4 parámetros que dependen de la embarcación donde se este utilizando, el largo, el ancho, el tipo y el nombre de la misma son modificables por el usuario. Además, tiene 2 entradas, la primera es desde donde toma el tipo de mensaje que debe generar, 18 (para el mensaje 18), 240 (para el mesaje 24 A) o 241 (para el mensaje 24 B). Cualquier otra entrada no generara un mensaje válido a la salida. 
+En la segunda entrada, recibirá un vector de 5 posiciones con speed, longitud, latitud, curso y ts. Estos parámetros los recibirá del GPS y son utilizados para la creación de los mensajes.
+
+Se agregaron banderas para evitar que se envíe más de una vez el mismo mensaje al recibir la señal de envío (qué mensaje enviar). En caso de dejar una entrada fija en 18, 240 o 241, los mensajes se enviarán cada 2,6 segundos.

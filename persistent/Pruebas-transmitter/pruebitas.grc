@@ -36,7 +36,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '10'
+    value: '5'
   states:
     bus_sink: false
     bus_source: false
@@ -56,24 +56,6 @@ blocks:
     coordinate: [184, 12]
     rotation: 0
     state: enabled
-- name: blocks_stream_to_vector_0
-  id: blocks_stream_to_vector
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    num_items: '10'
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [248, 272.0]
-    rotation: 0
-    state: true
 - name: blocks_stream_to_vector_0_0
   id: blocks_stream_to_vector
   parameters:
@@ -89,7 +71,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [256, 128.0]
+    coordinate: [396, 278]
     rotation: 0
     state: true
 - name: blocks_vector_to_stream_0
@@ -107,25 +89,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 52.0]
-    rotation: 0
-    state: true
-- name: blocks_vector_to_stream_1
-  id: blocks_vector_to_stream
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    num_items: '1'
-    type: complex
-    vlen: '2'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [608, 204.0]
+    coordinate: [925, 239]
     rotation: 0
     state: true
 - name: epy_block_0
@@ -181,7 +145,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [384, 52.0]
+    coordinate: [630, 269]
     rotation: 0
     state: true
 - name: epy_block_0_0
@@ -237,66 +201,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [408, 300.0]
+    coordinate: [424, 348.0]
     rotation: 0
     state: disabled
-- name: epy_block_0_1
-  id: epy_block
-  parameters:
-    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
-      \ GRC will instantiate the first class it finds\nto get ports and parameters\
-      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
-      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
-      from gnuradio import gr\nfrom datetime import datetime, timedelta\n\n\nclass\
-      \ blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block\n\
-      \    \"\"\"Embedded Python Block example - a simple multiply const\"\"\"\n\n\
-      \    def __init__(self, example_param=1.0):  # only default arguments here\n\
-      \        \"\"\"arguments to this function show up as parameters in GRC\"\"\"\
-      \n        gr.sync_block.__init__(\n            self,\n            name='Embedded\
-      \ Python Block',   # will show up in GRC\n            in_sig=[(np.complex64,10)],\n\
-      \            out_sig=[(np.complex64,2)]\n        )\n        # if an attribute\
-      \ with the same name as a parameter is found,\n        # a callback is registered\
-      \ (properties work, too).\n        self.example_param = example_param\n    \
-      \    self.lim = 20\n        self.arr = np.full(10, -1)\n        self.aux = []\n\
-      \        self.arreglo = [-1, 0]\n        self.unavez = True\n        self.current_slot\
-      \ = -10\n        self.slots_per_minute = 2250\n        self.slot = -1\n    \
-      \    self.once = True\n\n    def work(self, input_items, output_items):\n  \
-      \      \"\"\"example: multiply with constant\"\"\"\n        current_utc_time\
-      \ = datetime.utcnow()\n        start_of_minute = current_utc_time.replace(second=0,\
-      \ microsecond=0)\n        time_elapsed = current_utc_time - start_of_minute\n\
-      \        milliseconds_elapsed = time_elapsed.total_seconds() * 1000\n      \
-      \  self.current_slot = int((milliseconds_elapsed)*self.slots_per_minute/60000)\
-      \ #Cantidad de slots desde que empez\xF3 el minuto.\n        \n        self.arr\
-      \ = np.real(input_items[0][0])\n        \n        if np.sum(self.arr) != -10\
-      \ and self.unavez:\n            self.aux = self.arr\n            self.slot =\
-      \ self.current_slot\n            self.unavez = False\n            print(\"recibi\
-      \ candidatos en \", self.current_slot, self.arr)\n        \n        else:\n\
-      \            if np.sum(self.arr) != -10 and self.current_slot in self.aux and\
-      \ self.once: # and self.lim > 0:\n            \tself.slot = self.current_slot\n\
-      \            \tself.arreglo = [self.slot, 1]\n            \toutput_items[0][:]\
-      \ = self.arreglo\n            \t#self.lim -= 1\n            \tself.once = False\n\
-      \        if self.current_slot > self.slot+500:\n            #self.lim = 20\n\
-      \            self.unavez = True\n            self.once = True\n            self.arreglo\
-      \ = [-1, 0]\n            output_items[0][:] = self.arreglo\n               \
-      \ #print(\"slot y puedo A \", self.arreglo) \n                \n\n\n       \
-      \ output_items[0][:] = self.arreglo\n\n        return len(output_items)\n  \
-      \      \n        \n        \n"
-    affinity: ''
-    alias: ''
-    comment: ''
-    example_param: '1.0'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-  states:
-    _io_cache: ('Embedded Python Block', 'blk', [('example_param', '1.0')], [('0',
-      'complex', 10)], [('0', 'complex', 2)], 'Embedded Python Block example - a simple
-      multiply const', ['example_param'])
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [384, 212.0]
-    rotation: 0
-    state: true
 - name: zeromq_pub_sink_0
   id: zeromq_pub_sink
   parameters:
@@ -313,26 +220,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [808, 36.0]
-    rotation: 0
-    state: true
-- name: zeromq_pub_sink_1
-  id: zeromq_pub_sink
-  parameters:
-    address: tcp://127.0.0.1:5001
-    affinity: ''
-    alias: ''
-    comment: ''
-    hwm: '-1'
-    pass_tags: 'False'
-    timeout: mss
-    type: complex
-    vlen: '2'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [808, 188.0]
+    coordinate: [1173, 215]
     rotation: 0
     state: true
 - name: zeromq_sub_source_0
@@ -353,42 +241,15 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 156.0]
-    rotation: 0
-    state: true
-- name: zeromq_sub_source_1
-  id: zeromq_sub_source
-  parameters:
-    address: tcp://127.0.0.1:6001
-    affinity: ''
-    alias: ''
-    comment: ''
-    hwm: '-1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    pass_tags: 'False'
-    timeout: mss
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [32, 276.0]
+    coordinate: [77, 238]
     rotation: 0
     state: true
 
 connections:
-- [blocks_stream_to_vector_0, '0', epy_block_0_0, '0']
-- [blocks_stream_to_vector_0, '0', epy_block_0_1, '0']
 - [blocks_stream_to_vector_0_0, '0', epy_block_0, '0']
 - [blocks_vector_to_stream_0, '0', zeromq_pub_sink_0, '0']
-- [blocks_vector_to_stream_1, '0', zeromq_pub_sink_1, '0']
 - [epy_block_0, '0', blocks_vector_to_stream_0, '0']
-- [epy_block_0_0, '0', blocks_vector_to_stream_1, '0']
-- [epy_block_0_1, '0', blocks_vector_to_stream_1, '0']
 - [zeromq_sub_source_0, '0', blocks_stream_to_vector_0_0, '0']
-- [zeromq_sub_source_1, '0', blocks_stream_to_vector_0, '0']
 
 metadata:
   file_format: 1

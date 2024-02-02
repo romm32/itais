@@ -42,7 +42,7 @@ RUN apt-get install -y git
 
 # Install rtl-sdr
 RUN sudo apt-get install -y git cmake libusb-1.0 libusb-1.0-0-dev swig pkg-config
-RUN git clone git://git.osmocom.org/rtl-sdr.git /home/gnuradio/rtl-sdr/ && cd /home/gnuradio/rtl-sdr/ && mkdir build && cd build && cmake ../ -DINSTALL_UDEV_RULES=ON -DDETACH_KERNEL_DRIVER=ON && make && sudo make install && sudo ldconfig 
+RUN git clone https://gitea.osmocom.org/sdr/rtl-sdr.git /home/gnuradio/rtl-sdr/ && cd /home/gnuradio/rtl-sdr/ && mkdir build && cd build && cmake ../ -DINSTALL_UDEV_RULES=ON -DDETACH_KERNEL_DRIVER=ON && make && sudo make install && sudo ldconfig 
 
 
 # Install hackrf
@@ -123,6 +123,8 @@ RUN cd /home/gnuradio/libad9361-iio && mkdir build && cd build && cmake .. -DPYT
 RUN git clone -b upgrade-3.8 https://github.com/analogdevicesinc/gr-iio.git /home/gnuradio/gr-iio
 RUN cd /home/gnuradio/gr-iio && cmake . && make && make install
 RUN ldconfig
+
+ADD gr-aistx /home/gnuradio/gr-aistx 
 
 USER gnuradio
 

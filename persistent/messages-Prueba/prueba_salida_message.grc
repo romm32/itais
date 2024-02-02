@@ -1,0 +1,224 @@
+options:
+  parameters:
+    author: ''
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: prueba_salida_message
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Not titled yet
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '32000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 12]
+    rotation: 0
+    state: enabled
+- name: analog_const_source_x_0
+  id: analog_const_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '18'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 204.0]
+    rotation: 0
+    state: true
+- name: blocks_message_debug_0
+  id: blocks_message_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [832, 200.0]
+    rotation: 0
+    state: true
+- name: blocks_vector_source_x_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: (4, 44, -35, 83, 38)
+    vlen: '5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 284.0]
+    rotation: 0
+    state: true
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\nimport pmt\nfrom datetime import datetime, timedelta\n\
+      \nclass blk(gr.sync_block):  # other base classes are basic_block, decim_block,\
+      \ interp_block\n    \"\"\"Embedded Python Block example - a simple multiply\
+      \ const\"\"\"\n\n    def __init__(self, vessel_length = 18, vessel_beam = 14,\
+      \ vessel_name = \"ROMA\", vessel_type = 30):  # only default arguments here\n\
+      \        \"\"\"arguments to this function show up as parameters in GRC\"\"\"\
+      \n        gr.sync_block.__init__(\n            self,\n            name='Messages',\
+      \   # will show up in GRC\n            in_sig=[np.float32, (np.float32, 5)],\n\
+      \            out_sig=[]\n        )\n        self.vessel_length = vessel_length\n\
+      \        self.vessel_beam = vessel_beam\n        self.vessel_name = vessel_name\n\
+      \        self.vessel_type = vessel_type\n        \n        self.portName = 'bits_Out'\n\
+      \        self.message_port_register_out(pmt.intern(self.portName))\n       \
+      \ \n        self.message = -1\n        \n        self.speed = -1\n        self.long\
+      \ = -1\n        self.lat = -1\n        self.course = -1\n        self.ts = -1\n\
+      \        \n        self.mmsi = 247320162 #Default. tiene que tener 9 d\xEDgitos\n\
+      \        self.payload = \"\"\n        \n        self.slots_per_minute = 2250\n\
+      \        self.slot_duration = 60/2250\n        self.samples_per_slot = int(self.slot_duration*50000)\n\
+      \        \n        self.primera18 = True\n        self.primera240 = True\n \
+      \       self.primera241 = True\n        \n        self.slot_transmitido18 =\
+      \ -1\n        self.slot_transmitido240 = -1\n        self.slot_transmitido241\
+      \ = -1\n        \n    def encode_string(self, string):\n        vocabolary =\
+      \ \"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^- !\\\"#$%&'()*+,-./0123456789:;<=>?\"\
+      \n        encoded_string = \"\"\n        for c in string.upper():\n        \
+      \    index = vocabolary.find(c)\n            encoded_string += '{0:b}'.format(index).rjust(6,'0')\n\
+      \        return encoded_string\n        \n        \n    #We add a mask to tell\
+      \ python how long is our rapresentation (overwise on negative integers, it cannot\
+      \ do the complement 2).\n    def compute_long_lat (self, __long, __lat):\n \
+      \       _long = '{0:b}'.format(int(round(__long*600000)) & 0b1111111111111111111111111111).rjust(28,'0')\n\
+      \        _lat =  '{0:b}'.format(int(round(__lat*600000))  & 0b111111111111111111111111111).rjust(27,'0')\n\
+      \        return (_long, _lat)\n        \n    def encode_18(self, __mmsi, __speed,\
+      \ __long, __lat, __course, __ts):\n        _type = '{0:b}'.format(18).rjust(6,'0')\
+      \ # 18\n        _repeat = \"00\"\t#repeat (directive to an AIS transceiver that\
+      \ this message should be rebroadcast.)\n        _mmsi = '{0:b}'.format(__mmsi).rjust(30,'0')\
+      \ # 30 bits (247320162)\n        _reserved = '0'*8\n        _speed = '{0:b}'.format(int(round(__speed*10))).rjust(10,'0')\t\
+      # Speed over ground is in 0.1-knot resolution from 0 to 102 knots. value 1023\
+      \ indicates speed is not available, value 1022 indicates 102.2 knots or higher.\n\
+      \        _accurancy = '0' # > 10m\n        \n        (_long, _lat) = self.compute_long_lat(__long,\
+      \ __lat)\n        \n        _course = '{0:b}'.format(int(round(__course*10))).rjust(12,'0')\
+      \ # 0.1 resolution. Course over ground will be 3600 (0xE10) if that data is\
+      \ not available.\n        _true_heading = '1'*9\t# 511 (N/A)\n        _ts =\
+      \ '{0:b}'.format(__ts).rjust(6,'0') # Second of UTC timestamp.\n        \n \
+      \       _flags = '001000000'\n        # '00': Regional reserved\n        # '1':\
+      \  CS mode (carrier sense Class B)\n        # '0' Display flag\n        # '0':\
+      \ DSC\n        # '0': Band Flag\n        # '0': M22 Flag\n        # '0': Assigned\
+      \ 0 -> Autonomous mode\n        # '0': Raim flag\n        \n        _rstatus\
+      \ = '11100000000000000110'\n        # '11100000000000000110' : Radio status\n\
+      \        \n        return _type+_repeat+_mmsi+_reserved+_speed+_accurancy+_long+_lat+_course+_true_heading+_ts+_flags+_rstatus\n\
+      \        \n    def encode_24(self, __mmsi, __part, __vname=\"NAN\", __callsign=\"\
+      NAN\", __vsize1=\"18\", __vsize2=\"14\", __vtype=50):\n        _type = '{0:b}'.format(24).rjust(6,'0')\
+      \ # 24\n        _repeat = \"00\" # repeat (directive to an AIS transceiver that\
+      \ this message should be rebroadcast.)\n        _mmsi = '{0:b}'.format(__mmsi).rjust(30,'0')\
+      \ # 30 bits (247320162)\n        if __part == \"A\":\n            _part = \"\
+      00\"\n            _vname = self.encode_string(__vname)\n            _padding\
+      \ = '0'*(156-6-2-30-2-len(_vname))\t\t# 160 bits per RFC -> 4 bits padding added\
+      \ in Build_Frame_imple.cc\n            return _type+_repeat+_mmsi+_part+_vname+_padding\n\
+      \        \n        else:\n            _part = \"01\"\n            _vtype = '{0:b}'.format(__vtype).rjust(8,'0')\
+      \   #30 = fishing\n            _vendorID = \"0\"*42 #vendor ID\n           \
+      \ \n            _tmp = self.encode_string(__callsign)\n            _callsign\
+      \ = _tmp + \"0\"*(42-len(_tmp)) #7 six-bit characters\n            \n      \
+      \      _hl=int(__vsize1)/2 # AIS antenna in the middle of the boat\n       \
+      \     _hw=int(__vsize2)/2\n            _half_length='{0:b}'.format(int(_hl)).rjust(9,'0')\n\
+      \            _half_width='{0:b}'.format(int(_hw)).rjust(6,'0')\n           \
+      \ \n            return _type+_repeat+_mmsi+_part+_vtype+_vendorID+_callsign+_half_length+_half_length+_half_width+_half_width+\"\
+      000000\"\n        \n    def work(self, input_items, output_items):\n       \
+      \ self.message = input_items[0][0]\n        self.speed = input_items[1][0][0]\n\
+      \        self.long = input_items[1][0][1]\n        self.lat = input_items[1][0][2]\n\
+      \        self.course = input_items[1][0][3]\n        self.ts = input_items[1][0][4]\n\
+      \        \n        current_utc_time = datetime.utcnow()\n        start_of_minute\
+      \ = current_utc_time.replace(second=0, microsecond=0)\n        time_elapsed\
+      \ = current_utc_time - start_of_minute\n        milliseconds_elapsed = time_elapsed.total_seconds()\
+      \ * 1000\n        slot_index = (milliseconds_elapsed)*self.slots_per_minute/60000\
+      \ #Cantidad de slots desde que empez\xF3 el minuto.\n        \n        if (self.message\
+      \ == 18 and self.primera18):\n            self. payload = self.encode_18(int(self.mmsi),\
+      \ float(self.speed), float(self.long), float(self.lat), float(self.course),\
+      \ int(self.ts))\n            PMT_msg = pmt.to_pmt(self.payload)\n          \
+      \  self.message_port_pub(pmt.intern(self.portName), PMT_msg)\n            self.primera18\
+      \ = False\n            self.slot_transmitido18 = int(slot_index)\n         \
+      \   \n        elif (self.message == 240 and self.primera240):\n            self.payload\
+      \ = self.encode_24(int(self.mmsi), \"A\", self.vessel_name)\n            PMT_msg\
+      \ = pmt.to_pmt(self.payload)\n            self.message_port_pub(pmt.intern(self.portName),\
+      \ PMT_msg)\n            self.primera240 = False\n            self.slot_transmitido240\
+      \ = int(slot_index)\n            \n        elif (self.message == 241 and self.primera241):\n\
+      \            self.payload = self.encode_24(int(self.mmsi), \"B\", self.vessel_name,\
+      \ \"@@@@@@@\", str(self.vessel_length), str(self.vessel_beam), int(self.vessel_type))\n\
+      \            PMT_msg = pmt.to_pmt(self.payload)\n            self.message_port_pub(pmt.intern(self.portName),\
+      \ PMT_msg)\n            self.primera241 = False\n            self.slot_transmitido241\
+      \ = int(slot_index)\n            \n        if (np.abs(self.slot_transmitido18\
+      \ - int(slot_index)) > 100):\n            self.primera18 = True\n          \
+      \  \n        if (np.abs(self.slot_transmitido240 - int(slot_index)) > 100):\n\
+      \            self.primera240 = True\n            \n        if (np.abs(self.slot_transmitido241\
+      \ - int(slot_index)) > 100):\n            self.primera241 = True\n         \
+      \   \n        return (300)\n        \n        \n        \n        \n       \
+      \ \n        \n        \n        \n        \n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vessel_beam: '14'
+    vessel_length: '18'
+    vessel_name: '"ROMA"'
+    vessel_type: '30'
+  states:
+    _io_cache: ('Messages', 'blk', [('vessel_length', '18'), ('vessel_beam', '14'),
+      ('vessel_name', "'ROMA'"), ('vessel_type', '30')], [('0', 'float', 1), ('1',
+      'float', 5)], [('bits_Out', 'message', 1)], 'Embedded Python Block example -
+      a simple multiply const', ['vessel_beam', 'vessel_length', 'vessel_name', 'vessel_type'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 164.0]
+    rotation: 0
+    state: true
+
+connections:
+- [analog_const_source_x_0, '0', epy_block_0, '0']
+- [blocks_vector_source_x_0, '0', epy_block_0, '1']
+- [epy_block_0, bits_Out, blocks_message_debug_0, print]
+
+metadata:
+  file_format: 1

@@ -36,7 +36,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '10'
+    value: '5'
   states:
     bus_sink: false
     bus_source: false
@@ -62,7 +62,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    const: '4'
+    const: '1'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -70,7 +70,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [248, 372.0]
+    coordinate: [296, 396.0]
     rotation: 0
     state: true
 - name: blocks_stream_to_vector_0
@@ -88,25 +88,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [264, 112.0]
-    rotation: 0
-    state: true
-- name: blocks_stream_to_vector_1
-  id: blocks_stream_to_vector
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    num_items: '2'
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [248, 192.0]
+    coordinate: [320, 240.0]
     rotation: 0
     state: true
 - name: blocks_vector_to_stream_0
@@ -124,194 +106,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 48.0]
+    coordinate: [672, 180.0]
     rotation: 0
     state: true
-- name: blocks_vector_to_stream_1
-  id: blocks_vector_to_stream
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    num_items: '1'
-    type: complex
-    vlen: '10'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [632, 176.0]
-    rotation: 0
-    state: true
-- name: epy_block_0
-  id: epy_block
-  parameters:
-    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
-      \ GRC will instantiate the first class it finds\nto get ports and parameters\
-      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
-      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
-      from gnuradio import gr\nimport time\nfrom datetime import datetime, timedelta\n\
-      \n\nclass blk(gr.sync_block):  # other base classes are basic_block, decim_block,\
-      \ interp_block\n    \"\"\"Embedded Python Block example - a simple multiply\
-      \ const\"\"\"\n\n    def __init__(self):  # only default arguments here\n  \
-      \      \"\"\"arguments to this function show up as parameters in GRC\"\"\"\n\
-      \        gr.sync_block.__init__(\n            self,\n            name='Transmitter',\
-      \   # will show up in GRC\n            in_sig=[(np.complex64,2), (np.complex64,2),\
-      \ np.float32],\n            out_sig=[(np.complex64,10), (np.complex64,10), np.float32]\n\
-      \        )\n        self.inicio_18 = 0\n        self.inicio_24 = 0\n       \
-      \ self.slot_y_puedo = np.zeros(2)\n        self.inicializando = True\n     \
-      \   self.slots_per_minute = 2250\n        self.transmitiendo = [False, False]\n\
-      \        self.prox_fijo18 = False\n        self.prox_fijo24 = False\n      \
-      \  self.mensaje24_a_transmitir = \"A\"\n        self.primero_en_pedir = 0\n\
-      \        self.ultimo_canal = \"B\"\n        self.prox_18 = -1\n        self.prox_24\
-      \ = -1\n        self.mensaje = 0\n        self.current_slot = -1\n        self.candidatos_18\
-      \ = np.full(10, -1)\n        self.candidatos_24 = np.full(10, -1)\n        self.candidatos_A\
-      \ = np.full(10, -1)\n        self.candidatos_B = np.full(10, -1)\n        self.diff\
-      \ = 400\n        self.es_menor0 = False\n        self.ultimo_slot = -1\n\n \
-      \   def slot_selection(NTT):\n        selected = np.random.randint(NTT-187,\
-      \ NTT+187+1, size=10)\n        selected = np.array(sorted(selected))\n     \
-      \   if NTT-187 < 0:\n            shift = 2250\n            selected = (selected+shift)%2250\n\
-      \        elif NTT+187 > 2250:\n            selected = selected%2250\n      \
-      \  return(selected)\n    \n    def work(self, input_items, output_items):\n\
-      \        \"\"\"example: multiply with constant\"\"\"\n        if self.ultimo_canal\
-      \ == \"A\": #Si el ultimo canal fue el A, vamos a transmitir en el B y tomamos\
-      \ la segunda entrada\n            self.slot_y_puedo = input_items[1][0]\n  \
-      \      else: #Si el ultimo canal fue el B, vamos a transmitir en el A y tomamos\
-      \ la primera entrada\n            self.slot_y_puedo = input_items[0][0]\n  \
-      \      if self.inicializando:\n            print(\"inicializando\")\n      \
-      \      time.sleep(60)\n            self.inicializando = False\n            \n\
-      \            current_utc_time = datetime.utcnow()\n            start_of_minute\
-      \ = current_utc_time.replace(second=0, microsecond=0)\n            time_elapsed\
-      \ = current_utc_time - start_of_minute\n            milliseconds_elapsed = time_elapsed.total_seconds()\
-      \ * 1000\n            self.current_slot = int((milliseconds_elapsed)*self.slots_per_minute/60000)\
-      \ #Cantidad de slots desde que empez\xF3 el minuto.\n            \n        \
-      \    self.inicio_18 = self.current_slot\n            self.inicio_24 = self.current_slot+10\n\
-      \            \n            print(\"inicializo\")\n            print(\"empiezan\
-      \ temporizadores\")\n            print(\"slot \", self.current_slot)\n     \
-      \       \n        else:\n            current_utc_time = datetime.utcnow()\n\
-      \            start_of_minute = current_utc_time.replace(second=0, microsecond=0)\n\
-      \            time_elapsed = current_utc_time - start_of_minute\n           \
-      \ milliseconds_elapsed = time_elapsed.total_seconds() * 1000\n            self.current_slot\
-      \ = int((milliseconds_elapsed)*self.slots_per_minute/60000) #Cantidad de slots\
-      \ desde que empez\xF3 el minuto.\n            \n            if not self.transmitiendo[0]\
-      \ and not self.transmitiendo[1]:\n                if not self.prox_fijo18: ##\
-      \ si no fij\xE9 ya cu\xE1l es el slot pr\xF3ximo para transmitir\n         \
-      \           if input_items[2][0] > 2: #### verificar en qu\xE9 unidad nos da\
-      \ la velocidad el gps\n                        self.prox_18 = (self.inicio_18\
-      \ + 1125)%2250 # transmito cada 30 seg\n                    else:\n        \
-      \                self.prox_18 = (self.inicio_18 + 2250*3) # transmito cada 3\
-      \ min    ### ver mod 2250\n                    self.prox_fijo18 = True\n   \
-      \                 print(\"fijo prox \", self.prox_18, \"ahora estoy \", self.current_slot)\n\
-      \                    self.mensaje = 0\n                    output_items[2][:]\
-      \ = self.mensaje\n                if not self.prox_fijo24:\n               \
-      \     if self.mensaje24_a_transmitir == \"A\":\n                        self.prox_24\
-      \ = (self.inicio_24 + 2250*5) ### ver modulo\n                    else:\n  \
-      \                      self.prox_24 = (self.inicio_24 + 2250)\n            \
-      \        self.prox_fijo24 = True\n                    self.mensaje = 0 ## no\
-      \ estoy pidiendo ningun mensaje a messages ahora\n                    output_items[2][:]\
-      \ = self.mensaje\n                    \n                if self.current_slot\
-      \ == ((self.prox_18-self.diff)%2250) and (self.current_slot != self.inicio_18):\n\
-      \                    if self.prox_18-self.diff < 0:\n                      \
-      \  self.es_menor0 = True\n                    if self.es_menor0 or (self.current_slot\
-      \ == self.prox_18-self.diff):\n                        self.candidatos_18 =\
-      \ [self.prox_18-5,self.prox_18-4,self.prox_18-3,self.prox_18-2,self.prox_18-1,\
-      \ self.prox_18,self.prox_18+1,self.prox_18+2,self.prox_18+3,self.prox_18+4]#slot_selection(self.prox_18)\n\
-      \                        self.transmitiendo[0] = True\n                    \
-      \    print(\"transm 18\", self.current_slot)\n                        if self.primero_en_pedir\
-      \ == 0:\n                            self.primero_en_pedir = 18\n          \
-      \                  \n                        if self.ultimo_canal == \"B\":\n\
-      \                            self.candidatos_A = self.candidatos_18\n      \
-      \                      output_items[0][:] = self.candidatos_A\n            \
-      \            else:\n                            self.candidatos_B = self.candidatos_18\n\
-      \                            output_items[1][:] = self.candidatos_B\n      \
-      \                      \n                    else:\n                       \
-      \ self.prox_18 = self.prox_18 - 2250 # queda un minuto menos\n             \
-      \           \n                if self.current_slot == ((self.prox_24-self.diff)%2250)\
-      \ and (self.current_slot != self.inicio_24):\n                    if self.prox_24-self.diff\
-      \ < 0:\n                        self.es_menor0 = True\n                    if\
-      \ self.es_menor0 or (self.current_slot == self.prox_24-self.diff):\n       \
-      \                 self.candidatos_24 = [self.prox_24-5,self.prox_24-4,self.prox_24-3,self.prox_24-2,self.prox_24-1,\
-      \ self.prox_24,self.prox_24+1,self.prox_24+2,self.prox_24+3,self.prox_24+4]\
-      \ #slot_selection(self.prox_24)\n                        self.transmitiendo[1]\
-      \ = True\n                        if self.primero_en_pedir == 0:\n         \
-      \                   self.primero_en_pedir = 24\n                           \
-      \ \n                        if self.ultimo_canal == \"B\":\n               \
-      \             self.candidatos_A = self.candidatos_24\n                     \
-      \       output_items[0][:] = self.candidatos_A\n                        else:\n\
-      \                            self.candidatos_B = self.candidatos_24\n      \
-      \                      output_items[1][:] = self.candidatos_B\n            \
-      \                \n                    else:\n                        self.prox_24\
-      \ = self.prox_24 - 2250 # queda un minuto menos\n                        \n\
-      \            else:\n                if self.transmitiendo[0] and (np.real(self.slot_y_puedo[1])\
-      \ == 1) and (np.real(self.slot_y_puedo[0]) in self.candidatos_18) and ((not\
-      \ self.slot_y_puedo[0] in self.candidatos_24) or (self.primero_en_pedir == 18))\
-      \ and self.current_slot == self.slot_y_puedo[0]:\n                \n       \
-      \             self.mensaje = 18 ### mensaje a mandar a messages\n          \
-      \          output_items[2][:] = self.mensaje\n                    self.transmitiendo[0]\
-      \ = False\n                    self.prox_fijo18 = False\n                  \
-      \  if self.transmitiendo[1]:\n                        self.primero_en_pedir\
-      \ = 24\n                    else:\n                        self.primero_en_pedir\
-      \ = 0\n                    self.inicio_18 = np.real(self.slot_y_puedo[0]) ###\
-      \ que deberia ser igual a current_slot\n                    self.candidatos_18\
-      \ = np.full(10, -1)\n                    self.es_menor0 = False\n          \
-      \          \n                    print(self.ultimo_canal, \" reinicia 30s\"\
-      , self.current_slot)\n                    #print(\"slot \", self.current_slot)\n\
-      \                    #print(\"slot y puedo\", self.slot_y_puedo[0])\n      \
-      \              \n                    self.slot_y_puedo = np.zeros(2)\n     \
-      \               self.prox_18 = -1\n                    \n                  \
-      \  if self.ultimo_canal == \"B\": # si el ultimo canal era B, transmiti en A\
-      \ recien, entonces limpio esas variables y actualizo el ultimo canal\n     \
-      \                   self.candidatos_A = np.full(10, -1)\n                  \
-      \      output_items[0][:] = self.candidatos_A\n                        self.ultimo_canal\
-      \ = \"A\"\n                    else:\n                        self.candidatos_B\
-      \ = np.full(10, -1)\n                        output_items[1][:] = self.candidatos_B\n\
-      \                        self.ultimo_canal = \"B\"\n                       \
-      \ \n                elif self.transmitiendo[1] and self.slot_y_puedo[1] == 1\
-      \ and (self.slot_y_puedo[0] in self.candidatos_24) and (not (self.slot_y_puedo[0]\
-      \ in self.candidatos_18) or (self.primero_en_pedir == 24)):\n              \
-      \  \n                    if self.mensaje24_a_transmitir == \"A\":\n        \
-      \                self.mensaje = 240 ### mensaje a mandar a messages, es el 24-0\
-      \ que indica 24-A\n                        output_items[2][:] = self.mensaje\n\
-      \                        self.mensaje24_a_transmitir = \"B\"\n             \
-      \           self.es_menor0 = False\n                        print(\"Envio mensaje\
-      \ 24 A\")\n                        print(\"slot \", self.current_slot)\n   \
-      \                 else:\n                        self.mensaje = 241 ### mensaje\
-      \ a mandar a messages, es el 24-1 que indica 24-B\n                        output_items[2][:]\
-      \ = self.mensaje\n                        self.mensaje24_a_transmitir = \"A\"\
-      \n                        self.es_menor0 = False\n                        print(\"\
-      Envio mensaje 24 B\")\n                        print(\"slot \", self.current_slot)\n\
-      \                    self.transmitiendo[1] = False\n                    self.prox_fijo24\
-      \ = False\n                    if self.transmitiendo[0]:\n                 \
-      \       self.primero_en_pedir = 18\n                    else:\n            \
-      \            self.primero_en_pedir = 0\n                    self.inicio_24 =\
-      \ np.real(self.slot_y_puedo[0]) ### que deberia ser igual a current_slot\n \
-      \                   self.candidatos_24 = np.full(10, -1)\n                 \
-      \   \n                    if self.ultimo_canal == \"B\":\n                 \
-      \       self.candidatos_A = np.full(10, -1)\n                        output_items[0][:]\
-      \ = self.candidatos_A\n                        self.ultimo_canal = \"A\"\n \
-      \                   else:\n                        self.candidatos_B = np.full(10,\
-      \ -1)\n                        output_items[1][:] = self.candidatos_B\n    \
-      \                    self.ultimo_canal = \"B\"\n                        \n \
-      \       output_items[0][:] = self.candidatos_A\n        output_items[1][:] =\
-      \ self.candidatos_B\n        output_items[2][:] = self.mensaje\n        return\
-      \ len(output_items[0])\n        \n        \n\n"
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-  states:
-    _io_cache: ('Transmitter', 'blk', [], [('0', 'complex', 2), ('1', 'complex', 2),
-      ('2', 'float', 1)], [('0', 'complex', 10), ('1', 'complex', 10), ('2', 'float',
-      1)], 'Embedded Python Block example - a simple multiply const', [])
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [448, 24.0]
-    rotation: 0
-    state: disabled
 - name: epy_block_0_0
   id: epy_block
   parameters:
@@ -325,161 +122,164 @@ blocks:
       \ const\"\"\"\n\n    def __init__(self):  # only default arguments here\n  \
       \      \"\"\"arguments to this function show up as parameters in GRC\"\"\"\n\
       \        gr.sync_block.__init__(\n            self,\n            name='Transmitter',\
-      \   # will show up in GRC\n            in_sig=[(np.complex64,2), (np.complex64,2),\
-      \ np.float32],\n            out_sig=[(np.complex64,10), (np.complex64,10), np.float32]\n\
-      \        )\n        self.inicio_18 = 0\n        self.inicio_24 = 0\n       \
-      \ self.slot_y_puedo = np.zeros(2)\n        self.inicializando = True\n     \
-      \   self.slots_per_minute = 2250\n        self.transmitiendo = [False, False]\n\
-      \        self.mensaje24_a_transmitir = \"A\"\n        self.primero_en_pedir\
-      \ = 0\n        self.ultimo_canal = \"B\"\n        self.prox_18 = -1\n      \
-      \  self.prox_24 = -1\n        self.mensaje = 0\n        self.current_slot =\
-      \ -1\n        self.candidatos_18 = np.full(10, -1)\n        self.candidatos_24\
-      \ = np.full(10, -1)\n        self.candidatos_A = np.full(10, -1)\n        self.candidatos_B\
-      \ = np.full(10, -1)\n        self.diff = 400\n        self.es_menor0 = False\n\
-      \        self.ultimo_slot = -1\n\n    def slot_selection(NTT):\n        selected\
+      \   # will show up in GRC\n            in_sig=[(np.complex64,2), np.float32],\n\
+      \            out_sig=[(np.complex64,10), np.float32]\n        )\n        self.inicio_18\
+      \ = 0\n        self.inicio_24 = 0\n        self.slot_y_puedo = np.zeros(2)\n\
+      \        self.inicializando = True\n        self.slots_per_minute = 2250\n \
+      \       self.transmitiendo = [False, False]\n        self.mensaje24_a_transmitir\
+      \ = \"A\"\n        self.primero_en_pedir = 0\n        self.prox_18 = -1\n  \
+      \      self.prox_24 = -1\n        self.mensaje = 0\n        self.current_slot\
+      \ = -1\n        self.candidatos_18 = np.full(10, -1)\n        self.candidatos_24\
+      \ = np.full(10, -1)\n        self.candidatos = np.full(10, -1)\n        self.diff\
+      \ = 400\n        self.es_menor0 = False\n        self.ultimo_slot = -1\n   \
+      \     self.cambio = False\n\n    def slot_selection(self, NTT):\n        selected\
       \ = np.random.randint(NTT-187, NTT+187+1, size=10)\n        selected = np.array(sorted(selected))\n\
       \        if NTT-187 < 0:\n            shift = 2250\n            selected = (selected+shift)%2250\n\
       \        elif NTT+187 > 2250:\n            selected = selected%2250\n      \
       \  return(selected)\n    \n    def work(self, input_items, output_items):\n\
-      \        \"\"\"example: multiply with constant\"\"\"\n        if self.ultimo_canal\
-      \ == \"A\": #Si el ultimo canal fue el A, vamos a transmitir en el B y tomamos\
-      \ la segunda entrada\n            self.slot_y_puedo = input_items[1][0]\n  \
-      \      else: #Si el ultimo canal fue el B, vamos a transmitir en el A y tomamos\
-      \ la primera entrada\n            self.slot_y_puedo = input_items[0][0]\n  \
-      \      if self.inicializando:\n            print(\"inicializando\")\n      \
-      \      time.sleep(60)\n            self.inicializando = False\n            \n\
-      \            current_utc_time = datetime.utcnow()\n            start_of_minute\
-      \ = current_utc_time.replace(second=0, microsecond=0)\n            time_elapsed\
-      \ = current_utc_time - start_of_minute\n            milliseconds_elapsed = time_elapsed.total_seconds()\
-      \ * 1000\n            self.current_slot = int((milliseconds_elapsed)*self.slots_per_minute/60000)\
-      \ #Cantidad de slots desde que empez\xF3 el minuto.\n            \n        \
-      \    self.inicio_18 = self.current_slot\n            self.inicio_24 = self.current_slot+10\n\
-      \            \n            print(\"inicializo\")\n            print(\"empiezan\
-      \ temporizadores\")\n            print(\"slot \", self.current_slot)\n     \
-      \       \n            if input_items[2][0] > 2: #### verificar en qu\xE9 unidad\
-      \ nos da la velocidad el gps\n                self.prox_18 = (self.inicio_18\
-      \ + 1125)%2250 # transmito cada 30 seg\n            else:\n                self.prox_18\
-      \ = (self.inicio_18 + 2250*3) # transmito cada 3 min    ### ver mod 2250\n \
-      \           print(\"fijo prox \", self.prox_18, \"ahora estoy \", self.current_slot)\n\
-      \            \n            \n            if self.mensaje24_a_transmitir == \"\
-      A\":\n                self.prox_24 = (self.inicio_24 + 2250*5) ### ver modulo\n\
-      \            else:\n                self.prox_24 = (self.inicio_24 + 2250)\n\
-      \            \n            self.mensaje = 0\n            output_items[2][:]\
-      \ = self.mensaje\n        \n        else:\n            current_utc_time = datetime.utcnow()\n\
+      \        \"\"\"example: multiply with constant\"\"\"\n        self.slot_y_puedo\
+      \ = input_items[0][0]\n        \n        if self.inicializando:\n          \
+      \  print(\"inicializando\")\n            time.sleep(60)\n            self.inicializando\
+      \ = False\n            \n            current_utc_time = datetime.utcnow()\n\
       \            start_of_minute = current_utc_time.replace(second=0, microsecond=0)\n\
       \            time_elapsed = current_utc_time - start_of_minute\n           \
       \ milliseconds_elapsed = time_elapsed.total_seconds() * 1000\n            self.current_slot\
       \ = int((milliseconds_elapsed)*self.slots_per_minute/60000) #Cantidad de slots\
-      \ desde que empez\xF3 el minuto.\n            \n            if not self.transmitiendo[0]\
-      \ and not self.transmitiendo[1]:\n                self.mensaje = 0 ## no estoy\
-      \ pidiendo ningun mensaje a messages ahora\n                output_items[2][:]\
-      \ = self.mensaje\n                \n                if self.current_slot ==\
-      \ ((self.prox_18-self.diff)%2250) and (self.current_slot != self.inicio_18):\n\
-      \                    if self.prox_18-self.diff < 0:\n                      \
-      \  self.es_menor0 = True\n                    if self.es_menor0 or (self.current_slot\
+      \ desde que empez\xF3 el minuto.\n            \n            \n            self.inicio_18\
+      \ = self.current_slot\n            self.inicio_24 = self.current_slot\n    \
+      \        self.ultimo_slot = self.current_slot\n            \n            print(\"\
+      inicializo\")\n            print(\"empiezan temporizadores\")\n            print(\"\
+      slot \", self.current_slot)\n            \n            if input_items[1][0]\
+      \ > 2: #### verificar en qu\xE9 unidad nos da la velocidad el gps\n        \
+      \        self.prox_18 = (self.inicio_18 + 1125)%2250 # transmito cada 30 seg\n\
+      \            else:\n                self.prox_18 = (self.inicio_18 + 2250*2)\
+      \ # transmito cada 3 min, ver abajo explicacion de por que solo sumo 2 mins\n\
+      \            print(\"fijo prox 18\", self.prox_18, \"ahora es \", self.current_slot)\n\
+      \            \n            \n            if self.mensaje24_a_transmitir == \"\
+      A\":\n                self.prox_24 = (self.inicio_24 + 2250*5) ### esto se transmite\
+      \ cada 6 minutos. lo que pasa es que nosotros\n                            \
+      \                             ### vamos restando en cada minuto que pasa. despues\
+      \ de que pasen 5 minutos,\n                                                \
+      \         ### va a ser necesario otro minuto entero para transmitir, asi que\
+      \ esto esta\n                                                         ### bien\
+      \ asi\n                print(\"fijo prox 240\", self.prox_24, \"ahora es \"\
+      , self.current_slot)                                           \n          \
+      \  else:\n                self.prox_24 = (self.inicio_24) #  + 2250) ### nosotros\
+      \ vamos restando de a 2250 slots. si ahora ponemos inicio+2250,\n          \
+      \                                              ### indicando que tenemos que\
+      \ transmitir en un minuto, cuando pase el minuto\n                         \
+      \                               ### voy a restar 2250, pero espero otro minuto\
+      \ entero para transmitir, y esto esta\n                                    \
+      \                    ### mal. por eso solo inicio_24 (ese slot, pero del siguiente\
+      \ minuto)\n                print(\"fijo prox 241\", self.prox_24, \"ahora es\
+      \ \", self.current_slot)\n            \n            self.mensaje = 0\n     \
+      \       output_items[1][:] = self.mensaje\n        \n        else:\n       \
+      \     current_utc_time = datetime.utcnow()\n            start_of_minute = current_utc_time.replace(second=0,\
+      \ microsecond=0)\n            time_elapsed = current_utc_time - start_of_minute\n\
+      \            milliseconds_elapsed = time_elapsed.total_seconds() * 1000\n  \
+      \          self.current_slot = int((milliseconds_elapsed)*self.slots_per_minute/60000)\
+      \ #Cantidad de slots desde que empez\xF3 el minuto.\n            \n        \
+      \    if self.current_slot != self.ultimo_slot:\n                self.ultimo_slot\
+      \ = self.current_slot\n                self.cambio = True\n            \n  \
+      \          self.mensaje = 0 ## no estoy pidiendo ningun mensaje a messages ahora\n\
+      \            output_items[1][:] = self.mensaje\n            \n            if\
+      \ self.prox_18 >= 2250 and self.current_slot == (self.prox_18%2250) and self.cambio:\n\
+      \                self.prox_18 = self.prox_18 - 2250\n                print(\"\
+      queda un minuto menos 18\")\n                 \n            elif (not self.transmitiendo[0]):\
+      \ ### en un elif porque sino podr\xEDa ser que resto 2250 y despu\xE9s se hacen\
+      \ cosas con el n\xFAmero resultante.\n                \n                if self.current_slot\
+      \ == ((self.prox_18-self.diff)%2250): ### and (self.current_slot != self.inicio_18):\n\
+      \                ### ver que esto si no podemos analizar todos los slots, es\
+      \ un problema. porque capaz nunca miro el slot prox_18-diff\n              \
+      \  \n                    if self.prox_18-self.diff < 0:\n                  \
+      \      self.es_menor0 = True\n                    if self.es_menor0 or (self.current_slot\
       \ == self.prox_18-self.diff):\n                        self.candidatos_18 =\
-      \ [self.prox_18-5,self.prox_18-4,self.prox_18-3,self.prox_18-2,self.prox_18-1,\
-      \ self.prox_18,self.prox_18+1,self.prox_18+2,self.prox_18+3,self.prox_18+4]#slot_selection(self.prox_18)\n\
+      \ self.slot_selection(self.prox_18) #[self.prox_18-5,self.prox_18-4,self.prox_18-3,self.prox_18-2,self.prox_18-1,\
+      \ self.prox_18,self.prox_18+1,self.prox_18+2,self.prox_18+3,self.prox_18+4]#\n\
       \                        self.transmitiendo[0] = True\n                    \
-      \    print(\"transm 18\", self.current_slot)\n                        if self.primero_en_pedir\
-      \ == 0:\n                            self.primero_en_pedir = 18\n          \
-      \                  \n                        if self.ultimo_canal == \"B\":\n\
-      \                            self.candidatos_A = self.candidatos_18\n      \
-      \                      output_items[0][:] = self.candidatos_A\n            \
-      \            else:\n                            self.candidatos_B = self.candidatos_18\n\
-      \                            output_items[1][:] = self.candidatos_B\n      \
-      \                      \n                    else:\n                       \
-      \ self.prox_18 = self.prox_18 - 2250 # queda un minuto menos\n             \
-      \           \n                if self.current_slot == ((self.prox_24-self.diff)%2250)\
-      \ and (self.current_slot != self.inicio_24):\n                    if self.prox_24-self.diff\
-      \ < 0:\n                        self.es_menor0 = True\n                    if\
-      \ self.es_menor0 or (self.current_slot == self.prox_24-self.diff):\n       \
-      \                 self.candidatos_24 = [self.prox_24-5,self.prox_24-4,self.prox_24-3,self.prox_24-2,self.prox_24-1,\
+      \    print(\"transmitiendo 18\", self.current_slot)\n                      \
+      \  if self.primero_en_pedir == 0:\n                            self.primero_en_pedir\
+      \ = 18\n                            \n                        self.candidatos\
+      \ = self.candidatos_18\n                        output_items[0][:] = self.candidatos\n\
+      \                        self.es_menor0 = False\n\n            if self.prox_24\
+      \ >= 2250 and self.current_slot == (self.prox_24%2250) and self.cambio:\n  \
+      \              self.prox_24 = self.prox_24 - 2250       \n                print(\"\
+      queda un minuto menos 24\") \n\n            elif not self.transmitiendo[1]:\n\
+      \                        \n                if self.current_slot == (self.prox_24-self.diff)%2250:\
+      \ ### and (self.current_slot != self.inicio_24): ### ver segunda condicion\n\
+      \                    if self.prox_24-self.diff < 0:\n                      \
+      \  self.es_menor0 = True\n                    if self.es_menor0 or (self.current_slot\
+      \ == self.prox_24-self.diff):\n                        self.candidatos_24 =\
+      \ self.slot_selection(self.prox_24) #[self.prox_24-5,self.prox_24-4,self.prox_24-3,self.prox_24-2,self.prox_24-1,\
       \ self.prox_24,self.prox_24+1,self.prox_24+2,self.prox_24+3,self.prox_24+4]\
-      \ #slot_selection(self.prox_24)\n                        self.transmitiendo[1]\
-      \ = True\n                        if self.primero_en_pedir == 0:\n         \
-      \                   self.primero_en_pedir = 24\n                           \
-      \ \n                        if self.ultimo_canal == \"B\":\n               \
-      \             self.candidatos_A = self.candidatos_24\n                     \
-      \       output_items[0][:] = self.candidatos_A\n                        else:\n\
-      \                            self.candidatos_B = self.candidatos_24\n      \
-      \                      output_items[1][:] = self.candidatos_B\n            \
-      \                \n                    else:\n                        self.prox_24\
-      \ = self.prox_24 - 2250 # queda un minuto menos\n                        \n\
-      \            else:\n                if self.transmitiendo[0] and (np.real(self.slot_y_puedo[1])\
-      \ == 1) and (np.real(self.slot_y_puedo[0]) in self.candidatos_18) and ((not\
+      \ #\n                        self.transmitiendo[1] = True\n                \
+      \        print(\"transmitiendo 24\", self.current_slot)\n                  \
+      \      if self.primero_en_pedir == 0:\n                            self.primero_en_pedir\
+      \ = 24\n                        \n                        self.candidatos =\
+      \ self.candidatos_24\n                        output_items[0][:] = self.candidatos\n\
+      \                        self.es_menor0 = False\n                        \n\
+      \            \n            if self.transmitiendo[0] and (np.real(self.slot_y_puedo[0])\
+      \ in self.candidatos_18) and (np.real(self.slot_y_puedo[1]) == 1) and ((not\
       \ self.slot_y_puedo[0] in self.candidatos_24) or (self.primero_en_pedir == 18))\
       \ and self.current_slot == self.slot_y_puedo[0]:\n                \n       \
-      \             self.mensaje = 18 ### mensaje a mandar a messages\n          \
-      \          output_items[2][:] = self.mensaje\n                    self.transmitiendo[0]\
-      \ = False\n                    if self.transmitiendo[1]:\n                 \
-      \       self.primero_en_pedir = 24\n                    else:\n            \
-      \            self.primero_en_pedir = 0\n                    self.inicio_18 =\
-      \ np.real(self.slot_y_puedo[0]) ### que deberia ser igual a current_slot\n \
-      \                   if input_items[2][0] > 2: #### verificar en qu\xE9 unidad\
-      \ nos da la velocidad el gps\n                        self.prox_18 = (self.inicio_18\
-      \ + 1125)%2250 # transmito cada 30 seg\n                    else:\n        \
-      \                self.prox_18 = (self.inicio_18 + 2250*3) # transmito cada 3\
-      \ min    ### ver mod 2250\n                    print(\"fijo prox \", self.prox_18,\
-      \ \"ahora estoy \", self.current_slot)\n                    \n             \
-      \       self.candidatos_18 = np.full(10, -1)\n                    self.es_menor0\
-      \ = False\n                    \n                    print(self.ultimo_canal,\
-      \ \" reinicia 30s\", self.current_slot)\n                    #print(\"slot \"\
-      , self.current_slot)\n                    #print(\"slot y puedo\", self.slot_y_puedo[0])\n\
-      \                    \n                    self.slot_y_puedo = np.zeros(2)\n\
-      \                    \n                    if self.ultimo_canal == \"B\": #\
-      \ si el ultimo canal era B, transmiti en A recien, entonces limpio esas variables\
-      \ y actualizo el ultimo canal\n                        self.candidatos_A = np.full(10,\
-      \ -1)\n                        output_items[0][:] = self.candidatos_A\n    \
-      \                    self.ultimo_canal = \"A\"\n                    else:\n\
-      \                        self.candidatos_B = np.full(10, -1)\n             \
-      \           output_items[1][:] = self.candidatos_B\n                       \
-      \ self.ultimo_canal = \"B\"\n                        \n                elif\
-      \ self.transmitiendo[1] and self.slot_y_puedo[1] == 1 and (self.slot_y_puedo[0]\
-      \ in self.candidatos_24) and (not (self.slot_y_puedo[0] in self.candidatos_18)\
-      \ or (self.primero_en_pedir == 24)):\n                \n                   \
-      \ if self.mensaje24_a_transmitir == \"A\":\n                        self.mensaje\
-      \ = 240 ### mensaje a mandar a messages, es el 24-0 que indica 24-A\n      \
-      \                  output_items[2][:] = self.mensaje\n                     \
-      \   self.mensaje24_a_transmitir = \"B\"\n                        self.es_menor0\
-      \ = False\n                        print(\"Envio mensaje 24 A\")\n         \
-      \               print(\"slot \", self.current_slot)\n                    else:\n\
-      \                        self.mensaje = 241 ### mensaje a mandar a messages,\
-      \ es el 24-1 que indica 24-B\n                        output_items[2][:] = self.mensaje\n\
-      \                        self.mensaje24_a_transmitir = \"A\"\n             \
-      \           self.es_menor0 = False\n                        print(\"Envio mensaje\
-      \ 24 B\")\n                        print(\"slot \", self.current_slot)\n   \
-      \                 self.transmitiendo[1] = False\n                    self.prox_fijo24\
-      \ = False\n                    if self.transmitiendo[0]:\n                 \
-      \       self.primero_en_pedir = 18\n                    else:\n            \
-      \            self.primero_en_pedir = 0\n                    self.inicio_24 =\
-      \ np.real(self.slot_y_puedo[0]) ### que deberia ser igual a current_slot\n \
-      \                   \n                    if self.mensaje24_a_transmitir ==\
-      \ \"A\":\n                        self.prox_24 = (self.inicio_24 + 2250*5) ###\
-      \ ver modulo\n                    else:\n                        self.prox_24\
-      \ = (self.inicio_24 + 2250)\n                    \n                    self.candidatos_24\
-      \ = np.full(10, -1)\n                    \n                    if self.ultimo_canal\
-      \ == \"B\":\n                        self.candidatos_A = np.full(10, -1)\n \
-      \                       output_items[0][:] = self.candidatos_A\n           \
-      \             self.ultimo_canal = \"A\"\n                    else:\n       \
-      \                 self.candidatos_B = np.full(10, -1)\n                    \
-      \    output_items[1][:] = self.candidatos_B\n                        self.ultimo_canal\
-      \ = \"B\"\n                        \n        output_items[0][:] = self.candidatos_A\n\
-      \        output_items[1][:] = self.candidatos_B\n        output_items[2][:]\
-      \ = self.mensaje\n        return len(output_items[0])\n        \n        \n\n"
+      \         self.mensaje = 18 ### mensaje a mandar a messages\n              \
+      \  output_items[1][:] = self.mensaje\n                self.transmitiendo[0]\
+      \ = False\n                if self.transmitiendo[1]:\n                    self.primero_en_pedir\
+      \ = 24\n                else:\n                    self.primero_en_pedir = 0\n\
+      \                   \n                self.inicio_18 = np.real(self.slot_y_puedo[0])\
+      \ ### que deberia ser igual a current_slot\n                    \n         \
+      \       if input_items[1][0] > 2: #### verificar en qu\xE9 unidad nos da la\
+      \ velocidad el gps\n                    self.prox_18 = (self.inicio_18 + 1125)%2250\
+      \ # transmito cada 30 seg\n                else:\n                    self.prox_18\
+      \ = (self.inicio_18 + 2250*2) # transmito cada 3 min    ### ver mod 2250\n \
+      \               print(\"fijo prox \", self.prox_18, \"ahora es \", self.current_slot)\n\
+      \                    \n                self.candidatos_18 = np.full(10, -1)\n\
+      \                    \n                print(\"reinicia 30s\", self.current_slot)\n\
+      \                #print(\"slot \", self.current_slot)\n                #print(\"\
+      slot y puedo\", self.slot_y_puedo[0])\n                \n                self.slot_y_puedo\
+      \ = np.zeros(2)\n                    \n                self.candidatos = np.full(10,\
+      \ -1)\n                output_items[0][:] = self.candidatos\n              \
+      \      \n                    \n                \n                        \n\
+      \            if self.transmitiendo[1] and (self.slot_y_puedo[0] in self.candidatos_24)\
+      \ and np.real(self.slot_y_puedo[1]) == 1 and (not (self.slot_y_puedo[0] in self.candidatos_18)\
+      \ or (self.primero_en_pedir == 24)) and self.current_slot == self.slot_y_puedo[0]:\n\
+      \                \n                if self.mensaje24_a_transmitir == \"A\":\n\
+      \                    self.mensaje = 240 ### mensaje a mandar a messages, es\
+      \ el 24-0 que indica 24-A\n                    output_items[1][:] = self.mensaje\n\
+      \                    self.mensaje24_a_transmitir = \"B\"\n                 \
+      \       \n                    print(\"Envio mensaje 24 A\")\n              \
+      \      print(\"slot \", self.current_slot)\n                else:\n        \
+      \            self.mensaje = 241 ### mensaje a mandar a messages, es el 24-1\
+      \ que indica 24-B\n                    output_items[1][:] = self.mensaje\n \
+      \                   self.mensaje24_a_transmitir = \"A\"\n                  \
+      \      \n                    print(\"Envio mensaje 24 B\")\n               \
+      \     print(\"slot \", self.current_slot)\n                self.transmitiendo[1]\
+      \ = False\n                    \n                if self.transmitiendo[0]:\n\
+      \                    self.primero_en_pedir = 18\n                else:\n   \
+      \                 self.primero_en_pedir = 0\n                self.inicio_24\
+      \ = np.real(self.slot_y_puedo[0]) ### que deberia ser igual a current_slot\n\
+      \                    \n                if self.mensaje24_a_transmitir == \"\
+      A\":\n                    self.prox_24 = (self.inicio_24 + 2250*5) ### ver modulo\n\
+      \                else:\n                    self.prox_24 = (self.inicio_24)\n\
+      \                    \n                self.candidatos_24 = np.full(10, -1)\n\
+      \                    \n                self.candidatos = np.full(10, -1)\n \
+      \               output_items[0][:] = self.candidatos\n                    \n\
+      \        \n            self.cambio = False\n        output_items[0][:] = self.candidatos\n\
+      \        output_items[1][:] = self.mensaje\n        return len(output_items[0])\n\
+      \        \n        \n\n"
     affinity: ''
     alias: ''
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
-    _io_cache: ('Transmitter', 'blk', [], [('0', 'complex', 2), ('1', 'complex', 2),
-      ('2', 'float', 1)], [('0', 'complex', 10), ('1', 'complex', 10), ('2', 'float',
-      1)], 'Embedded Python Block example - a simple multiply const', [])
+    _io_cache: ('Transmitter', 'blk', [], [('0', 'complex', 2), ('1', 'float', 1)],
+      [('0', 'complex', 10), ('1', 'float', 1)], 'Embedded Python Block example -
+      a simple multiply const', [])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [464, 216.0]
+    coordinate: [512, 272.0]
     rotation: 0
     state: true
 - name: epy_block_1
@@ -498,18 +298,20 @@ blocks:
       \            in_sig=[np.float32],\n            out_sig=[]\n        )\n     \
       \   # if an attribute with the same name as a parameter is found,\n        #\
       \ a callback is registered (properties work, too).\n        self.example_param\
-      \ = example_param\n        self.lim = 5000\n        self.primera18 = True\n\n\
-      \    def work(self, input_items, output_items):\n        \"\"\"example: multiply\
-      \ with constant\"\"\"\n        if (18 in input_items[0] or 240 in input_items[0]\
-      \ or 241 in input_items[0]) and self.lim >0:\n        \tif 18 in input_items[0]\
-      \ and self.primera18:\n        \t\tprint(\"llego 18\")\n        \t\tself.primera18\
-      \ = False\n        \telif 240 in input_items[0] and self.lim == 70:\n      \
-      \  \t\tprint(\"llego 240\")\n        \telif 241 in input_items[0] and self.lim\
-      \ == 70:\n        \t\tprint(\"llego 241\")\n        \tself.lim -= 1\n      \
-      \  \t\n        #if 18 not in input_items[0] and 240 not in input_items[0] and\
-      \ 241 not in input_items[0]:\n        if self.lim == 0:\n        \tself.lim\
-      \ = 5000\n        \tself.primera18 = True\n\n        return 2\n        \n  \
-      \      \n        \n        \n        \n        \n        \n"
+      \ = example_param\n        self.lim = 3000\n        self.primera18 = True\n\
+      \        self.primera240 = True\n        self.primera241 = True\n\n    def work(self,\
+      \ input_items, output_items):\n        \"\"\"example: multiply with constant\"\
+      \"\"\n        if (18 in input_items[0] or 240 in input_items[0] or 241 in input_items[0])\
+      \ and self.lim >0:\n            if 18 in input_items[0] and self.primera18:\n\
+      \                print(\"llego 18\")\n                self.primera18 = False\n\
+      \            elif 240 in input_items[0] and self.primera240:\n             \
+      \   print(\"llego 240\")\n                self.primera240 = False\n        \
+      \    \n            elif 241 in input_items[0] and self.primera241:\n       \
+      \         print(\"llego 241\")\n                self.primera241 = False\n  \
+      \          self.lim -= 1\n            \n        if self.lim == 0:\n        \
+      \    self.lim = 3000\n            self.primera18 = True\n            self.primera240\
+      \ = True\n            self.primera241 = True\n\n        return 2\n        \n\
+      \        \n        \n        \n        \n        \n        \n"
     affinity: ''
     alias: ''
     comment: ''
@@ -523,72 +325,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [704, 260.0]
+    coordinate: [672, 388.0]
     rotation: 0
     state: true
-- name: qtgui_number_sink_0
-  id: qtgui_number_sink
-  parameters:
-    affinity: ''
-    alias: ''
-    autoscale: 'False'
-    avg: '0'
-    color1: ("black", "black")
-    color10: ("black", "black")
-    color2: ("black", "black")
-    color3: ("black", "black")
-    color4: ("black", "black")
-    color5: ("black", "black")
-    color6: ("black", "black")
-    color7: ("black", "black")
-    color8: ("black", "black")
-    color9: ("black", "black")
-    comment: ''
-    factor1: '1'
-    factor10: '1'
-    factor2: '1'
-    factor3: '1'
-    factor4: '1'
-    factor5: '1'
-    factor6: '1'
-    factor7: '1'
-    factor8: '1'
-    factor9: '1'
-    graph_type: qtgui.NUM_GRAPH_HORIZ
-    gui_hint: ''
-    label1: ''
-    label10: ''
-    label2: ''
-    label3: ''
-    label4: ''
-    label5: ''
-    label6: ''
-    label7: ''
-    label8: ''
-    label9: ''
-    max: '300'
-    min: '10'
-    name: '""'
-    nconnections: '1'
-    type: float
-    unit1: ''
-    unit10: ''
-    unit2: ''
-    unit3: ''
-    unit4: ''
-    unit5: ''
-    unit6: ''
-    unit7: ''
-    unit8: ''
-    unit9: ''
-    update_time: '0.10'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [648, 348.0]
-    rotation: 0
-    state: disabled
 - name: zeromq_pub_sink_0
   id: zeromq_pub_sink
   parameters:
@@ -605,26 +344,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [824, 12.0]
-    rotation: 0
-    state: true
-- name: zeromq_pub_sink_1
-  id: zeromq_pub_sink
-  parameters:
-    address: tcp://127.0.0.1:6001
-    affinity: ''
-    alias: ''
-    comment: ''
-    hwm: '-1'
-    pass_tags: 'False'
-    timeout: mss
-    type: complex
-    vlen: '10'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [824, 116.0]
+    coordinate: [832, 108.0]
     rotation: 0
     state: true
 - name: zeromq_sub_source_0
@@ -645,49 +365,17 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [40, 116.0]
-    rotation: 0
-    state: true
-- name: zeromq_sub_source_1
-  id: zeromq_sub_source
-  parameters:
-    address: tcp://127.0.0.1:5001
-    affinity: ''
-    alias: ''
-    comment: ''
-    hwm: '-1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    pass_tags: 'False'
-    timeout: mss
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [40, 244.0]
+    coordinate: [70, 229]
     rotation: 0
     state: true
 
 connections:
-- [analog_const_source_x_0, '0', epy_block_0, '2']
-- [analog_const_source_x_0, '0', epy_block_0_0, '2']
-- [blocks_stream_to_vector_0, '0', epy_block_0, '0']
+- [analog_const_source_x_0, '0', epy_block_0_0, '1']
 - [blocks_stream_to_vector_0, '0', epy_block_0_0, '0']
-- [blocks_stream_to_vector_1, '0', epy_block_0, '1']
-- [blocks_stream_to_vector_1, '0', epy_block_0_0, '1']
 - [blocks_vector_to_stream_0, '0', zeromq_pub_sink_0, '0']
-- [blocks_vector_to_stream_1, '0', zeromq_pub_sink_1, '0']
-- [epy_block_0, '0', blocks_vector_to_stream_0, '0']
-- [epy_block_0, '1', blocks_vector_to_stream_1, '0']
-- [epy_block_0, '2', epy_block_1, '0']
-- [epy_block_0, '2', qtgui_number_sink_0, '0']
 - [epy_block_0_0, '0', blocks_vector_to_stream_0, '0']
-- [epy_block_0_0, '1', blocks_vector_to_stream_1, '0']
-- [epy_block_0_0, '2', epy_block_1, '0']
+- [epy_block_0_0, '1', epy_block_1, '0']
 - [zeromq_sub_source_0, '0', blocks_stream_to_vector_0, '0']
-- [zeromq_sub_source_1, '0', blocks_stream_to_vector_1, '0']
 
 metadata:
   file_format: 1
