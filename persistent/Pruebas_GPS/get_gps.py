@@ -7,16 +7,18 @@ import serial
 import pynmea2 
 import zmq
 
-serial_port = '/dev/ttyUSB0'
+serial_port = '/dev/ttyACM0'
 ser = serial.Serial(serial_port, baudrate=9600, timeout=1)
 
 context = zmq.Context()
 socket = context.socket(zmq.PUB)
-socket.bind("tcp://127.0.0.1:5570")
+socket.bind("tcp://127.0.0.1:5600")
+from datetime import datetime
+
 
 # Se definen dos topics, uno para cada tipo de info que se quiere mandar a otros scripts
-topic_utc = "UTC"
-topic_info = "info"
+#topic_utc = "UTC"
+#topic_info = "info"
 
 while True:
     # Se lee una línea o un dato desde el GPS
@@ -28,16 +30,24 @@ while True:
         try:
             # Se parsea con NMEA la línea leída, se generan las estructuras de datos
             # necesarias para la transmisión a través del socket, y se envía.
-            msg = pynmea2.parse(line)
-            datos = {"long": msg.longitude, "lat": msg.latitude, "sog": msg.spd_over_grnd, "cog": msg.true_course} 
-            message_info = f"{topic_info} {datos}"
-            message_utc = f"{topic_utc} {msg.timestamp}"
-            
-            socket.send_string(message_info)
-            socket.send_string(message_utc)
+            packet = pynmea2.parse(line)
+            #print(packet.fields)
+            latitude = packet.latitude
+            longitude = packet.longitude
+            speed = packet.spd_over_grnd
+            if speed is None: # sometimes we don't have access to gps data
+                speed_in_knots = 4
+            else:    
+                speed_in_knots = speed*1.94384
+            course = packet.true_course
+            gps_time_str = packet.timestamp
+            #gps_time_datetime = datetime.strptime(gps_time_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+            utc_second = gps_time_str.second
+			# Print the information
+            print(f"Latitude: {latitude}, Longitude: {longitude}, Speed: {speed} m/s, Course: {course}, UTC second: {utc_second}")
+            dict = {"speed": speed_in_knots, "lon": longitude, "lat": latitude, "course": course, "UTC_sec": utc_second}
+            socket.send_string(f"{dict}")
 
-            print("messages sent", message_info)
-            print("messages sent", message_utc)
 
         except pynmea2.ParseError as e:
             print(f"Error parsing NMEA sentence: {e}")

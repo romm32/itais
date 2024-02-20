@@ -1,0 +1,7 @@
+/*!
+ * \defgroup block GNU Radio ITAIS C++ Signal Processing Blocks
+ * \brief All C++ blocks that can be used from the ITAIS GNU Radio
+ *        module are listed here or in the subcategories below.
+ *
+ */
+

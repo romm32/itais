@@ -62,6 +62,24 @@ blocks:
     coordinate: [384, 300.0]
     rotation: 0
     state: enabled
+- name: blocks_vector_to_stream_0_0_0
+  id: blocks_vector_to_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: '1'
+    type: complex
+    vlen: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 84.0]
+    rotation: 0
+    state: enabled
 - name: epy_block_0_0_0
   id: epy_block
   parameters:
@@ -95,13 +113,49 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [160, 308.0]
+    coordinate: [152, 292.0]
+    rotation: 0
+    state: true
+- name: epy_block_0_0_0_0_0
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\n\n\nclass blk(gr.sync_block):  # other base classes\
+      \ are basic_block, decim_block, interp_block\n    \"\"\"Embedded Python Block\
+      \ example - a simple multiply const\"\"\"\n\n    def __init__(self, example_param=1.0):\
+      \  # only default arguments here\n        \"\"\"arguments to this function show\
+      \ up as parameters in GRC\"\"\"\n        gr.sync_block.__init__(\n         \
+      \   self,\n            name='Embedded Python Block',   # will show up in GRC\n\
+      \            in_sig=[],\n            out_sig=[(np.complex64, 2)]\n        )\n\
+      \        # if an attribute with the same name as a parameter is found,\n   \
+      \     # a callback is registered (properties work, too).\n        self.example_param\
+      \ = example_param\n        self.lim = 5\n        self.arr = [1, 2]\n\n    def\
+      \ work(self, input_items, output_items):\n        \"\"\"example: multiply with\
+      \ constant\"\"\"\n        output_items[0][:] = self.arr\n        if self.lim\
+      \ > 0:\n                print(\"pub: \", self.arr)\n                self.lim\
+      \ = self.lim-1\n        return 2\n"
+    affinity: ''
+    alias: ''
+    comment: esta parte envia arreglos de dim 2
+    example_param: '1.0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('Embedded Python Block', 'blk', [('example_param', '1.0')], [], [('0',
+      'complex', 2)], 'Embedded Python Block example - a simple multiply const', ['example_param'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 92.0]
     rotation: 0
     state: true
 - name: zeromq_pub_sink_0_0
   id: zeromq_pub_sink
   parameters:
-    address: tcp://127.0.0.1:5000
+    address: tcp://127.0.0.1:5611
     affinity: ''
     alias: ''
     comment: ''
@@ -117,10 +171,31 @@ blocks:
     coordinate: [576, 284.0]
     rotation: 0
     state: true
+- name: zeromq_pub_sink_0_0_0
+  id: zeromq_pub_sink
+  parameters:
+    address: tcp://127.0.0.1:5610
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    pass_tags: 'False'
+    timeout: '100'
+    type: complex
+    vlen: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [752, 92.0]
+    rotation: 0
+    state: true
 
 connections:
 - [blocks_vector_to_stream_0_0, '0', zeromq_pub_sink_0_0, '0']
+- [blocks_vector_to_stream_0_0_0, '0', zeromq_pub_sink_0_0_0, '0']
 - [epy_block_0_0_0, '0', blocks_vector_to_stream_0_0, '0']
+- [epy_block_0_0_0_0_0, '0', blocks_vector_to_stream_0_0_0, '0']
 
 metadata:
   file_format: 1

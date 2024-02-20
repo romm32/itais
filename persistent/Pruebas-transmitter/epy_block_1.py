@@ -24,7 +24,7 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         # if an attribute with the same name as a parameter is found,
         # a callback is registered (properties work, too).
         self.example_param = example_param
-        self.lim = 3000
+        self.lim = 6000
         self.primera18 = True
         self.primera240 = True
         self.primera241 = True

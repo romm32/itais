@@ -32,7 +32,7 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import zeromq
-import epy_block_0_0
+import epy_block_0
 import epy_block_1
 
 from gnuradio import qtgui
@@ -79,24 +79,32 @@ class transmitter(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
-        self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5000', mss, False, -1)
-        self.zeromq_pub_sink_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 10, 'tcp://127.0.0.1:6000', mss, False, -1)
+        self.zeromq_sub_source_0_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5611', mss, False, -1)
+        self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5610', mss, False, -1)
+        self.zeromq_pub_sink_0_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 10, 'tcp://127.0.0.1:5606', mss, False, -1)
+        self.zeromq_pub_sink_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 10, 'tcp://127.0.0.1:5605', mss, False, -1)
         self.epy_block_1 = epy_block_1.blk(example_param=1.0)
-        self.epy_block_0_0 = epy_block_0_0.blk()
+        self.epy_block_0 = epy_block_0.blk()
+        self.blocks_vector_to_stream_0_0 = blocks.vector_to_stream(gr.sizeof_gr_complex*10, 1)
         self.blocks_vector_to_stream_0 = blocks.vector_to_stream(gr.sizeof_gr_complex*10, 1)
+        self.blocks_stream_to_vector_0_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, 2)
         self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, 2)
-        self.analog_const_source_x_0 = analog.sig_source_f(0, analog.GR_CONST_WAVE, 0, 0, 1)
+        self.analog_const_source_x_0 = analog.sig_source_f(0, analog.GR_CONST_WAVE, 0, 0, 4)
 
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.analog_const_source_x_0, 0), (self.epy_block_0_0, 1))
-        self.connect((self.blocks_stream_to_vector_0, 0), (self.epy_block_0_0, 0))
+        self.connect((self.analog_const_source_x_0, 0), (self.epy_block_0, 2))
+        self.connect((self.blocks_stream_to_vector_0, 0), (self.epy_block_0, 0))
+        self.connect((self.blocks_stream_to_vector_0_0, 0), (self.epy_block_0, 1))
         self.connect((self.blocks_vector_to_stream_0, 0), (self.zeromq_pub_sink_0, 0))
-        self.connect((self.epy_block_0_0, 0), (self.blocks_vector_to_stream_0, 0))
-        self.connect((self.epy_block_0_0, 1), (self.epy_block_1, 0))
+        self.connect((self.blocks_vector_to_stream_0_0, 0), (self.zeromq_pub_sink_0_0, 0))
+        self.connect((self.epy_block_0, 0), (self.blocks_vector_to_stream_0, 0))
+        self.connect((self.epy_block_0, 1), (self.blocks_vector_to_stream_0_0, 0))
+        self.connect((self.epy_block_0, 2), (self.epy_block_1, 0))
         self.connect((self.zeromq_sub_source_0, 0), (self.blocks_stream_to_vector_0, 0))
+        self.connect((self.zeromq_sub_source_0_0, 0), (self.blocks_stream_to_vector_0_0, 0))
 
 
     def closeEvent(self, event):

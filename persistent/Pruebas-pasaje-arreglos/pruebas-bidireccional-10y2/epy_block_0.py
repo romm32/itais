@@ -34,7 +34,12 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         	self.arr = np.real(input_items[0][0])
 
         if self.lim > 0:
-                print("sub: ", self.arr)
-                self.lim = self.lim - 1
-
+        	print("sub: ", self.arr)
+        	self.lim = self.lim - 1
+        	
+        	
         return len(output_items)
+        
+        
+        
+        

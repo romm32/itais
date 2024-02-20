@@ -1,0 +1,25 @@
+#!/usr/bin/python3
+#ais transmitter, main app
+
+from gnuradio.eng_option import eng_option
+from optparse import OptionParser
+import itais
+
+import time
+import sys
+import socket
+
+def main():
+    # Create Options Parser
+    parser = OptionParser (option_class=eng_option, conflict_handler="resolve")
+    itais.rf.ais_rf.add_rf_options(parser)
+    (options, args) = parser.parse_args ()
+
+    tb = itais.rf.ais_rf(options)
+    tb.run()
+    tb.close()
+
+if __name__ == '__main__':
+    main()
+
+

@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="namespacegr_1_1itais" kind="namespace" language="C++">
+    <compoundname>gr::itais</compoundname>
+    <innerclass refid="classgr_1_1itais_1_1corr__est__cc" prot="public">gr::itais::corr_est_cc</innerclass>
+    <innerclass refid="classgr_1_1itais_1_1freqest" prot="public">gr::itais::freqest</innerclass>
+    <innerclass refid="classgr_1_1itais_1_1invert" prot="public">gr::itais::invert</innerclass>
+    <innerclass refid="classgr_1_1itais_1_1msk__timing__recovery__cc" prot="public">gr::itais::msk_timing_recovery_cc</innerclass>
+    <innerclass refid="classgr_1_1itais_1_1pdu__to__nmea" prot="public">gr::itais::pdu_to_nmea</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/gnuradio/gr-itais/include/itais/corr_est_cc.h" line="28" column="17"/>
+  </compounddef>
+</doxygen>

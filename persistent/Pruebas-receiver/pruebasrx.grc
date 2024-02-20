@@ -1,0 +1,369 @@
+options:
+  parameters:
+    author: ''
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: pruebitasrx
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: pruebasrx
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: mss
+  id: variable
+  parameters:
+    comment: ''
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 12.0]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '32000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 12]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_to_stream_0_0
+  id: blocks_vector_to_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: '1'
+    type: complex
+    vlen: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1000, 420.0]
+    rotation: 0
+    state: true
+- name: blocks_vector_to_stream_0_0_0
+  id: blocks_vector_to_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: '1'
+    type: complex
+    vlen: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1000, 196.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\nfrom datetime import datetime, timedelta\n\n\nclass\
+      \ blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block\n\
+      \    \"\"\"Embedded Python Block example - a simple multiply const\"\"\"\n\n\
+      \    def __init__(self, example_param=1.0):  # only default arguments here\n\
+      \        \"\"\"arguments to this function show up as parameters in GRC\"\"\"\
+      \n        gr.sync_block.__init__(\n            self,\n            name='Embedded\
+      \ Python Block',   # will show up in GRC\n            in_sig=[np.float32],\n\
+      \            out_sig=[(np.complex64,10)]\n        )\n        # if an attribute\
+      \ with the same name as a parameter is found,\n        # a callback is registered\
+      \ (properties work, too).\n        self.NTT = 700\n        self.candidatos =\
+      \ np.full(10, -1)\n        self.slot_y_puedo = [2, 2]\n        self.current_slot\
+      \ = -1\n        self.slots_per_minute = 2250\n        self.inicios = 500\n \
+      \       self.cambio = False\n        self.ultimo_slot = -1\n        self.primeravez\
+      \ = True\n        self.ultimavez = True\n        self.s_y_p_numero = 0\n\n \
+      \   def work(self, input_items, output_items):\n        \"\"\"example: multiply\
+      \ with constant\"\"\"\n        current_utc_time = datetime.utcnow()\n      \
+      \  start_of_minute = current_utc_time.replace(second=0, microsecond=0)\n   \
+      \     time_elapsed = current_utc_time - start_of_minute\n        milliseconds_elapsed\
+      \ = time_elapsed.total_seconds() * 1000\n        self.current_slot = int((milliseconds_elapsed)*self.slots_per_minute/60000)\
+      \ #Cantidad de slots desde que empez\xF3 el minuto.\n        \n        self.s_y_p_numero\
+      \ = int(input_items[0][0])\n\n        if len(str(self.s_y_p_numero)) != 1:\n\
+      \            self.slot_y_puedo[0] = int(str(self.s_y_p_numero)[0:len(str(self.s_y_p_numero))-1])\n\
+      \        else:\n            self.slot_y_puedo[0] = 0\n        self.slot_y_puedo[1]\
+      \ = int(str(self.s_y_p_numero)[-1]) # slot y puedo\n        \n        if self.current_slot\
+      \ != self.ultimo_slot:\n            self.ultimo_slot = self.current_slot\n \
+      \           self.cambio = True\n            #print(input_items[0][0])\n    \
+      \        #print(\"s_y_p\", self.slot_y_puedo)\n            if self.current_slot\
+      \ in self.candidatos and self.slot_y_puedo[0] == self.current_slot:\n      \
+      \          print(\"s_y_p\", self.slot_y_puedo)\n                #print(np.count_nonzero(self.slot_y_puedo[0]))\n\
+      \                \n\n        if self.slot_y_puedo[1] == 1 and self.slot_y_puedo[0]\
+      \ in self.candidatos and self.cambio:\n            print(self.slot_y_puedo,\
+      \ \"A\")\n        \n        elif self.slot_y_puedo[1] == 3 and self.primeravez:\n\
+      \            print(\"inicializando\")\n            self.primeravez = False\n\
+      \        elif self.slot_y_puedo[1] != 3 and self.ultimavez:\n            print(\"\
+      inicializo\")\n            self.ultimavez = False\n        \n        if (self.current_slot\
+      \ - self.inicios)%2250 <= 200:\n            self.NTT = self.inicios\n      \
+      \      self.inicios = (self.inicios + 1125)%2250 \n            self.candidatos\
+      \ = np.array(sorted(np.random.randint(self.NTT-187, self.NTT+187+1, size=10)))\n\
+      \            print(self.candidatos, \"A\")\n\n            \n        self.cambio\
+      \ = False\n        output_items[0][:] = self.candidatos\n        \n\n      \
+      \  return 16\n        \n \n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    example_param: '1.0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('Embedded Python Block', 'blk', [('example_param', '1.0')], [('0',
+      'float', 1)], [('0', 'complex', 10)], 'Embedded Python Block example - a simple
+      multiply const', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [752, 212.0]
+    rotation: 0
+    state: true
+- name: epy_block_0_0
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\nfrom datetime import datetime, timedelta\n\n\nclass\
+      \ blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block\n\
+      \    \"\"\"Embedded Python Block example - a simple multiply const\"\"\"\n\n\
+      \    def __init__(self, example_param=1.0):  # only default arguments here\n\
+      \        \"\"\"arguments to this function show up as parameters in GRC\"\"\"\
+      \n        gr.sync_block.__init__(\n            self,\n            name='Embedded\
+      \ Python Block',   # will show up in GRC\n            in_sig=[(np.complex64,10)],\n\
+      \            out_sig=[(np.complex64,2)]\n        )\n        # if an attribute\
+      \ with the same name as a parameter is found,\n        # a callback is registered\
+      \ (properties work, too).\n        self.example_param = example_param\n    \
+      \    self.lim = 20\n        self.arr = np.full(10, -1)\n        self.aux = []\n\
+      \        self.arreglo = [-1, 0]\n        self.unavez = True\n        self.current_slot\
+      \ = -10\n        self.slots_per_minute = 2250\n        self.slot = -1\n    \
+      \    self.once = True\n\n    def work(self, input_items, output_items):\n  \
+      \      \"\"\"example: multiply with constant\"\"\"\n        current_utc_time\
+      \ = datetime.utcnow()\n        start_of_minute = current_utc_time.replace(second=0,\
+      \ microsecond=0)\n        time_elapsed = current_utc_time - start_of_minute\n\
+      \        milliseconds_elapsed = time_elapsed.total_seconds() * 1000\n      \
+      \  self.current_slot = int((milliseconds_elapsed)*self.slots_per_minute/60000)\
+      \ #Cantidad de slots desde que empez\xF3 el minuto.\n        \n        self.arr\
+      \ = np.real(input_items[0][0])\n        \n        if np.sum(self.arr) != -10\
+      \ and self.unavez:\n            self.aux = self.arr\n            self.slot =\
+      \ self.current_slot\n            self.unavez = False\n            print(\"recibi\
+      \ candidatos en \", self.current_slot)\n        \n        else:\n          \
+      \  if np.sum(self.arr) != -10 and self.current_slot in self.aux and self.once:\
+      \ # and self.lim > 0:\n            \tself.slot = self.current_slot\n       \
+      \     \tself.arreglo = [self.slot, 1]\n            \t#self.lim -= 1\n      \
+      \      \tself.once = False\n        if self.current_slot > self.slot+500:\n\
+      \            #self.lim = 20\n            self.unavez = True\n            self.once\
+      \ = True\n            self.arreglo = [-1, 0]\n                #print(\"slot\
+      \ y puedo A \", self.arreglo) \n                \n\n\n        output_items[0][:]\
+      \ = self.arreglo\n\n        return len(output_items)\n        \n        \n \
+      \       \n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    example_param: '1.0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('Embedded Python Block', 'blk', [('example_param', '1.0')], [('0',
+      'complex', 10)], [('0', 'complex', 2)], 'Embedded Python Block example - a simple
+      multiply const', ['example_param'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [656, 280.0]
+    rotation: 0
+    state: disabled
+- name: epy_block_0_1
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
+      from gnuradio import gr\nfrom datetime import datetime, timedelta\n\n\nclass\
+      \ blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block\n\
+      \    \"\"\"Embedded Python Block example - a simple multiply const\"\"\"\n\n\
+      \    def __init__(self, example_param=1.0):  # only default arguments here\n\
+      \        \"\"\"arguments to this function show up as parameters in GRC\"\"\"\
+      \n        gr.sync_block.__init__(\n            self,\n            name='Embedded\
+      \ Python Block',   # will show up in GRC\n            in_sig=[np.float32],\n\
+      \            out_sig=[(np.complex64,10)]\n        )\n        # if an attribute\
+      \ with the same name as a parameter is found,\n        # a callback is registered\
+      \ (properties work, too).\n        self.NTT = 700\n        self.candidatos =\
+      \ np.full(10, -1)\n        self.slot_y_puedo = [2, 2]\n        self.current_slot\
+      \ = -1\n        self.slots_per_minute = 2250\n        self.inicios = 500\n \
+      \       self.cambio = False\n        self.ultimo_slot = -1\n        self.primeravez\
+      \ = True\n        self.ultimavez = True\n        self.s_y_p_numero = 0\n\n \
+      \   def work(self, input_items, output_items):\n        \"\"\"example: multiply\
+      \ with constant\"\"\"\n        current_utc_time = datetime.utcnow()\n      \
+      \  start_of_minute = current_utc_time.replace(second=0, microsecond=0)\n   \
+      \     time_elapsed = current_utc_time - start_of_minute\n        milliseconds_elapsed\
+      \ = time_elapsed.total_seconds() * 1000\n        self.current_slot = int((milliseconds_elapsed)*self.slots_per_minute/60000)\
+      \ #Cantidad de slots desde que empez\xF3 el minuto.\n        \n        self.s_y_p_numero\
+      \ = int(input_items[0][0])\n\n        if len(str(self.s_y_p_numero)) != 1:\n\
+      \            self.slot_y_puedo[0] = int(str(self.s_y_p_numero)[0:len(str(self.s_y_p_numero))-1])\n\
+      \        else:\n            self.slot_y_puedo[0] = 0\n        self.slot_y_puedo[1]\
+      \ = int(str(self.s_y_p_numero)[-1]) # slot y puedo\n        \n        if self.current_slot\
+      \ != self.ultimo_slot:\n            self.ultimo_slot = self.current_slot\n \
+      \           self.cambio = True\n            #print(input_items[0][0])\n    \
+      \        #print(\"s_y_p\", self.slot_y_puedo)\n            if self.current_slot\
+      \ in self.candidatos and self.slot_y_puedo[0] == self.current_slot:\n      \
+      \          print(\"s_y_p\", self.slot_y_puedo)\n                #print(np.count_nonzero(self.slot_y_puedo[0]))\n\
+      \                \n\n        if self.slot_y_puedo[1] == 1 and self.slot_y_puedo[0]\
+      \ in self.candidatos and self.cambio:\n            print(self.slot_y_puedo,\
+      \ \"B\")\n        \n        elif self.slot_y_puedo[1] == 3 and self.primeravez:\n\
+      \            print(\"inicializando\")\n            self.primeravez = False\n\
+      \        elif self.slot_y_puedo[1] != 3 and self.ultimavez:\n            print(\"\
+      inicializo\")\n            self.ultimavez = False\n        \n        if (self.current_slot\
+      \ - self.inicios)%2250 <= 200:\n            self.NTT = self.inicios\n      \
+      \      self.inicios = (self.inicios + 1125)%2250 \n            self.candidatos\
+      \ = np.array(sorted(np.random.randint(self.NTT-187, self.NTT+187+1, size=10)))\n\
+      \            print(self.candidatos, \"B\")\n\n            \n        self.cambio\
+      \ = False\n        output_items[0][:] = self.candidatos\n        \n\n      \
+      \  return 16\n        \n \n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    example_param: '1.0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('Embedded Python Block', 'blk', [('example_param', '1.0')], [('0',
+      'float', 1)], [('0', 'complex', 10)], 'Embedded Python Block example - a simple
+      multiply const', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 348.0]
+    rotation: 0
+    state: true
+- name: zeromq_pub_sink_0_0
+  id: zeromq_pub_sink
+  parameters:
+    address: tcp://127.0.0.1:5606
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    pass_tags: 'False'
+    timeout: mss
+    type: complex
+    vlen: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1192, 348.0]
+    rotation: 0
+    state: true
+- name: zeromq_pub_sink_0_0_0
+  id: zeromq_pub_sink
+  parameters:
+    address: tcp://127.0.0.1:5605
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    pass_tags: 'False'
+    timeout: mss
+    type: complex
+    vlen: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1184, 204.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5610
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'False'
+    timeout: mss
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 168.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5611
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'False'
+    timeout: mss
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 324.0]
+    rotation: 0
+    state: true
+
+connections:
+- [blocks_vector_to_stream_0_0, '0', zeromq_pub_sink_0_0, '0']
+- [blocks_vector_to_stream_0_0_0, '0', zeromq_pub_sink_0_0_0, '0']
+- [epy_block_0, '0', blocks_vector_to_stream_0_0_0, '0']
+- [epy_block_0_1, '0', blocks_vector_to_stream_0_0, '0']
+- [zeromq_sub_source_0, '0', epy_block_0, '0']
+- [zeromq_sub_source_0_0, '0', epy_block_0_1, '0']
+
+metadata:
+  file_format: 1

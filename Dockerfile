@@ -125,11 +125,16 @@ RUN cd /home/gnuradio/gr-iio && cmake . && make && make install
 RUN ldconfig
 
 ADD gr-aistx /home/gnuradio/gr-aistx 
+ADD gr-itais /home/gnuradio/gr-itais
+
+RUN pip install pyserial
+RUN pip install pynmea2
+RUN pip install zmq
 
 USER gnuradio
 
 WORKDIR /home/gnuradio
 
-ENV PYTHONPATH "${PYTHONPATH}:/usr/local/lib/python3/dist-packages:/home/gnuradio/gr-ais/python"
+ENV PYTHONPATH "${PYTHONPATH}:/usr/local/lib/python3/dist-packages:/home/gnuradio/gr-ais/python:/home/gnuradio/gr-itais/python:/home/gnuradio/gr-aistx/python"
 
 CMD bash
