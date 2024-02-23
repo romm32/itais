@@ -40,7 +40,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         gr.sync_block.__init__(
             self,
             name='messages',   # will show up in GRC
-            in_sig=[np.float32, (np.float32, 5)],
+            in_sig=[(np.float32, 5)],
             out_sig=[]
         )
         self.vessel_length = vessel_length
@@ -66,14 +66,15 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         self.slot_duration = 60/2250
         self.samples_per_slot = int(self.slot_duration*50000)
         
-        self.primera18 = True
-        self.primera240 = True
-        self.primera241 = True
+        self.portName_in = 'Msg'
+        self.message_port_register_in(pmt.intern(self.portName_in))
+        self.set_msg_handler(pmt.intern("Msg"), self.process_message)
         
-        self.slot_transmitido18 = -1
-        self.slot_transmitido240 = -1
-        self.slot_transmitido241 = -1
         
+    def process_message(self, message):
+        # Retrieve message payload and save it to a variable
+        self.message = pmt.to_python(message) # lista con los candidatos
+    
     def encode_string(self, string):
         vocabolary = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^- !\"#$%&'()*+,-./0123456789:;<=>?"
         encoded_string = ""
@@ -144,12 +145,12 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
             return _type+_repeat+_mmsi+_part+_vtype+_vendorID+_callsign+_half_length+_half_length+_half_width+_half_width+"000000"
         
     def work(self, input_items, output_items):
-        self.message = input_items[0][0]
-        self.speed = input_items[1][0][0]
-        self.long = input_items[1][0][1]
-        self.lat = input_items[1][0][2]
-        self.course = input_items[1][0][3]
-        self.ts = input_items[1][0][4]
+        #self.message = input_items[0][0]
+        self.speed = input_items[0][0][0]
+        self.long = input_items[0][0][1]
+        self.lat = input_items[0][0][2]
+        self.course = input_items[0][0][3]
+        self.ts = input_items[0][0][4]
         
         current_utc_time = datetime.utcnow()
         start_of_minute = current_utc_time.replace(second=0, microsecond=0)
@@ -157,40 +158,29 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         milliseconds_elapsed = time_elapsed.total_seconds() * 1000
         slot_index = (milliseconds_elapsed)*self.slots_per_minute/60000 #Cantidad de slots desde que empezó el minuto.
         
-        if (self.message == 18 and self.primera18):
+        if (self.message == 18):
             self. payload = self.encode_18(int(self.mmsi), float(self.speed), float(self.long), float(self.lat), float(self.course), int(self.ts))
             PMT_msg = pmt.to_pmt(self.payload)
             self.message_port_pub(pmt.intern(self.portName), PMT_msg)
-            self.primera18 = False
-            self.slot_transmitido18 = int(slot_index)
+            self.message = 0
             print("mando 18")
             
-        elif (self.message == 240 and self.primera240):
+        elif (self.message == 240):
             self.payload = self.encode_24(int(self.mmsi), "A", self.vessel_name)
             PMT_msg = pmt.to_pmt(self.payload)
             self.message_port_pub(pmt.intern(self.portName), PMT_msg)
-            self.primera240 = False
-            self.slot_transmitido240 = int(slot_index)
+            self.message = 0
             print("mando 240")
             
-        elif (self.message == 241 and self.primera241):
+        elif (self.message == 241):
             self.payload = self.encode_24(int(self.mmsi), "B", self.vessel_name, "@@@@@@@", str(self.vessel_length), str(self.vessel_beam), int(self.vessel_type))
             PMT_msg = pmt.to_pmt(self.payload)
             self.message_port_pub(pmt.intern(self.portName), PMT_msg)
-            self.primera241 = False
-            self.slot_transmitido241 = int(slot_index)
+            self.message = 0
             print("mando 241")
+        
             
-        if (np.abs(self.slot_transmitido18 - int(slot_index)) > 100):
-            self.primera18 = True
-            
-        if (np.abs(self.slot_transmitido240 - int(slot_index)) > 100):
-            self.primera240 = True
-            
-        if (np.abs(self.slot_transmitido241 - int(slot_index)) > 100):
-            self.primera241 = True
-            
-        return (300)
+        return (256)
         
         
         

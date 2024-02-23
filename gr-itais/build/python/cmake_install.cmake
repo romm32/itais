@@ -48,6 +48,8 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     "/home/gnuradio/gr-itais/python/radio.py"
     "/home/gnuradio/gr-itais/python/ais_demod.py"
     "/home/gnuradio/gr-itais/python/rf.py"
+    "/home/gnuradio/gr-itais/python/itais_radio.py"
+    "/home/gnuradio/gr-itais/python/selector_itais.py"
     )
 endif()
 
@@ -62,6 +64,8 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     "/home/gnuradio/gr-itais/build/python/radio.pyc"
     "/home/gnuradio/gr-itais/build/python/ais_demod.pyc"
     "/home/gnuradio/gr-itais/build/python/rf.pyc"
+    "/home/gnuradio/gr-itais/build/python/itais_radio.pyc"
+    "/home/gnuradio/gr-itais/build/python/selector_itais.pyc"
     "/home/gnuradio/gr-itais/build/python/__init__.pyo"
     "/home/gnuradio/gr-itais/build/python/messages.pyo"
     "/home/gnuradio/gr-itais/build/python/sub_gps.pyo"
@@ -71,6 +75,8 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     "/home/gnuradio/gr-itais/build/python/radio.pyo"
     "/home/gnuradio/gr-itais/build/python/ais_demod.pyo"
     "/home/gnuradio/gr-itais/build/python/rf.pyo"
+    "/home/gnuradio/gr-itais/build/python/itais_radio.pyo"
+    "/home/gnuradio/gr-itais/build/python/selector_itais.pyo"
     )
 endif()
 

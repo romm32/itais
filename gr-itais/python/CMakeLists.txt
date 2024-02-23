@@ -40,7 +40,8 @@ GR_PYTHON_INSTALL(
     radio.py
     ais_demod.py
     rf.py
-    DESTINATION ${GR_PYTHON_DIR}/itais
+    itais_radio.py
+    selector_itais.py DESTINATION ${GR_PYTHON_DIR}/itais
 )
 
 ########################################################################

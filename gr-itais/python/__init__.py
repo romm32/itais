@@ -47,6 +47,8 @@ from .gmsk_sync import gmsk_sync
 from .ais_demod import ais_demod
 from .radio import ais_rx
 from .rf import ais_tx
+from .itais_radio import itais_tx
+from .selector_itais import selector_itais
 
 
 #

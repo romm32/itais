@@ -31,6 +31,7 @@ from gnuradio import fft
 from gnuradio import blocks
 from gnuradio import analog
 from math import pi
+import pmt
 
 
 class transmitter(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
@@ -41,8 +42,8 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
         gr.sync_block.__init__(
             self,
             name='transmitter',   # will show up in GRC
-            in_sig=[(np.complex64,2), (np.complex64,2), np.float32],
-            out_sig=[(np.complex64,10), (np.complex64,10), np.float32]
+            in_sig=[np.float32],
+            out_sig=[] #(np.complex64,10), (np.complex64,10), np.float32]
         )
         self.inicio_18 = 0
         self.inicio_24 = 0
@@ -67,7 +68,39 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
         self.transmitio = False
         self.inicio2 = 0
         self.final2 = 0
+        self.portNameA = 'candidatos_A'
+        self.message_port_register_out(pmt.intern(self.portNameA))
+        self.portNameB = 'candidatos_B'
+        self.message_port_register_out(pmt.intern(self.portNameB))
+        
+        self.portNameMsg = 'Mensajes'
+        self.message_port_register_out(pmt.intern(self.portNameMsg))
+        
+        self.portChannel = 'canal'
+        self.message_port_register_out(pmt.intern(self.portChannel))
+        
+        self.slot_y_puedo_A = [-1, -1]
+        self.slot_y_puedo_B = [-1, -1]
+        
+        self.portName_in_A = 'slot_y_puedo_A'
+        self.message_port_register_in(pmt.intern(self.portName_in_A))
+        self.set_msg_handler(pmt.intern("slot_y_puedo_A"), self.process_message_A)
+        
+        self.portName_in_B = 'slot_y_puedo_B'
+        self.message_port_register_in(pmt.intern(self.portName_in_B))
+        self.set_msg_handler(pmt.intern("slot_y_puedo_B"), self.process_message_B)
+        
 
+    def process_message_A(self, message):
+        # Retrieve message payload and save it to a variable
+        self.slot_y_puedo_A = pmt.to_python(message) # lista con los candidatos
+        print("llegaron slot y puedo", "A", self.slot_y_puedo_A)
+    
+    def process_message_B(self, message):
+        # Retrieve message payload and save it to a variable
+        self.slot_y_puedo_B = pmt.to_python(message) # lista con los candidatos
+        print("llegaron slot y puedo", "B", self.slot_y_puedo_B)
+    
     def slot_selection(self, NTT):
         selected = np.random.randint(NTT-187, NTT+187+1, size=10)
         selected = np.array(sorted(selected))
@@ -81,9 +114,9 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
     def work(self, input_items, output_items):
         """example: multiply with constant"""
         if self.canal_actual == "A":
-            self.slot_y_puedo = input_items[0][0]
+            self.slot_y_puedo = self.slot_y_puedo_A
         else:
-            self.slot_y_puedo = input_items[1][0]
+            self.slot_y_puedo = self.slot_y_puedo_B
 
 
         if self.inicializando:
@@ -99,14 +132,15 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
             
             
             self.inicio_18 = self.current_slot
-            self.inicio_24 = self.current_slot
+            self.inicio_24 = self.current_slot - 10
             self.ultimo_slot = self.current_slot
             
             print("inicializo")
             print("empiezan temporizadores")
             print("slot ", self.current_slot)
             
-            if input_items[2][0] > 2: #### verificar en qué unidad nos da la velocidad el gps
+            if input_items[0][0] > 2: #### verificar en qué unidad nos da la velocidad el gps
+                print(input_items[0][0])
                 self.prox_18 = (self.inicio_18 + 1125)%2250 # transmito cada 30 seg
             else:
                 self.prox_18 = (self.inicio_18 + 2250*2) # transmito cada 3 min, ver abajo explicacion de por que solo sumo 2 mins
@@ -125,9 +159,6 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                                                         ### voy a restar 2250, pero espero otro minuto entero para transmitir, y esto esta
                                                         ### mal. por eso solo inicio_24 (ese slot, pero del siguiente minuto)
                 print("fijo prox 241", self.prox_24, "ahora es ", self.current_slot)
-            
-            self.mensaje = 0
-            output_items[2][:] = self.mensaje
         
         else:
             current_utc_time = datetime.utcnow()
@@ -143,16 +174,13 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
             if self.cambio:
                 self.inicio2 = time.time()
             
-            self.mensaje = 0 ## no estoy pidiendo ningun mensaje a messages ahora
-            output_items[2][:] = self.mensaje
-            
-            if self.prox_18 >= 2250 and self.current_slot == (self.prox_18%2250) and self.cambio:
+            if self.prox_18 >= 2250 and self.cambio and (self.current_slot == (self.prox_18%2250)): #and ((self.prox_18%2250 - 2) < self.current_slot) and (self.current_slot <= (self.prox_18%2250)):
                 self.prox_18 = self.prox_18 - 2250
                 print("queda un minuto menos 18")
                  
             elif (not self.transmitiendo[0]): ### en un elif porque sino podría ser que resto 2250 y después se hacen cosas con el número resultante.
                 
-                if self.current_slot == ((self.prox_18-self.diff)%2250): ### and (self.current_slot != self.inicio_18):
+                if (((self.prox_18-self.diff)%2250 - 2) < self.current_slot) and (self.current_slot <= ((self.prox_18-self.diff)%2250 + 3)): ### and (self.current_slot != self.inicio_18):
                 ### ver que esto si no podemos analizar todos los slots, es un problema. porque capaz nunca miro el slot prox_18-diff
                 
                     if self.prox_18-self.diff < 0:
@@ -166,20 +194,20 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                             
                         self.candidatos = self.candidatos_18
                         if self.canal_actual == "A":
-                            output_items[0][:] = self.candidatos
-                            output_items[1][:] = np.full(10, -1)
+                            PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                            self.message_port_pub(pmt.intern(self.portNameA), PMT_msg)
                         else:
-                            output_items[1][:] = self.candidatos
-                            output_items[0][:] = np.full(10, -1)
+                            PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                            self.message_port_pub(pmt.intern(self.portNameB), PMT_msg)
                         self.es_menor0 = False
 
-            if self.prox_24 >= 2250 and self.current_slot == (self.prox_24%2250) and self.cambio:
+            if self.prox_24 >= 2250 and self.cambio and (self.current_slot == (self.prox_24%2250)): #((self.prox_24%2250) - 3 < self.current_slot) and (self.current_slot <= (self.prox_24%2250)):
                 self.prox_24 = self.prox_24 - 2250       
                 print("queda un minuto menos 24") 
 
             elif not self.transmitiendo[1]:
                         
-                if self.current_slot == (self.prox_24-self.diff)%2250: ### and (self.current_slot != self.inicio_24): ### ver segunda condicion
+                if (not self.transmitiendo[0]) and (((self.prox_24-self.diff)%2250 - 2) < self.current_slot) and (self.current_slot <= ((self.prox_24-self.diff)%2250 + 3)): #Se da prioridad al mensaje 18 por ser de información dinámica en el caso de que ambos mensajes quieran transmitir a la vez. ### and (self.current_slot != self.inicio_24): ### ver segunda condicion
                     if self.prox_24-self.diff < 0:
                         self.es_menor0 = True
                     if self.es_menor0 or (self.current_slot == self.prox_24-self.diff):
@@ -191,27 +219,30 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                         
                         self.candidatos = self.candidatos_24
                         if self.canal_actual == "A":
-                            output_items[0][:] = self.candidatos
-                            output_items[1][:] = np.full(10, -1)
+                            PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                            self.message_port_pub(pmt.intern(self.portNameA), PMT_msg)
                         else:
-                            output_items[1][:] = self.candidatos
-                            output_items[0][:] = np.full(10, -1)
+                            PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                            self.message_port_pub(pmt.intern(self.portNameB), PMT_msg)
                         self.es_menor0 = False
                         
             
             if self.transmitiendo[0] and (np.real(self.slot_y_puedo[0]) in self.candidatos_18) and (np.real(self.slot_y_puedo[1]) == 1) and ((not self.slot_y_puedo[0] in self.candidatos_24) or (self.primero_en_pedir == 18)) and self.current_slot == self.slot_y_puedo[0]:
                 
                 self.mensaje = 18 ### mensaje a mandar a messages
-                output_items[2][:] = self.mensaje
+                PMT_msg = pmt.to_pmt(self.mensaje)
+                self.message_port_pub(pmt.intern(self.portNameMsg), PMT_msg)
                 self.transmitiendo[0] = False
-                if self.transmitiendo[1]:
-                    self.primero_en_pedir = 24
+                if self.transmitiendo[1]: # Se debe a que el mensaje 18 tiene prioridad sobre el 24, así que
+                			# si el mensaje 24 estaba transmitiendo, se "borra" su estado y se reinicia
+                    self.primero_en_pedir = 0
+                    self.transmitiendo[1] = False
                 else:
                     self.primero_en_pedir = 0
                    
                 self.inicio_18 = np.real(self.slot_y_puedo[0]) ### que deberia ser igual a current_slot
                     
-                if input_items[2][0] > 2: #### verificar en qué unidad nos da la velocidad el gps
+                if input_items[0][0] > 2: #### verificar en qué unidad nos da la velocidad el gps
                     self.prox_18 = (self.inicio_18 + 1125)%2250 # transmito cada 30 seg
                 else:
                     self.prox_18 = (self.inicio_18 + 2250*2) # transmito cada 3 min    ### ver mod 2250
@@ -227,28 +258,28 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                     
                 self.candidatos = np.full(10, -1)
                 if self.canal_actual == "A":
-                    output_items[0][:] = self.candidatos
-                    output_items[1][:] = np.full(10, -1)
+                    PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                    self.message_port_pub(pmt.intern(self.portNameA), PMT_msg)
                     self.transmitio = True
                 else:
                     self.transmitio = True
-                    output_items[1][:] = self.candidatos
-                    output_items[0][:] = np.full(10, -1)
-                    
-                
+                    PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                    self.message_port_pub(pmt.intern(self.portNameB), PMT_msg)      
                         
             if self.transmitiendo[1] and (self.slot_y_puedo[0] in self.candidatos_24) and np.real(self.slot_y_puedo[1]) == 1 and (not (self.slot_y_puedo[0] in self.candidatos_18) or (self.primero_en_pedir == 24)) and self.current_slot == self.slot_y_puedo[0]:
                 
                 if self.mensaje24_a_transmitir == "A":
                     self.mensaje = 240 ### mensaje a mandar a messages, es el 24-0 que indica 24-A
-                    output_items[2][:] = self.mensaje
+                    PMT_msg = pmt.to_pmt(self.mensaje)
+                    self.message_port_pub(pmt.intern(self.portNameMsg), PMT_msg)
                     self.mensaje24_a_transmitir = "B"
                         
                     print("Envio mensaje 24 A")
                     print("slot ", self.current_slot)
                 else:
                     self.mensaje = 241 ### mensaje a mandar a messages, es el 24-1 que indica 24-B
-                    output_items[2][:] = self.mensaje
+                    PMT_msg = pmt.to_pmt(self.mensaje)
+                    self.message_port_pub(pmt.intern(self.portNameMsg), PMT_msg)
                     self.mensaje24_a_transmitir = "A"
                         
                     print("Envio mensaje 24 B")
@@ -270,12 +301,12 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                     
                 self.candidatos = np.full(10, -1)
                 if self.canal_actual == "A":
-                    output_items[0][:] = self.candidatos
-                    output_items[1][:] = np.full(10, -1)
+                    PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                    self.message_port_pub(pmt.intern(self.portNameA), PMT_msg)
                     self.transmitio = True
                 else:
-                    output_items[1][:] = self.candidatos
-                    output_items[0][:] = np.full(10, -1)
+                    PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                    self.message_port_pub(pmt.intern(self.portNameB), PMT_msg)
                     self.transmitio = True
                     
         
@@ -285,18 +316,18 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                 
             self.cambio = False
         if self.canal_actual == "A":
-            output_items[0][:] = self.candidatos
-            output_items[1][:] = np.full(10, -1)
             if self.transmitio:
                 self.transmitio = False
                 self.canal_actual = "B"
+                PMT_msg = pmt.to_pmt(self.canal_actual)
+                self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
         else:
-            output_items[0][:] = np.full(10, -1)
-            output_items[1][:] = self.candidatos
             if self.transmitio:
                 self.transmitio = False
                 self.canal_actual = "A"
-        output_items[2][:] = self.mensaje
-        return len(output_items[0])
+                PMT_msg = pmt.to_pmt(self.canal_actual)
+                self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
+
+        return 16 #len(output_items[0])
         
         

@@ -37,6 +37,7 @@ import itais
 import potumbral 
 #import igualarpotencias
 from gnuradio import zeromq
+import example
 
 #hier block encapsulating all the signal processing after the source
 #could probably be split into its own file
@@ -77,17 +78,19 @@ class ais_rx(gr.hier_block2):
         ##Empiezan modifs
         # Create a ZMQ Pub block
         if (designator == "A"):
-            self.zmq_pub = zeromq.pub_sink(gr.sizeof_float, 1, 'tcp://127.0.0.1:5610', 1, False, -1)
+            self.zmq_pub = zeromq.pub_sink(gr.sizeof_float, 2, 'tcp://127.0.0.1:5610', 1, False, -1)
             self.zmq_sub = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5605', 1, False, -1)
         else:
-            self.zmq_pub = zeromq.pub_sink(gr.sizeof_float, 1, 'tcp://127.0.0.1:5611', 1, False, -1)
+            self.zmq_pub = zeromq.pub_sink(gr.sizeof_float, 2, 'tcp://127.0.0.1:5611', 1, False, -1)
             self.zmq_sub = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5606', 1, False, -1)
             
 
-        #self.blocks_vector_to_stream_0 = blocks.vector_to_stream(gr.sizeof_gr_complex*2, 1)
+        self.blocks_vector_to_stream_0 = blocks.vector_to_stream(gr.sizeof_float*2, 1)
         self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, 10)
         self.blocks_complex_to_mag_squared_0 = blocks.complex_to_mag_squared(1)
-
+        
+        #self.example_tag_to_msg_0 = example.tag_to_msg(gr.sizeof_float*1, '', "latency_strobe")
+        #self.example_latency_manager_0 = example.latency_manager(2000, 1000, gr.sizeof_float*1)
 
 
         #self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, rate,True)
@@ -109,10 +112,13 @@ class ais_rx(gr.hier_block2):
         
         self.blocks_null_sink_0 = blocks.null_sink(gr.sizeof_gr_complex*1)
         
-        self.connect(self, (self.rational_resampler_xxx_0, 0), self.filter2, self.blocks_complex_to_mag_squared_0, (self.potumbral, 0))
+        self.connect(self, (self.rational_resampler_xxx_0, 0), self.filter2,  self.blocks_complex_to_mag_squared_0, (self.potumbral, 0)) #self.example_latency_manager_0, (self.potumbral, 0))
+        #self.msg_connect((self.example_tag_to_msg_0, 'msg'), (self.example_latency_manager_0, 'token'))
+        #self.connect((self.potumbral, 0), self.example_tag_to_msg_0)
         
-        #self.connect((self.potumbral, 0), (self.blocks_vector_to_stream_0, 0), (self.zmq_pub, 0))
-        self.connect((self.potumbral, 0), (self.zmq_pub, 0))
+        
+        self.connect((self.potumbral, 0), (self.blocks_vector_to_stream_0, 0), (self.zmq_pub, 0))
+        #self.connect((self.potumbral, 0), (self.zmq_pub, 0))
         self.connect((self.zmq_sub, 0), (self.blocks_stream_to_vector_0, 0), (self.potumbral, 1))
       
         self.connect(self, self.rational_resampler_xxx_1,             

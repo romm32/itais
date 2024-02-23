@@ -68,6 +68,18 @@ install/strip/fast: preinstall/fast
 	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -123,18 +135,6 @@ test/fast: test
 
 .PHONY : test/fast
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
 # The main all target
 all: cmake_check_build_system
 	cd /home/gnuradio/gr-itais/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/gnuradio/gr-itais/build/CMakeFiles /home/gnuradio/gr-itais/build/python/CMakeFiles/progress.marks
@@ -168,19 +168,19 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-python/CMakeFiles/pygen_python_24986.dir/rule:
-	cd /home/gnuradio/gr-itais/build && $(MAKE) -f CMakeFiles/Makefile2 python/CMakeFiles/pygen_python_24986.dir/rule
-.PHONY : python/CMakeFiles/pygen_python_24986.dir/rule
+python/CMakeFiles/pygen_python_1c616.dir/rule:
+	cd /home/gnuradio/gr-itais/build && $(MAKE) -f CMakeFiles/Makefile2 python/CMakeFiles/pygen_python_1c616.dir/rule
+.PHONY : python/CMakeFiles/pygen_python_1c616.dir/rule
 
 # Convenience name for target.
-pygen_python_24986: python/CMakeFiles/pygen_python_24986.dir/rule
+pygen_python_1c616: python/CMakeFiles/pygen_python_1c616.dir/rule
 
-.PHONY : pygen_python_24986
+.PHONY : pygen_python_1c616
 
 # fast build rule for target.
-pygen_python_24986/fast:
-	cd /home/gnuradio/gr-itais/build && $(MAKE) -f python/CMakeFiles/pygen_python_24986.dir/build.make python/CMakeFiles/pygen_python_24986.dir/build
-.PHONY : pygen_python_24986/fast
+pygen_python_1c616/fast:
+	cd /home/gnuradio/gr-itais/build && $(MAKE) -f python/CMakeFiles/pygen_python_1c616.dir/build.make python/CMakeFiles/pygen_python_1c616.dir/build
+.PHONY : pygen_python_1c616/fast
 
 # Help Target
 help:
@@ -189,13 +189,13 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... install/strip"
+	@echo "... install/local"
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test"
-	@echo "... install/local"
-	@echo "... pygen_python_24986"
+	@echo "... pygen_python_1c616"
 .PHONY : help
 
 

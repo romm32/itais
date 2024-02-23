@@ -24,6 +24,7 @@ import numpy as np
 from gnuradio import gr
 import math
 from datetime import datetime, timedelta
+import pmt
 
 class potumbral(gr.sync_block):  
     """Embedded Python Block example - a simple multiply const"""
@@ -33,10 +34,10 @@ class potumbral(gr.sync_block):
         gr.sync_block.__init__(
             self,
             name='potumbral',   # will show up in GRC
-            in_sig=[np.float32, (np.complex64,10)],
-            out_sig=[np.float32] #[(np.complex64,2)] para probar, dado que tenemos una salida con dos valores
+            in_sig=[np.float32], # (np.complex64,10)],
+            out_sig=[] #[(np.float32,2)] para probar, dado que tenemos una salida con dos valores
         )
-        self.N = 200 #Cantidad de iteraciones del for correspondiente a 20ms
+        self.N = 100 #Cantidad de iteraciones del for correspondiente a 20ms
         self.subintervalos = 0
         self.N_muestras = []
         self.pow_4s = np.zeros(200)
@@ -62,15 +63,15 @@ class potumbral(gr.sync_block):
         self.pow_avg = 2e-7
         
         self.slot_actual = 0 #Variable que se utiliza para saber en qué slot del frame actual se está        
-        self.contador_muestra = 0 #Variable que permite determinar qué muestra del slot actual se está procesando  
+        self.contador_muestra = -10 #Variable que permite determinar qué muestra del slot actual se está procesando, se inicializa en -10 porque la primera vez se le suma 10.  
         
-        self.intervalo_evaluado = [False, False, False, False, False, False, False, False, False, False, False] #Se define el arreglo que contendrá los últimos 11 intervalos de 100 microsegundos (0,1 ms). Esta es la cantidad de intervalos que entra en el rango donde se debe medir la potencia. Se toman intervalos de esa longitud pues es la longitud que se usa para calcular la potencia (la potencia es el promedio de los últimos 100 microsegundos).
+        self.intervalo_evaluado = [False, False, False, False, False]#, False, False, False, False, False, False] #Se define el arreglo que contendrá los últimos 11 intervalos de 100 microsegundos (0,1 ms). Esta es la cantidad de intervalos que entra en el rango donde se debe medir la potencia. Se toman intervalos de esa longitud pues es la longitud que se usa para calcular la potencia (la potencia es el promedio de los últimos 100 microsegundos).
         
         self.puedo_usar = 0 #Variable que determina si puede utilizarse o no el slot actual, inicializada con -1 (no se puede transmitir)
         
         self.salida_slot = [2, 2] #np.zeros(2) #Tupla usada para indicar si en e canal el slot actual puede usarse para transmitir o no
                 
-        self.slots_candidatos = np.zeros(10) #Arreglo con los slots donde el transmisor desea transmitir
+        self.slots_candidatos = np.full(10, -1) #Arreglo con los slots donde el transmisor desea transmitir
         
         self.slots_recibidos = []
         self.subint = 0
@@ -79,11 +80,24 @@ class potumbral(gr.sync_block):
         self.cambio = False
         self.slots_en_ejecucion = 0
         self.slots_sensados = 0
-        self.imprimir = True
+        self.imprimir = False
         self.i = 0
         self.canal = designator
         self.unavez = True
         self.s_y_p_numero = 0
+        self.s_y_p_dos = np.zeros(2)
+        self.designator = designator
+        self.portName_in = 'candidatos'
+        self.message_port_register_in(pmt.intern(self.portName_in))
+        self.set_msg_handler(pmt.intern("candidatos"), self.process_message)
+        
+        self.portName = 'slot_y_puedo'
+        self.message_port_register_out(pmt.intern(self.portName))
+        
+    def process_message(self, message):
+        # Retrieve message payload and save it to a variable
+        self.slots_candidatos = pmt.to_python(message) # lista con los candidatos
+        print("llegaron candidatos", self.designator, self.slots_candidatos)
         
     def work(self, input_items, output_items):
 		
@@ -99,13 +113,17 @@ class potumbral(gr.sync_block):
 		
         self.slot_actual = int(slot_index) #Se guarda el slot actual donde estamos parados
         self.contador_muestra = int((slot_index-self.slot_actual)*self.samples_per_slot) #Cantidad de tiempo que pasó desde que empezó el slot en cantidad de muestras. Es decir si 1 sot son 1333 muestras, se guarda cuantas muestras hay en 0.(algo) slots.
-        self.slots_candidatos = np.real(input_items[1][0])
+        
+        # ahora es una entrada de message - self.slots_candidatos = np.real(input_items[1][0])
 
         if self.slot_actual != self.ultimo_slot:
                 self.ultimo_slot = self.slot_actual
                 self.cambio = True
                 if self.imprimir:
                     self.slots_en_ejecucion = self.slots_en_ejecucion + len(input_items[0])/self.samples_per_slot
+                    
+                    #print(self.slots_candidatos, self.slot_actual)
+                    
                     if self.contador_muestra > 41:
                         self.slots_sensados = self.slots_sensados + int((len(input_items[0]) - (self.samples_per_slot - self.contador_muestra))/self.samples_per_slot)
                         if (len(input_items[0]) - (self.samples_per_slot - self.contador_muestra))%self.samples_per_slot > 98:
@@ -121,10 +139,14 @@ class potumbral(gr.sync_block):
                         self.slots_sensados = 0
 		
         while self.i < len(input_items[0]) and (self.puedo_usar != 1):
-            self.contador_muestra += 5
+            if self.slot_actual != self.ultimo_slot:
+                self.ultimo_slot = self.slot_actual
+                self.cambio = True
+                
+            self.contador_muestra += 10
             #muestra_actual = input_items[0][self.i]
 
-            self.pow_actual = input_items[0][self.i]#np.abs(muestra_actual)**2 #Paso la muestra actual compleja a un real con la potencia del complejo. Esto implica que se tendrá una muestra de potencia cada 0,1ms (o 100 micro).
+            self.pow_actual = input_items[0][self.i]#np.abs(muestra_actual)**2 #Paso la muestra actual compleja a un real con la potencia del complejo. Esto implica que se tendrá una muestra de potencia cada 0,2ms (o 200 micro).
             if self.pow_actual == 0: #Caso de borde
                 self.pow_actual = 1e-20
 
@@ -136,12 +158,12 @@ class potumbral(gr.sync_block):
             self.salida_db[1] = 0.9941*self.salida_db[1] + 6.893 
             
 			
-            self.N_muestras = np.append(self.N_muestras, self.pow_actual) #Se acumulan las 1000 muestras que se corresponde con 200 ejecuciones del for que acumula de a 5 muestras. Así se forman los 20ms, esto se acumula independientemente del calculo de la potencia actual del canal.
+            self.N_muestras = np.append(self.N_muestras, self.pow_actual) #Se acumulan las 1000 muestras que se corresponde con 100 ejecuciones del while que acumula de a 10 muestras. Así se forman los 20ms, esto se acumula independientemente del calculo de la potencia actual del canal.
             self.N = self.N - 1
             if self.N == 0: #Si ya acumule la potencia de los ultimos 20 ms.
                 self.pow_avg = np.mean(self.N_muestras) #Los 200 valores de potencia que se acumulan para formar los 4s es el promedio de los 20ms.
                 self.N_muestras = []
-                self.N = 200
+                self.N = 100
                 self.pow_4s[self.subintervalos] = self.pow_avg #Se acumulan los 200 valores de potencia para llegar a 4s.
                 self.subintervalos += 1
 
@@ -166,37 +188,30 @@ class potumbral(gr.sync_block):
                     self.intervalo_evaluado.insert(0, self.salida_db[1] < self.salida_db[0])
 					
                 elif self.contador_muestra >= 99 and self.contador_muestra <= 110: #Si ya se recorrieron todas las muestras donde se debe evaluar el slot, ya se actualizaron las 11 entradas del arreglo y se puede determinar si el slot está libre o no.
-                    self.puedo_usar = int(np.sum(self.intervalo_evaluado) > 6) #Si las 11 entradas son True (suma 11), la potencia es menor al umbral en todo el tramo y se puede usar ese slot, está libre.
-					
-				#elif self.contador_muestra > 120:
-				#	self.puedo_usar = -1
+                    self.puedo_usar = int(np.sum(self.intervalo_evaluado) > 2) #Si las 11 entradas son True (suma 11), la potencia es menor al umbral en todo el tramo y se puede usar ese slot, está libre.
 
-                self.salida_slot[1] = self.puedo_usar #Se fija si el slot está libre o no en la salida.
-                self.salida_slot[0] = self.slot_actual #Se fija el numero de slot en la salida
-                if self.contador_muestra >= 99 and self.contador_muestra <= 110:
+                    self.salida_slot[1] = self.puedo_usar #Se fija si el slot está libre o no en la salida.
+                    self.salida_slot[0] = self.slot_actual #Se fija el numero de slot en la salida
+                    PMT_msg = pmt.to_pmt(self.salida_slot)
+                    self.message_port_pub(pmt.intern(self.portName), PMT_msg)
+                    
                     print(self.canal, "u ", self.salida_db[0], "p", self.salida_db[1], "int", np.sum(self.intervalo_evaluado), "sal ", self.salida_slot)
                     
-            if self.cambio:
-                self.salida_slot[1] = self.puedo_usar #Se fija si el slot está libre o no en la salida.
-                self.salida_slot[0] = self.slot_actual #Se fija el numero de slot en la salida		
-            if self.contador_muestra == self.samples_per_slot: #Si la muestra es la última muestra del slot, se debe aumentar en 1 el slot y poner la muestra actual en 0.
-                self.contador_muestra = 0
-                if self.slot_actual == 2249: #Si estamos en la última muestra del último slot, en vez de aumentar en uno el slot actual, debemos volver a 0 el slot.
+                	
+            if self.contador_muestra + 10 >= self.samples_per_slot: #Si la muestra es la última muestra del slot, se debe aumentar en 1 el slot y poner la muestra actual en 0.
+                self.contador_muestra = self.contador_muestra + 10 - self.samples_per_slot #Se inicializa en -10 o -9 o -8 o lo que corresponda porque en la siguiente ejecución del while se le suma 10 y en este caso de borde se iría al 8 o al 9 o al 10 y se saltearía algunos valores de muestras.
+                self.ultimo_slot = self.slot_actual
+                if self.slot_actual >= 2249: #Si estamos en la última muestra del último slot, en vez de aumentar en uno el slot actual, debemos volver a 0 el slot.
                     self.slot_actual = 0
                 else:
                     self.slot_actual += 1
-
-            self.i = self.i + 5		
+            self.i = self.i + 10		
 	
-        self.s_y_p_numero = int(str(self.salida_slot[0])+str(self.salida_slot[1]))
-        output_items[0][:] = np.full(len(output_items[0]), self.s_y_p_numero) #self.salida_slot
-        self.salida_slot[0] = self.slot_actual
         self.cambio = False
         self.puedo_usar = 0
-        self.salida_slot[1] = 0
         self.i = 0
         		
-        return 512 #len(input_items[0])
+        return 16 #len(input_items[0])
         
         
         

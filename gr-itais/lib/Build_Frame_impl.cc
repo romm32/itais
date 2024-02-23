@@ -474,7 +474,7 @@ int Build_Frame_impl::work(int noutput_items,
         memset(frame, 0x0, LEN_FRAME_MAX);
 
         // headers
-        memcpy(frame, "\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0", LEN_PREAMBLE);
+        memcpy(frame, "\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1", LEN_PREAMBLE);
         memcpy(frame + LEN_PREAMBLE, "\0\1\1\1\1\1\1\0", LEN_START);
         // payload + crc
         memcpy(frame + LEN_PREAMBLE + LEN_START, stuffed_payload, LEN_STUFFED_PAYLOAD);
@@ -517,7 +517,7 @@ int Build_Frame_impl::work(int noutput_items,
         memset(frame, 0x0, LEN_FRAME);
 
         // headers
-        memcpy(frame, "\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0", LEN_PREAMBLE);
+        memcpy(frame, "\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1", LEN_PREAMBLE);
         memcpy(frame + LEN_PREAMBLE, "\0\1\1\1\1\1\1\0", LEN_START);
         // payload + crc
         memcpy(frame + LEN_PREAMBLE + LEN_START, stuffed_payload, LEN_STUFFED_PAYLOAD);

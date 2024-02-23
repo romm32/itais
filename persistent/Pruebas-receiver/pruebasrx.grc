@@ -56,6 +56,42 @@ blocks:
     coordinate: [184, 12]
     rotation: 0
     state: enabled
+- name: blocks_stream_to_vector_0
+  id: blocks_stream_to_vector
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 192.0]
+    rotation: 0
+    state: true
+- name: blocks_stream_to_vector_1
+  id: blocks_stream_to_vector
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [472, 280.0]
+    rotation: 0
+    state: true
 - name: blocks_vector_to_stream_0_0
   id: blocks_vector_to_stream
   parameters:
@@ -105,41 +141,43 @@ blocks:
       \    def __init__(self, example_param=1.0):  # only default arguments here\n\
       \        \"\"\"arguments to this function show up as parameters in GRC\"\"\"\
       \n        gr.sync_block.__init__(\n            self,\n            name='Embedded\
-      \ Python Block',   # will show up in GRC\n            in_sig=[np.float32],\n\
+      \ Python Block',   # will show up in GRC\n            in_sig=[(np.float32, 2)],\n\
       \            out_sig=[(np.complex64,10)]\n        )\n        # if an attribute\
       \ with the same name as a parameter is found,\n        # a callback is registered\
       \ (properties work, too).\n        self.NTT = 700\n        self.candidatos =\
-      \ np.full(10, -1)\n        self.slot_y_puedo = [2, 2]\n        self.current_slot\
-      \ = -1\n        self.slots_per_minute = 2250\n        self.inicios = 500\n \
-      \       self.cambio = False\n        self.ultimo_slot = -1\n        self.primeravez\
-      \ = True\n        self.ultimavez = True\n        self.s_y_p_numero = 0\n\n \
-      \   def work(self, input_items, output_items):\n        \"\"\"example: multiply\
-      \ with constant\"\"\"\n        current_utc_time = datetime.utcnow()\n      \
-      \  start_of_minute = current_utc_time.replace(second=0, microsecond=0)\n   \
-      \     time_elapsed = current_utc_time - start_of_minute\n        milliseconds_elapsed\
+      \ np.full(10, -1)\n        self.slot_y_puedo = np.zeros(10) #[2, 2]\n      \
+      \  self.current_slot = -1\n        self.slots_per_minute = 2250\n        self.inicios\
+      \ = 500\n        self.cambio = False\n        self.ultimo_slot = -1\n      \
+      \  self.primeravez = True\n        self.ultimavez = True\n        self.s_y_p_numero\
+      \ = 0\n\n    def work(self, input_items, output_items):\n        \"\"\"example:\
+      \ multiply with constant\"\"\"\n        current_utc_time = datetime.utcnow()\n\
+      \        start_of_minute = current_utc_time.replace(second=0, microsecond=0)\n\
+      \        time_elapsed = current_utc_time - start_of_minute\n        milliseconds_elapsed\
       \ = time_elapsed.total_seconds() * 1000\n        self.current_slot = int((milliseconds_elapsed)*self.slots_per_minute/60000)\
-      \ #Cantidad de slots desde que empez\xF3 el minuto.\n        \n        self.s_y_p_numero\
-      \ = int(input_items[0][0])\n\n        if len(str(self.s_y_p_numero)) != 1:\n\
-      \            self.slot_y_puedo[0] = int(str(self.s_y_p_numero)[0:len(str(self.s_y_p_numero))-1])\n\
-      \        else:\n            self.slot_y_puedo[0] = 0\n        self.slot_y_puedo[1]\
-      \ = int(str(self.s_y_p_numero)[-1]) # slot y puedo\n        \n        if self.current_slot\
-      \ != self.ultimo_slot:\n            self.ultimo_slot = self.current_slot\n \
-      \           self.cambio = True\n            #print(input_items[0][0])\n    \
-      \        #print(\"s_y_p\", self.slot_y_puedo)\n            if self.current_slot\
-      \ in self.candidatos and self.slot_y_puedo[0] == self.current_slot:\n      \
-      \          print(\"s_y_p\", self.slot_y_puedo)\n                #print(np.count_nonzero(self.slot_y_puedo[0]))\n\
-      \                \n\n        if self.slot_y_puedo[1] == 1 and self.slot_y_puedo[0]\
-      \ in self.candidatos and self.cambio:\n            print(self.slot_y_puedo,\
-      \ \"A\")\n        \n        elif self.slot_y_puedo[1] == 3 and self.primeravez:\n\
+      \ #Cantidad de slots desde que empez\xF3 el minuto.\n        \n        self.slot_y_puedo\
+      \ = input_items[0][0]\n        \n        #self.s_y_p_numero = int(input_items[0][0])\n\
+      \n        #if len(str(self.s_y_p_numero)) != 1:\n        #    self.slot_y_puedo[0]\
+      \ = int(str(self.s_y_p_numero)[0:len(str(self.s_y_p_numero))-1])\n        #else:\n\
+      \        #    self.slot_y_puedo[0] = 0\n        #self.slot_y_puedo[1] = int(str(self.s_y_p_numero)[-1])\
+      \ # slot y puedo\n        \n        if self.current_slot != self.ultimo_slot:\n\
+      \            self.ultimo_slot = self.current_slot\n            self.cambio =\
+      \ True\n            #print(input_items[0])\n            #print(\"s_y_p\", self.slot_y_puedo)\n\
+      \            if self.current_slot in self.candidatos:\n                print(\"\
+      A\", self.current_slot, input_items[0])\n            # and self.slot_y_puedo[0]\
+      \ == self.current_slot:\n                #print(\"s_y_p\", self.slot_y_puedo)\n\
+      \                #print(np.count_nonzero(self.slot_y_puedo[0]))\n          \
+      \      \n\n        if self.slot_y_puedo[1] == 1 and self.slot_y_puedo[0] in\
+      \ self.candidatos and self.cambio:\n            print(self.slot_y_puedo, \"\
+      A\")\n        \n        elif self.slot_y_puedo[1] == 3 and self.primeravez:\n\
       \            print(\"inicializando\")\n            self.primeravez = False\n\
       \        elif self.slot_y_puedo[1] != 3 and self.ultimavez:\n            print(\"\
-      inicializo\")\n            self.ultimavez = False\n        \n        if (self.current_slot\
-      \ - self.inicios)%2250 <= 200:\n            self.NTT = self.inicios\n      \
-      \      self.inicios = (self.inicios + 1125)%2250 \n            self.candidatos\
+      inicializo\")\n            self.ultimavez = False\n        \n        if (self.inicios\
+      \ - self.current_slot)%2250 <= 200:\n            self.NTT = self.inicios\n \
+      \           self.inicios = (self.inicios + 1125)%2250 \n            self.candidatos\
       \ = np.array(sorted(np.random.randint(self.NTT-187, self.NTT+187+1, size=10)))\n\
-      \            print(self.candidatos, \"A\")\n\n            \n        self.cambio\
-      \ = False\n        output_items[0][:] = self.candidatos\n        \n\n      \
-      \  return 16\n        \n \n"
+      \            print(self.candidatos, \"A\", self.current_slot)\n\n          \
+      \  \n        self.cambio = False\n        output_items[0][:] = self.candidatos\n\
+      \        \n\n        return 16\n        \n \n"
     affinity: ''
     alias: ''
     comment: ''
@@ -148,7 +186,7 @@ blocks:
     minoutbuf: '0'
   states:
     _io_cache: ('Embedded Python Block', 'blk', [('example_param', '1.0')], [('0',
-      'float', 1)], [('0', 'complex', 10)], 'Embedded Python Block example - a simple
+      'float', 2)], [('0', 'complex', 10)], 'Embedded Python Block example - a simple
       multiply const', [])
     bus_sink: false
     bus_source: false
@@ -225,41 +263,43 @@ blocks:
       \    def __init__(self, example_param=1.0):  # only default arguments here\n\
       \        \"\"\"arguments to this function show up as parameters in GRC\"\"\"\
       \n        gr.sync_block.__init__(\n            self,\n            name='Embedded\
-      \ Python Block',   # will show up in GRC\n            in_sig=[np.float32],\n\
+      \ Python Block',   # will show up in GRC\n            in_sig=[(np.float32, 2)],\n\
       \            out_sig=[(np.complex64,10)]\n        )\n        # if an attribute\
       \ with the same name as a parameter is found,\n        # a callback is registered\
       \ (properties work, too).\n        self.NTT = 700\n        self.candidatos =\
-      \ np.full(10, -1)\n        self.slot_y_puedo = [2, 2]\n        self.current_slot\
-      \ = -1\n        self.slots_per_minute = 2250\n        self.inicios = 500\n \
-      \       self.cambio = False\n        self.ultimo_slot = -1\n        self.primeravez\
-      \ = True\n        self.ultimavez = True\n        self.s_y_p_numero = 0\n\n \
-      \   def work(self, input_items, output_items):\n        \"\"\"example: multiply\
-      \ with constant\"\"\"\n        current_utc_time = datetime.utcnow()\n      \
-      \  start_of_minute = current_utc_time.replace(second=0, microsecond=0)\n   \
-      \     time_elapsed = current_utc_time - start_of_minute\n        milliseconds_elapsed\
+      \ np.full(10, -1)\n        self.slot_y_puedo = np.zeros(10) #[2, 2]\n      \
+      \  self.current_slot = -1\n        self.slots_per_minute = 2250\n        self.inicios\
+      \ = 500\n        self.cambio = False\n        self.ultimo_slot = -1\n      \
+      \  self.primeravez = True\n        self.ultimavez = True\n        self.s_y_p_numero\
+      \ = 0\n\n    def work(self, input_items, output_items):\n        \"\"\"example:\
+      \ multiply with constant\"\"\"\n        current_utc_time = datetime.utcnow()\n\
+      \        start_of_minute = current_utc_time.replace(second=0, microsecond=0)\n\
+      \        time_elapsed = current_utc_time - start_of_minute\n        milliseconds_elapsed\
       \ = time_elapsed.total_seconds() * 1000\n        self.current_slot = int((milliseconds_elapsed)*self.slots_per_minute/60000)\
-      \ #Cantidad de slots desde que empez\xF3 el minuto.\n        \n        self.s_y_p_numero\
-      \ = int(input_items[0][0])\n\n        if len(str(self.s_y_p_numero)) != 1:\n\
-      \            self.slot_y_puedo[0] = int(str(self.s_y_p_numero)[0:len(str(self.s_y_p_numero))-1])\n\
-      \        else:\n            self.slot_y_puedo[0] = 0\n        self.slot_y_puedo[1]\
-      \ = int(str(self.s_y_p_numero)[-1]) # slot y puedo\n        \n        if self.current_slot\
-      \ != self.ultimo_slot:\n            self.ultimo_slot = self.current_slot\n \
-      \           self.cambio = True\n            #print(input_items[0][0])\n    \
-      \        #print(\"s_y_p\", self.slot_y_puedo)\n            if self.current_slot\
-      \ in self.candidatos and self.slot_y_puedo[0] == self.current_slot:\n      \
-      \          print(\"s_y_p\", self.slot_y_puedo)\n                #print(np.count_nonzero(self.slot_y_puedo[0]))\n\
-      \                \n\n        if self.slot_y_puedo[1] == 1 and self.slot_y_puedo[0]\
-      \ in self.candidatos and self.cambio:\n            print(self.slot_y_puedo,\
-      \ \"B\")\n        \n        elif self.slot_y_puedo[1] == 3 and self.primeravez:\n\
+      \ #Cantidad de slots desde que empez\xF3 el minuto.\n        \n        self.slot_y_puedo\
+      \ = input_items[0][0]\n        \n        #self.s_y_p_numero = int(input_items[0][0])\n\
+      \n        #if len(str(self.s_y_p_numero)) != 1:\n        #    self.slot_y_puedo[0]\
+      \ = int(str(self.s_y_p_numero)[0:len(str(self.s_y_p_numero))-1])\n        #else:\n\
+      \        #    self.slot_y_puedo[0] = 0\n        #self.slot_y_puedo[1] = int(str(self.s_y_p_numero)[-1])\
+      \ # slot y puedo\n        \n        if self.current_slot != self.ultimo_slot:\n\
+      \            self.ultimo_slot = self.current_slot\n            self.cambio =\
+      \ True\n            #print(input_items[0])\n            #print(\"s_y_p\", self.slot_y_puedo)\n\
+      \            if self.current_slot in self.candidatos:\n                print(\"\
+      B\", self.current_slot, input_items[0])\n            # and self.slot_y_puedo[0]\
+      \ == self.current_slot:\n                #print(\"s_y_p\", self.slot_y_puedo)\n\
+      \                #print(np.count_nonzero(self.slot_y_puedo[0]))\n          \
+      \      \n\n        if self.slot_y_puedo[1] == 1 and self.slot_y_puedo[0] in\
+      \ self.candidatos and self.cambio:\n            print(self.slot_y_puedo, \"\
+      B\")\n        \n        elif self.slot_y_puedo[1] == 3 and self.primeravez:\n\
       \            print(\"inicializando\")\n            self.primeravez = False\n\
       \        elif self.slot_y_puedo[1] != 3 and self.ultimavez:\n            print(\"\
-      inicializo\")\n            self.ultimavez = False\n        \n        if (self.current_slot\
-      \ - self.inicios)%2250 <= 200:\n            self.NTT = self.inicios\n      \
-      \      self.inicios = (self.inicios + 1125)%2250 \n            self.candidatos\
+      inicializo\")\n            self.ultimavez = False\n        \n        if (self.inicios\
+      \ - self.current_slot)%2250 <= 200:\n            self.NTT = self.inicios\n \
+      \           self.inicios = (self.inicios + 1125)%2250 \n            self.candidatos\
       \ = np.array(sorted(np.random.randint(self.NTT-187, self.NTT+187+1, size=10)))\n\
-      \            print(self.candidatos, \"B\")\n\n            \n        self.cambio\
-      \ = False\n        output_items[0][:] = self.candidatos\n        \n\n      \
-      \  return 16\n        \n \n"
+      \            print(self.candidatos, \"B\", self.current_slot)\n\n          \
+      \  \n        self.cambio = False\n        output_items[0][:] = self.candidatos\n\
+      \        \n\n        return 16\n        \n \n"
     affinity: ''
     alias: ''
     comment: ''
@@ -268,7 +308,7 @@ blocks:
     minoutbuf: '0'
   states:
     _io_cache: ('Embedded Python Block', 'blk', [('example_param', '1.0')], [('0',
-      'float', 1)], [('0', 'complex', 10)], 'Embedded Python Block example - a simple
+      'float', 2)], [('0', 'complex', 10)], 'Embedded Python Block example - a simple
       multiply const', [])
     bus_sink: false
     bus_source: false
@@ -332,7 +372,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [304, 168.0]
+    coordinate: [216, 156.0]
     rotation: 0
     state: true
 - name: zeromq_sub_source_0_0
@@ -353,17 +393,19 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 324.0]
+    coordinate: [240, 324.0]
     rotation: 0
     state: true
 
 connections:
+- [blocks_stream_to_vector_0, '0', epy_block_0, '0']
+- [blocks_stream_to_vector_1, '0', epy_block_0_1, '0']
 - [blocks_vector_to_stream_0_0, '0', zeromq_pub_sink_0_0, '0']
 - [blocks_vector_to_stream_0_0_0, '0', zeromq_pub_sink_0_0_0, '0']
 - [epy_block_0, '0', blocks_vector_to_stream_0_0_0, '0']
 - [epy_block_0_1, '0', blocks_vector_to_stream_0_0, '0']
-- [zeromq_sub_source_0, '0', epy_block_0, '0']
-- [zeromq_sub_source_0_0, '0', epy_block_0_1, '0']
+- [zeromq_sub_source_0, '0', blocks_stream_to_vector_0, '0']
+- [zeromq_sub_source_0_0, '0', blocks_stream_to_vector_1, '0']
 
 metadata:
   file_format: 1

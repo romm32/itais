@@ -16,6 +16,7 @@
 /usr/local/lib/cmake/itais/gnuradio-itaisConfig.cmake
 /usr/local/bin/ais_rx
 /usr/local/bin/ais_tx
+/usr/local/bin/itais_tx
 /usr/local/lib/python3/dist-packages/itais/_itais_swig.so
 /usr/local/lib/python3/dist-packages/itais/itais_swig.py
 /usr/local/lib/python3/dist-packages/itais/itais_swig.pyc
@@ -31,6 +32,8 @@
 /usr/local/lib/python3/dist-packages/itais/radio.py
 /usr/local/lib/python3/dist-packages/itais/ais_demod.py
 /usr/local/lib/python3/dist-packages/itais/rf.py
+/usr/local/lib/python3/dist-packages/itais/itais_radio.py
+/usr/local/lib/python3/dist-packages/itais/selector_itais.py
 /usr/local/lib/python3/dist-packages/itais/__init__.pyc
 /usr/local/lib/python3/dist-packages/itais/messages.pyc
 /usr/local/lib/python3/dist-packages/itais/sub_gps.pyc
@@ -40,6 +43,8 @@
 /usr/local/lib/python3/dist-packages/itais/radio.pyc
 /usr/local/lib/python3/dist-packages/itais/ais_demod.pyc
 /usr/local/lib/python3/dist-packages/itais/rf.pyc
+/usr/local/lib/python3/dist-packages/itais/itais_radio.pyc
+/usr/local/lib/python3/dist-packages/itais/selector_itais.pyc
 /usr/local/lib/python3/dist-packages/itais/__init__.pyo
 /usr/local/lib/python3/dist-packages/itais/messages.pyo
 /usr/local/lib/python3/dist-packages/itais/sub_gps.pyo
@@ -49,6 +54,8 @@
 /usr/local/lib/python3/dist-packages/itais/radio.pyo
 /usr/local/lib/python3/dist-packages/itais/ais_demod.pyo
 /usr/local/lib/python3/dist-packages/itais/rf.pyo
+/usr/local/lib/python3/dist-packages/itais/itais_radio.pyo
+/usr/local/lib/python3/dist-packages/itais/selector_itais.pyo
 /usr/local/share/gnuradio/grc/blocks/itais_messages.block.yml
 /usr/local/share/gnuradio/grc/blocks/itais_sub_gps.block.yml
 /usr/local/share/gnuradio/grc/blocks/itais_transmitter.block.yml
@@ -63,3 +70,4 @@
 /usr/local/share/gnuradio/grc/blocks/itais_Build_Frame.block.yml
 /usr/local/share/gnuradio/grc/blocks/itais_nrz_to_nrzi.block.yml
 /usr/local/share/gnuradio/grc/blocks/itais_DebugME.block.yml
+/usr/local/share/gnuradio/grc/blocks/itais_selector_itais.block.yml

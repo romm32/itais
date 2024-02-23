@@ -53,6 +53,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     "/home/gnuradio/gr-itais/grc/itais_Build_Frame.block.yml"
     "/home/gnuradio/gr-itais/grc/itais_nrz_to_nrzi.block.yml"
     "/home/gnuradio/gr-itais/grc/itais_DebugME.block.yml"
+    "/home/gnuradio/gr-itais/grc/itais_selector_itais.block.yml"
     )
 endif()
 
