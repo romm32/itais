@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classgr_1_1itais_1_1pdu__to__nmea__impl" kind="class" language="C++" prot="public">
+    <compoundname>gr::itais::pdu_to_nmea_impl</compoundname>
+    <basecompoundref refid="classgr_1_1itais_1_1pdu__to__nmea" prot="public" virt="non-virtual">gr::itais::pdu_to_nmea</basecompoundref>
+    <includes refid="pdu__to__nmea__impl_8h" local="no">pdu_to_nmea_impl.h</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgr_1_1itais_1_1pdu__to__nmea__impl_1a45860dba1778baca07c7b1aea67987eb" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string gr::itais::pdu_to_nmea_impl::d_designator</definition>
+        <argsstring></argsstring>
+        <name>d_designator</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" line="42" column="22" bodyfile="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgr_1_1itais_1_1pdu__to__nmea__impl_1a4276a2d02e54d08ded5f6901d03e5f39" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void gr::itais::pdu_to_nmea_impl::print</definition>
+        <argsstring>(pmt::pmt_t msg)</argsstring>
+        <name>print</name>
+        <reimplements refid="classgr_1_1itais_1_1pdu__to__nmea_1a3ebc3deeb9e0b65d0f64b35d3552fd88">print</reimplements>
+        <param>
+          <type>pmt::pmt_t</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" line="34" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1pdu__to__nmea__impl_1a31671b29e7f614d8a8e6bd6fbf86cf0c" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void gr::itais::pdu_to_nmea_impl::to_nmea</definition>
+        <argsstring>(pmt::pmt_t msg)</argsstring>
+        <name>to_nmea</name>
+        <reimplements refid="classgr_1_1itais_1_1pdu__to__nmea_1a673c5e4d6b1a9e099242d921eeabfa82">to_nmea</reimplements>
+        <param>
+          <type>pmt::pmt_t</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" line="35" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1pdu__to__nmea__impl_1a2d574f1b0f59bea5d46c1d80ced51f56" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; uint8_t &gt;</type>
+        <definition>std::vector&lt;uint8_t&gt; gr::itais::pdu_to_nmea_impl::unpack_bits</definition>
+        <argsstring>(pmt::pmt_t msg, uint8_t *npad)</argsstring>
+        <name>unpack_bits</name>
+        <param>
+          <type>pmt::pmt_t</type>
+          <declname>msg</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>npad</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" line="36" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1pdu__to__nmea__impl_1ab81df9335c90b10ceb774df7f7cf173d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string gr::itais::pdu_to_nmea_impl::to_ascii</definition>
+        <argsstring>(std::vector&lt; uint8_t &gt; msg)</argsstring>
+        <name>to_ascii</name>
+        <param>
+          <type>std::vector&lt; uint8_t &gt;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" line="37" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1pdu__to__nmea__impl_1af708643f226771ea0ac4ebe5b45b556b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint8_t</type>
+        <definition>uint8_t gr::itais::pdu_to_nmea_impl::get_checksum</definition>
+        <argsstring>(std::string &amp;msg)</argsstring>
+        <name>get_checksum</name>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" line="38" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1pdu__to__nmea__impl_1a442b0d3a92e82338c5da2c6a549e0572" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string gr::itais::pdu_to_nmea_impl::to_sentence</definition>
+        <argsstring>(std::string ascii, uint8_t npad)</argsstring>
+        <name>to_sentence</name>
+        <param>
+          <type>std::string</type>
+          <declname>ascii</declname>
+        </param>
+        <param>
+          <type>uint8_t</type>
+          <declname>npad</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" line="39" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1pdu__to__nmea__impl_1a6fa85ee44f82f4ed1745603af0d54b3c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string gr::itais::pdu_to_nmea_impl::msg_to_sentence</definition>
+        <argsstring>(pmt::pmt_t msg)</argsstring>
+        <name>msg_to_sentence</name>
+        <param>
+          <type>pmt::pmt_t</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" line="40" column="22"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgr_1_1itais_1_1pdu__to__nmea__impl_1ae37d5d8d5ee922c5d6df8ae5b86cee17" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>gr::itais::pdu_to_nmea_impl::pdu_to_nmea_impl</definition>
+        <argsstring>(std::string designator)</argsstring>
+        <name>pdu_to_nmea_impl</name>
+        <param>
+          <type>std::string</type>
+          <declname>designator</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" line="45" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1pdu__to__nmea__impl_1ae40fda2a84c9a6490ca0eafacd06ae5d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>gr::itais::pdu_to_nmea_impl::~pdu_to_nmea_impl</definition>
+        <argsstring>()</argsstring>
+        <name>~pdu_to_nmea_impl</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" line="46" column="7"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>gr::itais::pdu_to_nmea</label>
+        <link refid="classgr_1_1itais_1_1pdu__to__nmea"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>gr::block</label>
+      </node>
+      <node id="1">
+        <label>gr::itais::pdu_to_nmea_impl</label>
+        <link refid="classgr_1_1itais_1_1pdu__to__nmea__impl"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>gr::itais::pdu_to_nmea</label>
+        <link refid="classgr_1_1itais_1_1pdu__to__nmea"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>gr::block</label>
+      </node>
+      <node id="1">
+        <label>gr::itais::pdu_to_nmea_impl</label>
+        <link refid="classgr_1_1itais_1_1pdu__to__nmea__impl"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" line="31" column="5" bodyfile="/home/ais/itais/gr-itais/lib/pdu_to_nmea_impl.h" bodystart="32" bodyend="47"/>
+    <listofallmembers>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea__impl_1a45860dba1778baca07c7b1aea67987eb" prot="private" virt="non-virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>d_designator</name></member>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea__impl_1af708643f226771ea0ac4ebe5b45b556b" prot="private" virt="non-virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>get_checksum</name></member>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea_1a4391ee70a3ee855f4c8d7ea094328589" prot="public" virt="non-virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>make</name></member>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea__impl_1a6fa85ee44f82f4ed1745603af0d54b3c" prot="private" virt="non-virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>msg_to_sentence</name></member>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea__impl_1ae37d5d8d5ee922c5d6df8ae5b86cee17" prot="public" virt="non-virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>pdu_to_nmea_impl</name></member>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea__impl_1a4276a2d02e54d08ded5f6901d03e5f39" prot="private" virt="virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>print</name></member>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea_1ab973ce58c388a99fb8260c7f04409349" prot="public" virt="non-virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>sptr</name></member>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea__impl_1ab81df9335c90b10ceb774df7f7cf173d" prot="private" virt="non-virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>to_ascii</name></member>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea__impl_1a31671b29e7f614d8a8e6bd6fbf86cf0c" prot="private" virt="virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>to_nmea</name></member>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea__impl_1a442b0d3a92e82338c5da2c6a549e0572" prot="private" virt="non-virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>to_sentence</name></member>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea__impl_1a2d574f1b0f59bea5d46c1d80ced51f56" prot="private" virt="non-virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>unpack_bits</name></member>
+      <member refid="classgr_1_1itais_1_1pdu__to__nmea__impl_1ae40fda2a84c9a6490ca0eafacd06ae5d" prot="public" virt="non-virtual"><scope>gr::itais::pdu_to_nmea_impl</scope><name>~pdu_to_nmea_impl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

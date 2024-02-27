@@ -1,4 +1,4 @@
-# Install script for directory: /home/gnuradio/gr-itais/swig
+# Install script for directory: /home/ais/itais/gr-itais/swig
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -37,6 +37,11 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
+# Set default install directory permissions.
+if(NOT DEFINED CMAKE_OBJDUMP)
+  set(CMAKE_OBJDUMP "/usr/bin/objdump")
+endif()
+
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais/_itais_swig.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais/_itais_swig.so")
@@ -44,12 +49,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais/_itais_swig.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais" TYPE MODULE FILES "/home/gnuradio/gr-itais/build/swig/_itais_swig.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais" TYPE MODULE FILES "/home/ais/itais/gr-itais/build/swig/_itais_swig.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais/_itais_swig.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais/_itais_swig.so")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais/_itais_swig.so"
-         OLD_RPATH "/home/gnuradio/gr-itais/build/lib:"
+         OLD_RPATH "/home/ais/itais/gr-itais/build/lib:/usr/local/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais/_itais_swig.so")
@@ -58,20 +63,20 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais" TYPE FILE FILES "/home/gnuradio/gr-itais/build/swig/itais_swig.py")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais" TYPE FILE FILES "/home/ais/itais/gr-itais/build/swig/itais_swig.py")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages/itais" TYPE FILE FILES
-    "/home/gnuradio/gr-itais/build/swig/itais_swig.pyc"
-    "/home/gnuradio/gr-itais/build/swig/itais_swig.pyo"
+    "/home/ais/itais/gr-itais/build/swig/itais_swig.pyc"
+    "/home/ais/itais/gr-itais/build/swig/itais_swig.pyo"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/itais/itais/swig" TYPE FILE FILES
-    "/home/gnuradio/gr-itais/swig/itais_swig.i"
-    "/home/gnuradio/gr-itais/build/swig/itais_swig_doc.i"
+    "/home/ais/itais/gr-itais/swig/itais_swig.i"
+    "/home/ais/itais/gr-itais/build/swig/itais_swig_doc.i"
     )
 endif()
 

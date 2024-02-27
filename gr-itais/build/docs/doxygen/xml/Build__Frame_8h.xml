@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="Build__Frame_8h" kind="file" language="C++">
+    <compoundname>Build_Frame.h</compoundname>
+    <includes refid="api_8h" local="no">itais/api.h</includes>
+    <includes local="no">gnuradio/tagged_stream_block.h</includes>
+    <includedby refid="Build__Frame__impl_8h" local="no">Build_Frame_impl.h</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>itais/api.h</label>
+        <link refid="api_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>gnuradio/attributes.h</label>
+      </node>
+      <node id="1">
+        <label>Build_Frame.h</label>
+        <link refid="Build__Frame_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>gnuradio/tagged_stream_block.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>Build_Frame.h</label>
+        <link refid="Build__Frame_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Build_Frame_impl.h</label>
+        <link refid="Build__Frame__impl_8h"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classgr_1_1itais_1_1Build__Frame" prot="public">gr::itais::Build_Frame</innerclass>
+    <innernamespace refid="namespacegr">gr</innernamespace>
+    <innernamespace refid="namespacegr_1_1itais">gr::itais</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/ais/itais/gr-itais/include/itais/Build_Frame.h"/>
+  </compounddef>
+</doxygen>

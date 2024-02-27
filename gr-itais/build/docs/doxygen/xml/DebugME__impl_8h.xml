@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="DebugME__impl_8h" kind="file" language="C++">
+    <compoundname>DebugME_impl.h</compoundname>
+    <includes refid="DebugME_8h" local="no">itais/DebugME.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>itais/api.h</label>
+        <link refid="api_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>gnuradio/attributes.h</label>
+      </node>
+      <node id="1">
+        <label>DebugME_impl.h</label>
+        <link refid="DebugME__impl_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>gnuradio/block.h</label>
+      </node>
+      <node id="2">
+        <label>itais/DebugME.h</label>
+        <link refid="DebugME_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <innerclass refid="classgr_1_1itais_1_1DebugME__impl" prot="public">gr::itais::DebugME_impl</innerclass>
+    <innernamespace refid="namespacegr">gr</innernamespace>
+    <innernamespace refid="namespacegr_1_1itais">gr::itais</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/ais/itais/gr-itais/lib/DebugME_impl.h"/>
+  </compounddef>
+</doxygen>

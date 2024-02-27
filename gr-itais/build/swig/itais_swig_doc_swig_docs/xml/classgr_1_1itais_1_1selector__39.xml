@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classgr_1_1itais_1_1selector__39" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>gr::itais::selector_39</compoundname>
+    <basecompoundref prot="public" virt="virtual">gr::block</basecompoundref>
+    <includes refid="selector__39_8h" local="no">selector_39.h</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="classgr_1_1itais_1_1selector__39_1a6d0cdfc0a28c4c0f639eb86b1cc49d28" prot="public" static="no">
+        <type>boost::shared_ptr&lt; <ref refid="classgr_1_1itais_1_1selector__39" kindref="compound">selector_39</ref> &gt;</type>
+        <definition>typedef boost::shared_ptr&lt;selector_39&gt; gr::itais::selector_39::sptr</definition>
+        <argsstring></argsstring>
+        <name>sptr</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/include/itais/selector_39.h" line="38" column="33" bodyfile="/home/ais/itais/gr-itais/include/itais/selector_39.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classgr_1_1itais_1_1selector__39_1a84d0e27a09dc69d29a13f48f7ec44238" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classgr_1_1itais_1_1selector__39_1a6d0cdfc0a28c4c0f639eb86b1cc49d28" kindref="member">sptr</ref></type>
+        <definition>static sptr gr::itais::selector_39::make</definition>
+        <argsstring>(size_t itemsize, unsigned int input_index, unsigned int output_index)</argsstring>
+        <name>make</name>
+        <param>
+          <type>size_t</type>
+          <declname>itemsize</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>input_index</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>output_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/include/itais/selector_39.h" line="41" column="5"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgr_1_1itais_1_1selector__39_1a054231e268dc54a1b04753777c640f0a" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void gr::itais::selector_39::set_enabled</definition>
+        <argsstring>(bool enable)=0</argsstring>
+        <name>set_enabled</name>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/include/itais/selector_39.h" line="45" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1selector__39_1a0febb20a6a0eeea93a975e950b3c672e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool gr::itais::selector_39::enabled</definition>
+        <argsstring>() const =0</argsstring>
+        <name>enabled</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/include/itais/selector_39.h" line="46" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1selector__39_1ab183df8106087266f0827cf50e2b15f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void gr::itais::selector_39::set_input_index</definition>
+        <argsstring>(unsigned int input_index)=0</argsstring>
+        <name>set_input_index</name>
+        <param>
+          <type>unsigned int</type>
+          <declname>input_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/include/itais/selector_39.h" line="48" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1selector__39_1a3214791b5761b535e28c53b26e02cb0a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>int</type>
+        <definition>virtual int gr::itais::selector_39::input_index</definition>
+        <argsstring>() const =0</argsstring>
+        <name>input_index</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/include/itais/selector_39.h" line="49" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1selector__39_1af5f95acaa76d6e24dd31091431922aeb" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void gr::itais::selector_39::set_output_index</definition>
+        <argsstring>(unsigned int output_index)=0</argsstring>
+        <name>set_output_index</name>
+        <param>
+          <type>unsigned int</type>
+          <declname>output_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/include/itais/selector_39.h" line="51" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1selector__39_1ad3b135f7cb0c66212cae201a3741d78a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>int</type>
+        <definition>virtual int gr::itais::selector_39::output_index</definition>
+        <argsstring>() const =0</argsstring>
+        <name>output_index</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/include/itais/selector_39.h" line="52" column="17"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>&lt;+description of block+&gt; </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>gr::itais::selector_39</label>
+        <link refid="classgr_1_1itais_1_1selector__39"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>gr::block</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>gr::itais::selector_39</label>
+        <link refid="classgr_1_1itais_1_1selector__39"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>gr::block</label>
+      </node>
+    </collaborationgraph>
+    <location file="/home/ais/itais/gr-itais/include/itais/selector_39.h" line="35" column="5" bodyfile="/home/ais/itais/gr-itais/include/itais/selector_39.h" bodystart="36" bodyend="53"/>
+    <listofallmembers>
+      <member refid="classgr_1_1itais_1_1selector__39_1a0febb20a6a0eeea93a975e950b3c672e" prot="public" virt="pure-virtual"><scope>gr::itais::selector_39</scope><name>enabled</name></member>
+      <member refid="classgr_1_1itais_1_1selector__39_1a3214791b5761b535e28c53b26e02cb0a" prot="public" virt="pure-virtual"><scope>gr::itais::selector_39</scope><name>input_index</name></member>
+      <member refid="classgr_1_1itais_1_1selector__39_1a84d0e27a09dc69d29a13f48f7ec44238" prot="public" virt="non-virtual"><scope>gr::itais::selector_39</scope><name>make</name></member>
+      <member refid="classgr_1_1itais_1_1selector__39_1ad3b135f7cb0c66212cae201a3741d78a" prot="public" virt="pure-virtual"><scope>gr::itais::selector_39</scope><name>output_index</name></member>
+      <member refid="classgr_1_1itais_1_1selector__39_1a054231e268dc54a1b04753777c640f0a" prot="public" virt="pure-virtual"><scope>gr::itais::selector_39</scope><name>set_enabled</name></member>
+      <member refid="classgr_1_1itais_1_1selector__39_1ab183df8106087266f0827cf50e2b15f1" prot="public" virt="pure-virtual"><scope>gr::itais::selector_39</scope><name>set_input_index</name></member>
+      <member refid="classgr_1_1itais_1_1selector__39_1af5f95acaa76d6e24dd31091431922aeb" prot="public" virt="pure-virtual"><scope>gr::itais::selector_39</scope><name>set_output_index</name></member>
+      <member refid="classgr_1_1itais_1_1selector__39_1a6d0cdfc0a28c4c0f639eb86b1cc49d28" prot="public" virt="non-virtual"><scope>gr::itais::selector_39</scope><name>sptr</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
