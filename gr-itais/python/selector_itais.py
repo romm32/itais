@@ -39,6 +39,9 @@ class selector_itais(gr.sync_block):
         self.portName_in = 'canal'
         self.message_port_register_in(pmt.intern(self.portName_in))
         self.set_msg_handler(pmt.intern("canal"), self.process_message)
+        
+        self.prueba0 = 0
+        self.prueba1 = 0 
 
     def process_message(self, message):
         # Retrieve message payload and save it to a variable
@@ -47,9 +50,13 @@ class selector_itais(gr.sync_block):
 
     def work(self, input_items, output_items):
         """example: multiply with constant"""
+        self.prueba0 = np.size(input_items)
+        self.prueba1 = len(output_items[0])
         if self.canal == "A":
             output_items[0][:] = input_items[0]
         elif self.canal == "B":
             output_items[0][:] = input_items[1]
             
         return len(output_items[0])
+        
+        

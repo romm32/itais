@@ -64,7 +64,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
         self.es_menor0 = False
         self.ultimo_slot = -1
         self.cambio = False
-        self.canal_actual = "A"
+        self.canal_actual = 0 # 0 es A, 1 es B
         self.transmitio = False
         self.inicio2 = 0
         self.final2 = 0
@@ -113,7 +113,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
     
     def work(self, input_items, output_items):
         """example: multiply with constant"""
-        if self.canal_actual == "A":
+        if self.canal_actual == 0:
             self.slot_y_puedo = self.slot_y_puedo_A
         else:
             self.slot_y_puedo = self.slot_y_puedo_B
@@ -138,6 +138,9 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
             print("inicializo")
             print("empiezan temporizadores")
             print("slot ", self.current_slot)
+            
+            PMT_msg = pmt.cons(pmt.PMT_NIL, pmt.from_long(self.canal_actual)) #pmt.intern(self.canal_actual)
+            self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
             
             if input_items[0][0] > 2: #### verificar en qué unidad nos da la velocidad el gps
                 print(input_items[0][0])
@@ -186,6 +189,8 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                     if self.prox_18-self.diff < 0:
                         self.es_menor0 = True
                     if self.es_menor0 or (self.current_slot == self.prox_18-self.diff):
+                        PMT_msg = pmt.cons(pmt.PMT_NIL, pmt.from_long(self.canal_actual)) #pmt.intern(self.canal_actual)
+                        self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
                         self.candidatos_18 = self.slot_selection(self.prox_18) #[self.prox_18-5,self.prox_18-4,self.prox_18-3,self.prox_18-2,self.prox_18-1, self.prox_18,self.prox_18+1,self.prox_18+2,self.prox_18+3,self.prox_18+4]#
                         self.transmitiendo[0] = True
                         print("transmitiendo 18", self.current_slot)
@@ -193,7 +198,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                             self.primero_en_pedir = 18
                             
                         self.candidatos = self.candidatos_18
-                        if self.canal_actual == "A":
+                        if self.canal_actual == 0:
                             PMT_msg = pmt.to_pmt(self.candidatos.tolist())
                             self.message_port_pub(pmt.intern(self.portNameA), PMT_msg)
                         else:
@@ -211,6 +216,8 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                     if self.prox_24-self.diff < 0:
                         self.es_menor0 = True
                     if self.es_menor0 or (self.current_slot == self.prox_24-self.diff):
+                        PMT_msg = pmt.cons(pmt.PMT_NIL, pmt.from_long(self.canal_actual)) #pmt.intern(self.canal_actual)
+                        self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
                         self.candidatos_24 = self.slot_selection(self.prox_24) #[self.prox_24-5,self.prox_24-4,self.prox_24-3,self.prox_24-2,self.prox_24-1, self.prox_24,self.prox_24+1,self.prox_24+2,self.prox_24+3,self.prox_24+4] #
                         self.transmitiendo[1] = True
                         print("transmitiendo 24", self.current_slot)
@@ -218,7 +225,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                             self.primero_en_pedir = 24
                         
                         self.candidatos = self.candidatos_24
-                        if self.canal_actual == "A":
+                        if self.canal_actual == 0:
                             PMT_msg = pmt.to_pmt(self.candidatos.tolist())
                             self.message_port_pub(pmt.intern(self.portNameA), PMT_msg)
                         else:
@@ -257,7 +264,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                 self.slot_y_puedo = np.zeros(2)
                     
                 self.candidatos = np.full(10, -1)
-                if self.canal_actual == "A":
+                if self.canal_actual == 0:
                     PMT_msg = pmt.to_pmt(self.candidatos.tolist())
                     self.message_port_pub(pmt.intern(self.portNameA), PMT_msg)
                     self.transmitio = True
@@ -300,7 +307,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                 self.candidatos_24 = np.full(10, -1)
                     
                 self.candidatos = np.full(10, -1)
-                if self.canal_actual == "A":
+                if self.canal_actual == 0:
                     PMT_msg = pmt.to_pmt(self.candidatos.tolist())
                     self.message_port_pub(pmt.intern(self.portNameA), PMT_msg)
                     self.transmitio = True
@@ -315,18 +322,14 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                 #print(self.final2-self.inicio2) #, self.current_slot)
                 
             self.cambio = False
-        if self.canal_actual == "A":
+        if self.canal_actual == 0:
             if self.transmitio:
                 self.transmitio = False
-                self.canal_actual = "B"
-                PMT_msg = pmt.to_pmt(self.canal_actual)
-                self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
+                self.canal_actual = 1
         else:
             if self.transmitio:
                 self.transmitio = False
-                self.canal_actual = "A"
-                PMT_msg = pmt.to_pmt(self.canal_actual)
-                self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
+                self.canal_actual = 0
 
         return 16 #len(output_items[0])
         

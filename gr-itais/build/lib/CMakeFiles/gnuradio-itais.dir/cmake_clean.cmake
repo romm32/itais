@@ -7,6 +7,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/gnuradio-itais.dir/msk_timing_recovery_cc_impl.cc.o"
   "CMakeFiles/gnuradio-itais.dir/nrz_to_nrzi_impl.cc.o"
   "CMakeFiles/gnuradio-itais.dir/pdu_to_nmea_impl.cc.o"
+  "CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o"
   "libgnuradio-itais.pdb"
   "libgnuradio-itais.so"
   "libgnuradio-itais.so.1.0.0"

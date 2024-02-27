@@ -41,3 +41,8 @@ lib/CMakeFiles/gnuradio-itais.dir/pdu_to_nmea_impl.cc.o: ../include/itais/pdu_to
 lib/CMakeFiles/gnuradio-itais.dir/pdu_to_nmea_impl.cc.o: ../lib/pdu_to_nmea_impl.cc
 lib/CMakeFiles/gnuradio-itais.dir/pdu_to_nmea_impl.cc.o: ../lib/pdu_to_nmea_impl.h
 
+lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o: ../include/itais/api.h
+lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o: ../include/itais/selector_39.h
+lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o: ../lib/selector_39_impl.cc
+lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o: ../lib/selector_39_impl.h
+

@@ -116,7 +116,7 @@ class itais_tx(gr.hier_block2):
         
 
         ### TRANSMISSION        
-        self.selector = itais.selector_itais()
+        #self.selector = itais.selector_itais()
 
         self.AISTX_Build_Frame = itais.Build_Frame(True, True, 'packet_len')
         # self.rational_resampler_tx = filter.rational_resampler_ccc(
@@ -127,39 +127,38 @@ class itais_tx(gr.hier_block2):
         self.digital_gmsk_mod = digital.gmsk_mod(int(1000000/9600), bt=0.4, verbose=False, log=False) #Se fijan los mismos parámetros que en gr-aistx.
         #self.blocks_selector = blocks.selector(gr.sizeof_gr_complex*1,1,0)
         #self.blocks_selector.set_enabled(True)
-        self.blocks_multiply_xx_1 = blocks.multiply_vcc(1)
-        self.blocks_multiply_xx_0 = blocks.multiply_vcc(1)
-        self.blocks_multiply_const_vxx_3 = blocks.multiply_const_cc(0.9)
+        self.selector = itais.selector_39(gr.sizeof_gr_complex*1,0,0)
+        self.selector.set_enabled(True)
+        
+        self.blocks_multiply_A = blocks.multiply_vcc(1)
+        self.blocks_multiply_B = blocks.multiply_vcc(1)
+        self.blocks_multiply_const_A = blocks.multiply_const_cc(0.9)
         #self.blocks_multiply_const_vxx_2 = blocks.multiply_const_cc(.45)
-        self.blocks_multiply_const_vxx_1 = blocks.multiply_const_cc(0.9)
+        self.blocks_multiply_const_B = blocks.multiply_const_cc(0.9)
         #self.blocks_multiply_const_vxx_0 = blocks.multiply_const_cc(.45)
         #self.blocks_add = blocks.add_vcc(1)
-        self.analog_sig_source_x_1 = analog.sig_source_c(1000000, analog.GR_SIN_WAVE, 25000, 1, 0, 0)
-        self.analog_sig_source_x_0 = analog.sig_source_c(1000000, analog.GR_SIN_WAVE, -25000, 1, 0, 0)        
+        self.analog_sig_source_A = analog.sig_source_c(1000000, analog.GR_SIN_WAVE, -25000, 1, 0, 0)
+        self.analog_sig_source_B = analog.sig_source_c(1000000, analog.GR_SIN_WAVE, 25000, 1, 0, 0)
+                
         self.iio_pluto_sink = iio.pluto_sink('ip:192.168.2.1', 162000000, 1000000, 20000000, 32768, False, 10.0, '', True)
         
         self.msg_connect((self.messages, 'bits_Out'), (self.AISTX_Build_Frame, 'sentence'))
         self.connect((self.AISTX_Build_Frame, 0), (self.digital_gmsk_mod, 0))
                                                 #(self.rational_resampler_tx, 0), 
-        self.connect((self.digital_gmsk_mod, 0), (self.blocks_multiply_xx_0, 1))
-        self.connect((self.digital_gmsk_mod, 0), (self.blocks_multiply_xx_1, 0))
+        self.connect((self.digital_gmsk_mod, 0), (self.blocks_multiply_A, 0))
+        self.connect((self.digital_gmsk_mod, 0), (self.blocks_multiply_B, 0))
 
-        self.connect((self.analog_sig_source_x_0, 0), (self.blocks_multiply_xx_0, 0))
-        self.connect((self.analog_sig_source_x_1, 0), (self.blocks_multiply_xx_1, 1))
+        self.connect((self.analog_sig_source_A, 0), (self.blocks_multiply_A, 1))
+        self.connect((self.analog_sig_source_B, 0), (self.blocks_multiply_B, 1))
         
-        #self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_multiply_const_vxx_0, 0))
-        self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_multiply_const_vxx_1, 0))
-        #self.connect((self.blocks_multiply_xx_1, 0), (self.blocks_multiply_const_vxx_2, 0))
-        self.connect((self.blocks_multiply_xx_1, 0), (self.blocks_multiply_const_vxx_3, 0))
+        self.connect((self.blocks_multiply_A, 0), (self.blocks_multiply_const_A, 0))
+        self.connect((self.blocks_multiply_B, 0), (self.blocks_multiply_const_B, 0))
         
-        #self.connect((self.blocks_multiply_const_vxx_0, 0), (self.blocks_add, 0))
-        #self.connect((self.blocks_multiply_const_vxx_2, 0), (self.blocks_add, 1))
-        
-        self.connect((self.blocks_multiply_const_vxx_1, 0), (self.selector, 0))
-        self.connect((self.blocks_multiply_const_vxx_3, 0), (self.selector, 1))
-        #self.connect((self.blocks_add, 0), (self.blocks_selector, 1))
-        self.msg_connect((self.transmitter, 'canal'), (self.selector, 'canal'))
-        
+
+        self.connect((self.blocks_multiply_const_A, 0), (self.selector, 0))
+        self.connect((self.blocks_multiply_const_B, 0), (self.selector, 1))
+        self.msg_connect((self.transmitter, 'canal'), (self.selector, 'iindex'))
+
         self.connect((self.selector, 0), (self.iio_pluto_sink, 0))
         
 

@@ -2707,5 +2707,371 @@ _itais_swig.DebugME_sptr_swigregister(DebugME_sptr)
 DebugME_sptr.__repr__ = lambda self: "<gr_block %s (%d)>" % (self.name(), self.unique_id())
 DebugME = DebugME.make;
 
+class selector_39(object):
+    r"""Proxy of C++ gr::itais::selector_39 class."""
+
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+
+    @staticmethod
+    def make(itemsize: "size_t", input_index: "unsigned int", output_index: "unsigned int") -> "gr::itais::selector_39::sptr":
+        r"""make(size_t itemsize, unsigned int input_index, unsigned int output_index) -> selector_39_sptr"""
+        return _itais_swig.selector_39_make(itemsize, input_index, output_index)
+
+    def set_enabled(self, enable: "bool") -> "void":
+        r"""set_enabled(selector_39 self, bool enable)"""
+        return _itais_swig.selector_39_set_enabled(self, enable)
+
+    def enabled(self) -> "bool":
+        r"""enabled(selector_39 self) -> bool"""
+        return _itais_swig.selector_39_enabled(self)
+
+    def set_input_index(self, input_index: "unsigned int") -> "void":
+        r"""set_input_index(selector_39 self, unsigned int input_index)"""
+        return _itais_swig.selector_39_set_input_index(self, input_index)
+
+    def input_index(self) -> "int":
+        r"""input_index(selector_39 self) -> int"""
+        return _itais_swig.selector_39_input_index(self)
+
+    def set_output_index(self, output_index: "unsigned int") -> "void":
+        r"""set_output_index(selector_39 self, unsigned int output_index)"""
+        return _itais_swig.selector_39_set_output_index(self, output_index)
+
+    def output_index(self) -> "int":
+        r"""output_index(selector_39 self) -> int"""
+        return _itais_swig.selector_39_output_index(self)
+    __swig_destroy__ = _itais_swig.delete_selector_39
+
+# Register selector_39 in _itais_swig:
+_itais_swig.selector_39_swigregister(selector_39)
+
+def selector_39_make(itemsize: "size_t", input_index: "unsigned int", output_index: "unsigned int") -> "gr::itais::selector_39::sptr":
+    r"""selector_39_make(size_t itemsize, unsigned int input_index, unsigned int output_index) -> selector_39_sptr"""
+    return _itais_swig.selector_39_make(itemsize, input_index, output_index)
+
+class selector_39_sptr(object):
+    r"""Proxy of C++ boost::shared_ptr< gr::itais::selector_39 > class."""
+
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        r"""
+        __init__(selector_39_sptr self) -> selector_39_sptr
+        __init__(selector_39_sptr self, selector_39 p) -> selector_39_sptr
+        """
+        _itais_swig.selector_39_sptr_swiginit(self, _itais_swig.new_selector_39_sptr(*args))
+
+    def __deref__(self) -> "gr::itais::selector_39 *":
+        r"""__deref__(selector_39_sptr self) -> selector_39"""
+        return _itais_swig.selector_39_sptr___deref__(self)
+    __swig_destroy__ = _itais_swig.delete_selector_39_sptr
+
+    def make(self, itemsize: "size_t", input_index: "unsigned int", output_index: "unsigned int") -> "gr::itais::selector_39::sptr":
+        r"""make(selector_39_sptr self, size_t itemsize, unsigned int input_index, unsigned int output_index) -> selector_39_sptr"""
+        return _itais_swig.selector_39_sptr_make(self, itemsize, input_index, output_index)
+
+    def set_enabled(self, enable: "bool") -> "void":
+        r"""set_enabled(selector_39_sptr self, bool enable)"""
+        return _itais_swig.selector_39_sptr_set_enabled(self, enable)
+
+    def enabled(self) -> "bool":
+        r"""enabled(selector_39_sptr self) -> bool"""
+        return _itais_swig.selector_39_sptr_enabled(self)
+
+    def set_input_index(self, input_index: "unsigned int") -> "void":
+        r"""set_input_index(selector_39_sptr self, unsigned int input_index)"""
+        return _itais_swig.selector_39_sptr_set_input_index(self, input_index)
+
+    def input_index(self) -> "int":
+        r"""input_index(selector_39_sptr self) -> int"""
+        return _itais_swig.selector_39_sptr_input_index(self)
+
+    def set_output_index(self, output_index: "unsigned int") -> "void":
+        r"""set_output_index(selector_39_sptr self, unsigned int output_index)"""
+        return _itais_swig.selector_39_sptr_set_output_index(self, output_index)
+
+    def output_index(self) -> "int":
+        r"""output_index(selector_39_sptr self) -> int"""
+        return _itais_swig.selector_39_sptr_output_index(self)
+
+    def history(self) -> "unsigned int":
+        r"""history(selector_39_sptr self) -> unsigned int"""
+        return _itais_swig.selector_39_sptr_history(self)
+
+    def declare_sample_delay(self, *args) -> "void":
+        r"""
+        declare_sample_delay(selector_39_sptr self, int which, int delay)
+        declare_sample_delay(selector_39_sptr self, unsigned int delay)
+        """
+        return _itais_swig.selector_39_sptr_declare_sample_delay(self, *args)
+
+    def sample_delay(self, which: "int") -> "unsigned int":
+        r"""sample_delay(selector_39_sptr self, int which) -> unsigned int"""
+        return _itais_swig.selector_39_sptr_sample_delay(self, which)
+
+    def set_output_multiple(self, multiple: "int") -> "void":
+        r"""set_output_multiple(selector_39_sptr self, int multiple)"""
+        return _itais_swig.selector_39_sptr_set_output_multiple(self, multiple)
+
+    def output_multiple(self) -> "int":
+        r"""output_multiple(selector_39_sptr self) -> int"""
+        return _itais_swig.selector_39_sptr_output_multiple(self)
+
+    def relative_rate(self) -> "double":
+        r"""relative_rate(selector_39_sptr self) -> double"""
+        return _itais_swig.selector_39_sptr_relative_rate(self)
+
+    def relative_rate_i(self) -> "uint64_t":
+        r"""relative_rate_i(selector_39_sptr self) -> uint64_t"""
+        return _itais_swig.selector_39_sptr_relative_rate_i(self)
+
+    def relative_rate_d(self) -> "uint64_t":
+        r"""relative_rate_d(selector_39_sptr self) -> uint64_t"""
+        return _itais_swig.selector_39_sptr_relative_rate_d(self)
+
+    def start(self) -> "bool":
+        r"""start(selector_39_sptr self) -> bool"""
+        return _itais_swig.selector_39_sptr_start(self)
+
+    def stop(self) -> "bool":
+        r"""stop(selector_39_sptr self) -> bool"""
+        return _itais_swig.selector_39_sptr_stop(self)
+
+    def nitems_read(self, which_input: "unsigned int") -> "uint64_t":
+        r"""nitems_read(selector_39_sptr self, unsigned int which_input) -> uint64_t"""
+        return _itais_swig.selector_39_sptr_nitems_read(self, which_input)
+
+    def nitems_written(self, which_output: "unsigned int") -> "uint64_t":
+        r"""nitems_written(selector_39_sptr self, unsigned int which_output) -> uint64_t"""
+        return _itais_swig.selector_39_sptr_nitems_written(self, which_output)
+
+    def set_log_level(self, level: "std::string") -> "void":
+        r"""set_log_level(selector_39_sptr self, std::string level)"""
+        return _itais_swig.selector_39_sptr_set_log_level(self, level)
+
+    def log_level(self) -> "std::string":
+        r"""log_level(selector_39_sptr self) -> std::string"""
+        return _itais_swig.selector_39_sptr_log_level(self)
+
+    def max_noutput_items(self) -> "int":
+        r"""max_noutput_items(selector_39_sptr self) -> int"""
+        return _itais_swig.selector_39_sptr_max_noutput_items(self)
+
+    def set_max_noutput_items(self, m: "int") -> "void":
+        r"""set_max_noutput_items(selector_39_sptr self, int m)"""
+        return _itais_swig.selector_39_sptr_set_max_noutput_items(self, m)
+
+    def unset_max_noutput_items(self) -> "void":
+        r"""unset_max_noutput_items(selector_39_sptr self)"""
+        return _itais_swig.selector_39_sptr_unset_max_noutput_items(self)
+
+    def is_set_max_noutput_items(self) -> "bool":
+        r"""is_set_max_noutput_items(selector_39_sptr self) -> bool"""
+        return _itais_swig.selector_39_sptr_is_set_max_noutput_items(self)
+
+    def set_min_noutput_items(self, m: "int") -> "void":
+        r"""set_min_noutput_items(selector_39_sptr self, int m)"""
+        return _itais_swig.selector_39_sptr_set_min_noutput_items(self, m)
+
+    def min_noutput_items(self) -> "int":
+        r"""min_noutput_items(selector_39_sptr self) -> int"""
+        return _itais_swig.selector_39_sptr_min_noutput_items(self)
+
+    def max_output_buffer(self, i: "int") -> "long":
+        r"""max_output_buffer(selector_39_sptr self, int i) -> long"""
+        return _itais_swig.selector_39_sptr_max_output_buffer(self, i)
+
+    def set_max_output_buffer(self, *args) -> "void":
+        r"""
+        set_max_output_buffer(selector_39_sptr self, long max_output_buffer)
+        set_max_output_buffer(selector_39_sptr self, int port, long max_output_buffer)
+        """
+        return _itais_swig.selector_39_sptr_set_max_output_buffer(self, *args)
+
+    def min_output_buffer(self, i: "int") -> "long":
+        r"""min_output_buffer(selector_39_sptr self, int i) -> long"""
+        return _itais_swig.selector_39_sptr_min_output_buffer(self, i)
+
+    def set_min_output_buffer(self, *args) -> "void":
+        r"""
+        set_min_output_buffer(selector_39_sptr self, long min_output_buffer)
+        set_min_output_buffer(selector_39_sptr self, int port, long min_output_buffer)
+        """
+        return _itais_swig.selector_39_sptr_set_min_output_buffer(self, *args)
+
+    def pc_noutput_items(self) -> "float":
+        r"""pc_noutput_items(selector_39_sptr self) -> float"""
+        return _itais_swig.selector_39_sptr_pc_noutput_items(self)
+
+    def pc_noutput_items_avg(self) -> "float":
+        r"""pc_noutput_items_avg(selector_39_sptr self) -> float"""
+        return _itais_swig.selector_39_sptr_pc_noutput_items_avg(self)
+
+    def pc_noutput_items_var(self) -> "float":
+        r"""pc_noutput_items_var(selector_39_sptr self) -> float"""
+        return _itais_swig.selector_39_sptr_pc_noutput_items_var(self)
+
+    def pc_nproduced(self) -> "float":
+        r"""pc_nproduced(selector_39_sptr self) -> float"""
+        return _itais_swig.selector_39_sptr_pc_nproduced(self)
+
+    def pc_nproduced_avg(self) -> "float":
+        r"""pc_nproduced_avg(selector_39_sptr self) -> float"""
+        return _itais_swig.selector_39_sptr_pc_nproduced_avg(self)
+
+    def pc_nproduced_var(self) -> "float":
+        r"""pc_nproduced_var(selector_39_sptr self) -> float"""
+        return _itais_swig.selector_39_sptr_pc_nproduced_var(self)
+
+    def pc_input_buffers_full(self, *args) -> "std::vector< float,std::allocator< float > >":
+        r"""
+        pc_input_buffers_full(selector_39_sptr self, int which) -> float
+        pc_input_buffers_full(selector_39_sptr self) -> pmt_vector_float
+        """
+        return _itais_swig.selector_39_sptr_pc_input_buffers_full(self, *args)
+
+    def pc_input_buffers_full_avg(self, *args) -> "std::vector< float,std::allocator< float > >":
+        r"""
+        pc_input_buffers_full_avg(selector_39_sptr self, int which) -> float
+        pc_input_buffers_full_avg(selector_39_sptr self) -> pmt_vector_float
+        """
+        return _itais_swig.selector_39_sptr_pc_input_buffers_full_avg(self, *args)
+
+    def pc_input_buffers_full_var(self, *args) -> "std::vector< float,std::allocator< float > >":
+        r"""
+        pc_input_buffers_full_var(selector_39_sptr self, int which) -> float
+        pc_input_buffers_full_var(selector_39_sptr self) -> pmt_vector_float
+        """
+        return _itais_swig.selector_39_sptr_pc_input_buffers_full_var(self, *args)
+
+    def pc_output_buffers_full(self, *args) -> "std::vector< float,std::allocator< float > >":
+        r"""
+        pc_output_buffers_full(selector_39_sptr self, int which) -> float
+        pc_output_buffers_full(selector_39_sptr self) -> pmt_vector_float
+        """
+        return _itais_swig.selector_39_sptr_pc_output_buffers_full(self, *args)
+
+    def pc_output_buffers_full_avg(self, *args) -> "std::vector< float,std::allocator< float > >":
+        r"""
+        pc_output_buffers_full_avg(selector_39_sptr self, int which) -> float
+        pc_output_buffers_full_avg(selector_39_sptr self) -> pmt_vector_float
+        """
+        return _itais_swig.selector_39_sptr_pc_output_buffers_full_avg(self, *args)
+
+    def pc_output_buffers_full_var(self, *args) -> "std::vector< float,std::allocator< float > >":
+        r"""
+        pc_output_buffers_full_var(selector_39_sptr self, int which) -> float
+        pc_output_buffers_full_var(selector_39_sptr self) -> pmt_vector_float
+        """
+        return _itais_swig.selector_39_sptr_pc_output_buffers_full_var(self, *args)
+
+    def pc_work_time(self) -> "float":
+        r"""pc_work_time(selector_39_sptr self) -> float"""
+        return _itais_swig.selector_39_sptr_pc_work_time(self)
+
+    def pc_work_time_avg(self) -> "float":
+        r"""pc_work_time_avg(selector_39_sptr self) -> float"""
+        return _itais_swig.selector_39_sptr_pc_work_time_avg(self)
+
+    def pc_work_time_var(self) -> "float":
+        r"""pc_work_time_var(selector_39_sptr self) -> float"""
+        return _itais_swig.selector_39_sptr_pc_work_time_var(self)
+
+    def pc_work_time_total(self) -> "float":
+        r"""pc_work_time_total(selector_39_sptr self) -> float"""
+        return _itais_swig.selector_39_sptr_pc_work_time_total(self)
+
+    def pc_throughput_avg(self) -> "float":
+        r"""pc_throughput_avg(selector_39_sptr self) -> float"""
+        return _itais_swig.selector_39_sptr_pc_throughput_avg(self)
+
+    def set_processor_affinity(self, mask: "std::vector< int,std::allocator< int > > const &") -> "void":
+        r"""set_processor_affinity(selector_39_sptr self, std::vector< int,std::allocator< int > > const & mask)"""
+        return _itais_swig.selector_39_sptr_set_processor_affinity(self, mask)
+
+    def unset_processor_affinity(self) -> "void":
+        r"""unset_processor_affinity(selector_39_sptr self)"""
+        return _itais_swig.selector_39_sptr_unset_processor_affinity(self)
+
+    def processor_affinity(self) -> "std::vector< int,std::allocator< int > >":
+        r"""processor_affinity(selector_39_sptr self) -> std::vector< int,std::allocator< int > >"""
+        return _itais_swig.selector_39_sptr_processor_affinity(self)
+
+    def active_thread_priority(self) -> "int":
+        r"""active_thread_priority(selector_39_sptr self) -> int"""
+        return _itais_swig.selector_39_sptr_active_thread_priority(self)
+
+    def thread_priority(self) -> "int":
+        r"""thread_priority(selector_39_sptr self) -> int"""
+        return _itais_swig.selector_39_sptr_thread_priority(self)
+
+    def set_thread_priority(self, priority: "int") -> "int":
+        r"""set_thread_priority(selector_39_sptr self, int priority) -> int"""
+        return _itais_swig.selector_39_sptr_set_thread_priority(self, priority)
+
+    def name(self) -> "std::string":
+        r"""name(selector_39_sptr self) -> std::string"""
+        return _itais_swig.selector_39_sptr_name(self)
+
+    def symbol_name(self) -> "std::string":
+        r"""symbol_name(selector_39_sptr self) -> std::string"""
+        return _itais_swig.selector_39_sptr_symbol_name(self)
+
+    def input_signature(self) -> "gr::io_signature::sptr":
+        r"""input_signature(selector_39_sptr self) -> io_signature_sptr"""
+        return _itais_swig.selector_39_sptr_input_signature(self)
+
+    def output_signature(self) -> "gr::io_signature::sptr":
+        r"""output_signature(selector_39_sptr self) -> io_signature_sptr"""
+        return _itais_swig.selector_39_sptr_output_signature(self)
+
+    def unique_id(self) -> "long":
+        r"""unique_id(selector_39_sptr self) -> long"""
+        return _itais_swig.selector_39_sptr_unique_id(self)
+
+    def to_basic_block(self) -> "gr::basic_block_sptr":
+        r"""to_basic_block(selector_39_sptr self) -> basic_block_sptr"""
+        return _itais_swig.selector_39_sptr_to_basic_block(self)
+
+    def check_topology(self, ninputs: "int", noutputs: "int") -> "bool":
+        r"""check_topology(selector_39_sptr self, int ninputs, int noutputs) -> bool"""
+        return _itais_swig.selector_39_sptr_check_topology(self, ninputs, noutputs)
+
+    def alias(self) -> "std::string":
+        r"""alias(selector_39_sptr self) -> std::string"""
+        return _itais_swig.selector_39_sptr_alias(self)
+
+    def set_block_alias(self, name: "std::string") -> "void":
+        r"""set_block_alias(selector_39_sptr self, std::string name)"""
+        return _itais_swig.selector_39_sptr_set_block_alias(self, name)
+
+    def _post(self, which_port: "swig_pmt_ptr", msg: "swig_pmt_ptr") -> "void":
+        r"""_post(selector_39_sptr self, swig_pmt_ptr which_port, swig_pmt_ptr msg)"""
+        return _itais_swig.selector_39_sptr__post(self, which_port, msg)
+
+    def message_ports_in(self) -> "pmt::pmt_t":
+        r"""message_ports_in(selector_39_sptr self) -> swig_pmt_ptr"""
+        return _itais_swig.selector_39_sptr_message_ports_in(self)
+
+    def message_ports_out(self) -> "pmt::pmt_t":
+        r"""message_ports_out(selector_39_sptr self) -> swig_pmt_ptr"""
+        return _itais_swig.selector_39_sptr_message_ports_out(self)
+
+    def message_subscribers(self, which_port: "swig_pmt_ptr") -> "pmt::pmt_t":
+        r"""message_subscribers(selector_39_sptr self, swig_pmt_ptr which_port) -> swig_pmt_ptr"""
+        return _itais_swig.selector_39_sptr_message_subscribers(self, which_port)
+
+# Register selector_39_sptr in _itais_swig:
+_itais_swig.selector_39_sptr_swigregister(selector_39_sptr)
+
+
+selector_39_sptr.__repr__ = lambda self: "<gr_block %s (%d)>" % (self.name(), self.unique_id())
+selector_39 = selector_39.make;
+
 
 

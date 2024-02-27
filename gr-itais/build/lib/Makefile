@@ -398,6 +398,33 @@ pdu_to_nmea_impl.cc.s:
 	cd /home/gnuradio/gr-itais/build && $(MAKE) -f lib/CMakeFiles/gnuradio-itais.dir/build.make lib/CMakeFiles/gnuradio-itais.dir/pdu_to_nmea_impl.cc.s
 .PHONY : pdu_to_nmea_impl.cc.s
 
+selector_39_impl.o: selector_39_impl.cc.o
+
+.PHONY : selector_39_impl.o
+
+# target to build an object file
+selector_39_impl.cc.o:
+	cd /home/gnuradio/gr-itais/build && $(MAKE) -f lib/CMakeFiles/gnuradio-itais.dir/build.make lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o
+.PHONY : selector_39_impl.cc.o
+
+selector_39_impl.i: selector_39_impl.cc.i
+
+.PHONY : selector_39_impl.i
+
+# target to preprocess a source file
+selector_39_impl.cc.i:
+	cd /home/gnuradio/gr-itais/build && $(MAKE) -f lib/CMakeFiles/gnuradio-itais.dir/build.make lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.i
+.PHONY : selector_39_impl.cc.i
+
+selector_39_impl.s: selector_39_impl.cc.s
+
+.PHONY : selector_39_impl.s
+
+# target to generate assembly for a file
+selector_39_impl.cc.s:
+	cd /home/gnuradio/gr-itais/build && $(MAKE) -f lib/CMakeFiles/gnuradio-itais.dir/build.make lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.s
+.PHONY : selector_39_impl.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -436,6 +463,9 @@ help:
 	@echo "... pdu_to_nmea_impl.o"
 	@echo "... pdu_to_nmea_impl.i"
 	@echo "... pdu_to_nmea_impl.s"
+	@echo "... selector_39_impl.o"
+	@echo "... selector_39_impl.i"
+	@echo "... selector_39_impl.s"
 .PHONY : help
 
 

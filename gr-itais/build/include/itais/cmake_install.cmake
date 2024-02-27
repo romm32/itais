@@ -48,6 +48,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     "/home/gnuradio/gr-itais/include/itais/Build_Frame.h"
     "/home/gnuradio/gr-itais/include/itais/nrz_to_nrzi.h"
     "/home/gnuradio/gr-itais/include/itais/DebugME.h"
+    "/home/gnuradio/gr-itais/include/itais/selector_39.h"
     )
 endif()
 

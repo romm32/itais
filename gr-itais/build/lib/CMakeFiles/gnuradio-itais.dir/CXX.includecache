@@ -6,37 +6,31 @@
 
 #IncludeRegexTransform: 
 
-../include/itais/Build_Frame.h
-itais/api.h
--
-gnuradio/tagged_stream_block.h
--
-
 ../include/itais/api.h
 gnuradio/attributes.h
 -
 
-/home/gnuradio/gr-itais/lib/Build_Frame_impl.cc
-config.h
-/home/gnuradio/gr-itais/lib/config.h
-Build_Frame_impl.h
-/home/gnuradio/gr-itais/lib/Build_Frame_impl.h
-gnuradio/blocks/pdu.h
+../include/itais/selector_39.h
+itais/api.h
 -
-gnuradio/io_signature.h
--
-gnuradio/tagged_stream_block.h
--
-cstdio
--
-cstdlib
--
-cstring
--
-iostream
+gnuradio/block.h
 -
 
-/home/gnuradio/gr-itais/lib/Build_Frame_impl.h
-itais/Build_Frame.h
+/home/gnuradio/gr-itais/lib/selector_39_impl.cc
+config.h
+/home/gnuradio/gr-itais/lib/config.h
+gnuradio/io_signature.h
+-
+selector_39_impl.h
+/home/gnuradio/gr-itais/lib/selector_39_impl.h
+cstring
+-
+stdexcept
+-
+
+/home/gnuradio/gr-itais/lib/selector_39_impl.h
+itais/selector_39.h
+-
+gnuradio/thread/thread.h
 -
 

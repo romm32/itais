@@ -32,5 +32,6 @@ install(FILES
     itais_Build_Frame.block.yml
     itais_nrz_to_nrzi.block.yml
     itais_DebugME.block.yml
-    itais_selector_itais.block.yml DESTINATION share/gnuradio/grc/blocks
+    itais_selector_itais.block.yml
+    itais_selector_39.block.yml DESTINATION share/gnuradio/grc/blocks
 )

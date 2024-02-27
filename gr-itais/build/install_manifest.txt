@@ -8,6 +8,7 @@
 /usr/local/include/itais/Build_Frame.h
 /usr/local/include/itais/nrz_to_nrzi.h
 /usr/local/include/itais/DebugME.h
+/usr/local/include/itais/selector_39.h
 /usr/local/lib/x86_64-linux-gnu/libgnuradio-itais.so.1.0.0.0
 /usr/local/lib/x86_64-linux-gnu/libgnuradio-itais.so.1.0.0
 /usr/local/lib/x86_64-linux-gnu/libgnuradio-itais.so
@@ -71,3 +72,4 @@
 /usr/local/share/gnuradio/grc/blocks/itais_nrz_to_nrzi.block.yml
 /usr/local/share/gnuradio/grc/blocks/itais_DebugME.block.yml
 /usr/local/share/gnuradio/grc/blocks/itais_selector_itais.block.yml
+/usr/local/share/gnuradio/grc/blocks/itais_selector_39.block.yml

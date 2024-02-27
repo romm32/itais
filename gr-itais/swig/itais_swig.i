@@ -16,6 +16,7 @@
 #include "itais/Build_Frame.h"
 #include "itais/nrz_to_nrzi.h"
 #include "itais/DebugME.h"
+#include "itais/selector_39.h"
 %}
 
 %include "itais/corr_est_cc.h"
@@ -36,3 +37,5 @@ GR_SWIG_BLOCK_MAGIC2(itais, Build_Frame);
 GR_SWIG_BLOCK_MAGIC2(itais, nrz_to_nrzi);
 %include "itais/DebugME.h"
 GR_SWIG_BLOCK_MAGIC2(itais, DebugME);
+%include "itais/selector_39.h"
+GR_SWIG_BLOCK_MAGIC2(itais, selector_39);

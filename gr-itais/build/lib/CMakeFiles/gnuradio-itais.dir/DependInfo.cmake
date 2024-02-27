@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/gnuradio/gr-itais/lib/msk_timing_recovery_cc_impl.cc" "/home/gnuradio/gr-itais/build/lib/CMakeFiles/gnuradio-itais.dir/msk_timing_recovery_cc_impl.cc.o"
   "/home/gnuradio/gr-itais/lib/nrz_to_nrzi_impl.cc" "/home/gnuradio/gr-itais/build/lib/CMakeFiles/gnuradio-itais.dir/nrz_to_nrzi_impl.cc.o"
   "/home/gnuradio/gr-itais/lib/pdu_to_nmea_impl.cc" "/home/gnuradio/gr-itais/build/lib/CMakeFiles/gnuradio-itais.dir/pdu_to_nmea_impl.cc.o"
+  "/home/gnuradio/gr-itais/lib/selector_39_impl.cc" "/home/gnuradio/gr-itais/build/lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

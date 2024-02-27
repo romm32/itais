@@ -58,6 +58,12 @@ itais/api.h
 gnuradio/block.h
 -
 
+../include/itais/selector_39.h
+itais/api.h
+-
+gnuradio/block.h
+-
+
 /home/gnuradio/gr-itais/build/swig/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx
 math.h
 -
@@ -113,6 +119,8 @@ itais/nrz_to_nrzi.h
 /home/gnuradio/gr-itais/build/swig/CMakeFiles/itais_swig.dir/itais/nrz_to_nrzi.h
 itais/DebugME.h
 /home/gnuradio/gr-itais/build/swig/CMakeFiles/itais_swig.dir/itais/DebugME.h
+itais/selector_39.h
+/home/gnuradio/gr-itais/build/swig/CMakeFiles/itais_swig.dir/itais/selector_39.h
 float.h
 -
 math.h

@@ -34,7 +34,8 @@ list(APPEND itais_sources
     msk_timing_recovery_cc_impl.cc
     Build_Frame_impl.cc
     nrz_to_nrzi_impl.cc
-    DebugME_impl.cc )
+    DebugME_impl.cc
+    selector_39_impl.cc )
 
 set(itais_sources "${itais_sources}" PARENT_SCOPE)
 if(NOT itais_sources)

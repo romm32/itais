@@ -10,6 +10,7 @@ swig/CMakeFiles/itais_swig.dir/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.c
 swig/CMakeFiles/itais_swig.dir/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx.o: ../include/itais/msk_timing_recovery_cc.h
 swig/CMakeFiles/itais_swig.dir/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx.o: ../include/itais/nrz_to_nrzi.h
 swig/CMakeFiles/itais_swig.dir/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx.o: ../include/itais/pdu_to_nmea.h
+swig/CMakeFiles/itais_swig.dir/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx.o: ../include/itais/selector_39.h
 swig/CMakeFiles/itais_swig.dir/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx.o: swig/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx
 swig/CMakeFiles/itais_swig.dir/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx.o: /usr/include/python3.8/Python.h
 swig/CMakeFiles/itais_swig.dir/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx.o: /usr/include/python3.8/abstract.h

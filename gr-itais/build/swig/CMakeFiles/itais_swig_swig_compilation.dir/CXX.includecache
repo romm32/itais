@@ -27,6 +27,8 @@ itais/nrz_to_nrzi.h
 /home/gnuradio/gr-itais/swig/itais/nrz_to_nrzi.h
 itais/DebugME.h
 /home/gnuradio/gr-itais/swig/itais/DebugME.h
+itais/selector_39.h
+/home/gnuradio/gr-itais/swig/itais/selector_39.h
 itais/corr_est_cc.h
 /home/gnuradio/gr-itais/swig/itais/corr_est_cc.h
 itais/freqest.h
@@ -43,4 +45,6 @@ itais/nrz_to_nrzi.h
 /home/gnuradio/gr-itais/swig/itais/nrz_to_nrzi.h
 itais/DebugME.h
 /home/gnuradio/gr-itais/swig/itais/DebugME.h
+itais/selector_39.h
+/home/gnuradio/gr-itais/swig/itais/selector_39.h
 

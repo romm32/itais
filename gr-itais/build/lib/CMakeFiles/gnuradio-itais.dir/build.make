@@ -161,6 +161,19 @@ lib/CMakeFiles/gnuradio-itais.dir/DebugME_impl.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-itais.dir/DebugME_impl.cc.s"
 	cd /home/gnuradio/gr-itais/build/lib && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gnuradio/gr-itais/lib/DebugME_impl.cc -o CMakeFiles/gnuradio-itais.dir/DebugME_impl.cc.s
 
+lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o: lib/CMakeFiles/gnuradio-itais.dir/flags.make
+lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o: ../lib/selector_39_impl.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gnuradio/gr-itais/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o"
+	cd /home/gnuradio/gr-itais/build/lib && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o -c /home/gnuradio/gr-itais/lib/selector_39_impl.cc
+
+lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.i"
+	cd /home/gnuradio/gr-itais/build/lib && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gnuradio/gr-itais/lib/selector_39_impl.cc > CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.i
+
+lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.s"
+	cd /home/gnuradio/gr-itais/build/lib && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gnuradio/gr-itais/lib/selector_39_impl.cc -o CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.s
+
 # Object files for target gnuradio-itais
 gnuradio__itais_OBJECTS = \
 "CMakeFiles/gnuradio-itais.dir/corr_est_cc_impl.cc.o" \
@@ -170,7 +183,8 @@ gnuradio__itais_OBJECTS = \
 "CMakeFiles/gnuradio-itais.dir/msk_timing_recovery_cc_impl.cc.o" \
 "CMakeFiles/gnuradio-itais.dir/Build_Frame_impl.cc.o" \
 "CMakeFiles/gnuradio-itais.dir/nrz_to_nrzi_impl.cc.o" \
-"CMakeFiles/gnuradio-itais.dir/DebugME_impl.cc.o"
+"CMakeFiles/gnuradio-itais.dir/DebugME_impl.cc.o" \
+"CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o"
 
 # External object files for target gnuradio-itais
 gnuradio__itais_EXTERNAL_OBJECTS =
@@ -183,6 +197,7 @@ lib/libgnuradio-itais.so.1.0.0.0: lib/CMakeFiles/gnuradio-itais.dir/msk_timing_r
 lib/libgnuradio-itais.so.1.0.0.0: lib/CMakeFiles/gnuradio-itais.dir/Build_Frame_impl.cc.o
 lib/libgnuradio-itais.so.1.0.0.0: lib/CMakeFiles/gnuradio-itais.dir/nrz_to_nrzi_impl.cc.o
 lib/libgnuradio-itais.so.1.0.0.0: lib/CMakeFiles/gnuradio-itais.dir/DebugME_impl.cc.o
+lib/libgnuradio-itais.so.1.0.0.0: lib/CMakeFiles/gnuradio-itais.dir/selector_39_impl.cc.o
 lib/libgnuradio-itais.so.1.0.0.0: lib/CMakeFiles/gnuradio-itais.dir/build.make
 lib/libgnuradio-itais.so.1.0.0.0: /usr/lib/x86_64-linux-gnu/libgnuradio-filter.so.3.8.5.0
 lib/libgnuradio-itais.so.1.0.0.0: /usr/lib/x86_64-linux-gnu/libgnuradio-blocks.so.3.8.5.0
@@ -204,7 +219,7 @@ lib/libgnuradio-itais.so.1.0.0.0: /usr/lib/x86_64-linux-gnu/libgmp.so
 lib/libgnuradio-itais.so.1.0.0.0: /usr/lib/x86_64-linux-gnu/libvolk.so.2.2
 lib/libgnuradio-itais.so.1.0.0.0: /usr/lib/x86_64-linux-gnu/liborc-0.4.so
 lib/libgnuradio-itais.so.1.0.0.0: lib/CMakeFiles/gnuradio-itais.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/gnuradio/gr-itais/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX shared library libgnuradio-itais.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/gnuradio/gr-itais/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX shared library libgnuradio-itais.so"
 	cd /home/gnuradio/gr-itais/build/lib && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/gnuradio-itais.dir/link.txt --verbose=$(VERBOSE)
 	cd /home/gnuradio/gr-itais/build/lib && $(CMAKE_COMMAND) -E cmake_symlink_library libgnuradio-itais.so.1.0.0.0 libgnuradio-itais.so.1.0.0 libgnuradio-itais.so
 

@@ -11,6 +11,7 @@ swig/CMakeFiles/itais_swig.dir/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.c
  ../include/itais/msk_timing_recovery_cc.h
  ../include/itais/nrz_to_nrzi.h
  ../include/itais/pdu_to_nmea.h
+ ../include/itais/selector_39.h
  /home/gnuradio/gr-itais/build/swig/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx
  /usr/include/python3.8/Python.h
  /usr/include/python3.8/abstract.h

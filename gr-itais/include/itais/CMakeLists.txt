@@ -30,5 +30,6 @@ install(FILES
     msk_timing_recovery_cc.h
     Build_Frame.h
     nrz_to_nrzi.h
-    DebugME.h DESTINATION include/itais
+    DebugME.h
+    selector_39.h DESTINATION include/itais
 )
