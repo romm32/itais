@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="selector__39_8h" kind="file" language="C++">
+    <compoundname>selector_39.h</compoundname>
+    <includes refid="api_8h" local="no">itais/api.h</includes>
+    <includes local="no">gnuradio/block.h</includes>
+    <includedby refid="selector__39__impl_8h" local="no">selector_39_impl.h</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>selector_39.h</label>
+        <link refid="selector__39_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>itais/api.h</label>
+        <link refid="api_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>gnuradio/attributes.h</label>
+      </node>
+      <node id="4">
+        <label>gnuradio/block.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>selector_39.h</label>
+        <link refid="selector__39_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>selector_39_impl.h</label>
+        <link refid="selector__39__impl_8h"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classgr_1_1itais_1_1selector__39" prot="public">gr::itais::selector_39</innerclass>
+    <innernamespace refid="namespacegr">gr</innernamespace>
+    <innernamespace refid="namespacegr_1_1itais">gr::itais</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/ais/itais/gr-itais/include/itais/selector_39.h"/>
+  </compounddef>
+</doxygen>

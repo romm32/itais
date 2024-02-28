@@ -1,4 +1,4 @@
-# Install script for directory: /home/gnuradio/gr-itais/grc
+# Install script for directory: /home/ais/itais/gr-itais/grc
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -37,24 +37,29 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
+# Set default install directory permissions.
+if(NOT DEFINED CMAKE_OBJDUMP)
+  set(CMAKE_OBJDUMP "/usr/bin/objdump")
+endif()
+
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gnuradio/grc/blocks" TYPE FILE FILES
-    "/home/gnuradio/gr-itais/grc/itais_messages.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_sub_gps.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_transmitter.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_potumbral.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_gmsk_sync.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_ais_demod.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_corr_est_cc.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_freqest.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_invert.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_pdu_to_nmea.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_msk_timing_recovery_cc.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_Build_Frame.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_nrz_to_nrzi.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_DebugME.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_selector_itais.block.yml"
-    "/home/gnuradio/gr-itais/grc/itais_selector_39.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_messages.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_sub_gps.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_transmitter.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_potumbral.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_gmsk_sync.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_ais_demod.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_corr_est_cc.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_freqest.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_invert.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_pdu_to_nmea.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_msk_timing_recovery_cc.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_Build_Frame.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_nrz_to_nrzi.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_DebugME.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_selector_itais.block.yml"
+    "/home/ais/itais/gr-itais/grc/itais_selector_39.block.yml"
     )
 endif()
 

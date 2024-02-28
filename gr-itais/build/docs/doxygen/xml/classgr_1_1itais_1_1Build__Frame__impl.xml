@@ -1,0 +1,464 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classgr_1_1itais_1_1Build__Frame__impl" kind="class" language="C++" prot="public">
+    <compoundname>gr::itais::Build_Frame_impl</compoundname>
+    <basecompoundref refid="classgr_1_1itais_1_1Build__Frame" prot="public" virt="non-virtual">gr::itais::Build_Frame</basecompoundref>
+    <includes refid="Build__Frame__impl_8h" local="no">Build_Frame_impl.h</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgr_1_1itais_1_1Build__Frame__impl_1a8bbbd4881d25dd2b8709e8db67d2bdf6" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool gr::itais::Build_Frame_impl::d_repeat</definition>
+        <argsstring></argsstring>
+        <name>d_repeat</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="32" column="10" bodyfile="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1itais_1_1Build__Frame__impl_1a808c6ebabc426b84823ecd648f97ebd5" prot="private" static="no" mutable="no">
+        <type>unsigned long</type>
+        <definition>unsigned long gr::itais::Build_Frame_impl::d_repeat_cnt</definition>
+        <argsstring></argsstring>
+        <name>d_repeat_cnt</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="33" column="19" bodyfile="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1itais_1_1Build__Frame__impl_1a68607e1e247d9cbe6c8207570698b263" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool gr::itais::Build_Frame_impl::d_enable_NRZI</definition>
+        <argsstring></argsstring>
+        <name>d_enable_NRZI</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="34" column="10" bodyfile="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1itais_1_1Build__Frame__impl_1a480cf410bfd4d45485502db90128c3ed" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t gr::itais::Build_Frame_impl::d_itemsize</definition>
+        <argsstring></argsstring>
+        <name>d_itemsize</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="35" column="12" bodyfile="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1itais_1_1Build__Frame__impl_1a37194df17dc023253926118a2776900e" prot="private" static="no" mutable="no">
+        <type>pmt::pmt_t</type>
+        <definition>pmt::pmt_t gr::itais::Build_Frame_impl::d_curr_meta</definition>
+        <argsstring></argsstring>
+        <name>d_curr_meta</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="36" column="16" bodyfile="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1itais_1_1Build__Frame__impl_1aa734ab43bc500d45be0b98efd39ebcf3" prot="private" static="no" mutable="no">
+        <type>pmt::pmt_t</type>
+        <definition>pmt::pmt_t gr::itais::Build_Frame_impl::d_curr_vect</definition>
+        <argsstring></argsstring>
+        <name>d_curr_vect</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="37" column="16" bodyfile="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1itais_1_1Build__Frame__impl_1ac2cac8dd28bd6ce8e898358d6e061a66" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t gr::itais::Build_Frame_impl::d_curr_len</definition>
+        <argsstring></argsstring>
+        <name>d_curr_len</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="38" column="12" bodyfile="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1a01374798d39aea430def7fce3a11fc8e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>gr::itais::Build_Frame_impl::Build_Frame_impl</definition>
+        <argsstring>(bool repeat, bool enable_NRZI, const std::string &amp;lengthtagname=&quot;packet_len&quot;)</argsstring>
+        <name>Build_Frame_impl</name>
+        <param>
+          <type>bool</type>
+          <declname>repeat</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable_NRZI</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>lengthtagname</declname>
+          <defval>&quot;packet_len&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="41" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1a31f9cb04c37b18c03c0d55fcc2760d18" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>gr::itais::Build_Frame_impl::~Build_Frame_impl</definition>
+        <argsstring>() override=default</argsstring>
+        <name>~Build_Frame_impl</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="44" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1a3eef9639335e72271963b20110eb520d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void gr::itais::Build_Frame_impl::dump_buffer</definition>
+        <argsstring>(const char *b, int buffer_size)</argsstring>
+        <name>dump_buffer</name>
+        <param>
+          <type>const char *</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>buffer_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="46" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1ab740a21607fd74aeb563df7503eb834d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>char *</type>
+        <definition>char* gr::itais::Build_Frame_impl::int2bin</definition>
+        <argsstring>(int a, char *buffer, int buf_size)</argsstring>
+        <name>int2bin</name>
+        <param>
+          <type>int</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>buf_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="47" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1a5edd4e165e6b744c83dd00193e296dd5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int gr::itais::Build_Frame_impl::stuff</definition>
+        <argsstring>(const char *in, char *out, int l_in)</argsstring>
+        <name>stuff</name>
+        <param>
+          <type>const char *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>l_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="48" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1a9e5912b227529ad2a2e4ae4e746781fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void gr::itais::Build_Frame_impl::pack</definition>
+        <argsstring>(int orig_ascii, char *ret, int bits_per_byte)</argsstring>
+        <name>pack</name>
+        <param>
+          <type>int</type>
+          <declname>orig_ascii</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>ret</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>bits_per_byte</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="49" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1aa726ad23bc381271de3a10d4a1dedf65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void gr::itais::Build_Frame_impl::nrz_to_nrzi</definition>
+        <argsstring>(char *data, int length)</argsstring>
+        <name>nrz_to_nrzi</name>
+        <param>
+          <type>char *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="50" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1a3c22cf6810954a278d526369bef9d477" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void gr::itais::Build_Frame_impl::reverse_bit_order</definition>
+        <argsstring>(char *data, int length)</argsstring>
+        <name>reverse_bit_order</name>
+        <param>
+          <type>char *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="51" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1ae6916c33e3aeed1920b27c28ef838b22" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>unsigned long</type>
+        <definition>unsigned long gr::itais::Build_Frame_impl::unpack</definition>
+        <argsstring>(char *buffer, int start, int length)</argsstring>
+        <name>unpack</name>
+        <param>
+          <type>char *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>start</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="52" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1a54794067fa6e5600fe848e6610cd41c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void gr::itais::Build_Frame_impl::compute_crc</definition>
+        <argsstring>(char *buffer, char *ret, unsigned int len)</argsstring>
+        <name>compute_crc</name>
+        <param>
+          <type>char *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>ret</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="53" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1ab6ad33af5671a58436bbdd21c14df6b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void gr::itais::Build_Frame_impl::byte_packing</definition>
+        <argsstring>(char *input_frame, unsigned char *out_byte, unsigned int len)</argsstring>
+        <name>byte_packing</name>
+        <param>
+          <type>char *</type>
+          <declname>input_frame</declname>
+        </param>
+        <param>
+          <type>unsigned char *</type>
+          <declname>out_byte</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="54" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1a903184682b36713e10af66b851f81add" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int gr::itais::Build_Frame_impl::calculate_output_stream_length</definition>
+        <argsstring>(const gr_vector_int &amp;ninput_items) override</argsstring>
+        <name>calculate_output_stream_length</name>
+        <param>
+          <type>const gr_vector_int &amp;</type>
+          <declname>ninput_items</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="56" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1itais_1_1Build__Frame__impl_1a6cb157d89f3b8b41db280d4255941f59" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int gr::itais::Build_Frame_impl::work</definition>
+        <argsstring>(int noutput_items, gr_vector_int &amp;ninput_items, gr_vector_const_void_star &amp;input_items, gr_vector_void_star &amp;output_items) override</argsstring>
+        <name>work</name>
+        <param>
+          <type>int</type>
+          <declname>noutput_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_int &amp;</type>
+          <declname>ninput_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_const_void_star &amp;</type>
+          <declname>input_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_void_star &amp;</type>
+          <declname>output_items</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="59" column="9"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>gr::itais::Build_Frame_impl</label>
+        <link refid="classgr_1_1itais_1_1Build__Frame__impl"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>gr::tagged_stream_block</label>
+      </node>
+      <node id="2">
+        <label>gr::itais::Build_Frame</label>
+        <link refid="classgr_1_1itais_1_1Build__Frame"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>gr::itais::Build_Frame_impl</label>
+        <link refid="classgr_1_1itais_1_1Build__Frame__impl"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>gr::tagged_stream_block</label>
+      </node>
+      <node id="2">
+        <label>gr::itais::Build_Frame</label>
+        <link refid="classgr_1_1itais_1_1Build__Frame"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" line="29" column="5" bodyfile="/home/ais/itais/gr-itais/lib/Build_Frame_impl.h" bodystart="30" bodyend="63"/>
+    <listofallmembers>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a01374798d39aea430def7fce3a11fc8e" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>Build_Frame_impl</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1ab6ad33af5671a58436bbdd21c14df6b1" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>byte_packing</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a903184682b36713e10af66b851f81add" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>calculate_output_stream_length</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a54794067fa6e5600fe848e6610cd41c7" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>compute_crc</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1ac2cac8dd28bd6ce8e898358d6e061a66" prot="private" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>d_curr_len</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a37194df17dc023253926118a2776900e" prot="private" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>d_curr_meta</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1aa734ab43bc500d45be0b98efd39ebcf3" prot="private" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>d_curr_vect</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a68607e1e247d9cbe6c8207570698b263" prot="private" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>d_enable_NRZI</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a480cf410bfd4d45485502db90128c3ed" prot="private" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>d_itemsize</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a8bbbd4881d25dd2b8709e8db67d2bdf6" prot="private" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>d_repeat</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a808c6ebabc426b84823ecd648f97ebd5" prot="private" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>d_repeat_cnt</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a3eef9639335e72271963b20110eb520d" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>dump_buffer</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1ab740a21607fd74aeb563df7503eb834d" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>int2bin</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame_1a8bc2de4d433db48cd32c3ce69a0d7ec2" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>make</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1aa726ad23bc381271de3a10d4a1dedf65" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>nrz_to_nrzi</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a9e5912b227529ad2a2e4ae4e746781fc" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>pack</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a3c22cf6810954a278d526369bef9d477" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>reverse_bit_order</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame_1a46a1a65a75adb4bbaf211c0d2b682d09" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>sptr</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a5edd4e165e6b744c83dd00193e296dd5" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>stuff</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1ae6916c33e3aeed1920b27c28ef838b22" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>unpack</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a6cb157d89f3b8b41db280d4255941f59" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>work</name></member>
+      <member refid="classgr_1_1itais_1_1Build__Frame__impl_1a31f9cb04c37b18c03c0d55fcc2760d18" prot="public" virt="non-virtual"><scope>gr::itais::Build_Frame_impl</scope><name>~Build_Frame_impl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

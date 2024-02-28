@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/gnuradio/gr-itais/build/swig/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx" "/home/gnuradio/gr-itais/build/swig/CMakeFiles/itais_swig.dir/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx.o"
+  "/home/ais/itais/gr-itais/build/swig/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx" "/home/ais/itais/gr-itais/build/swig/CMakeFiles/itais_swig.dir/CMakeFiles/itais_swig.dir/itais_swigPYTHON_wrap.cxx.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -26,14 +26,14 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "swig"
   "../swig"
-  "/usr/include/gnuradio/swig"
+  "/usr/local/include/gnuradio/swig"
   "../lib/../include"
-  "/usr/include/python3.8"
+  "/usr/include/python3.9"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/gnuradio/gr-itais/build/lib/CMakeFiles/gnuradio-itais.dir/DependInfo.cmake"
+  "/home/ais/itais/gr-itais/build/lib/CMakeFiles/gnuradio-itais.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/gnuradio/gr-itais/swig/itais_swig.i" "/home/gnuradio/gr-itais/build/swig/CMakeFiles/itais_swig.dir/itais_swigPYTHON.stamp"
+  "/home/ais/itais/gr-itais/swig/itais_swig.i" "/home/ais/itais/gr-itais/build/swig/CMakeFiles/itais_swig.dir/itais_swigPYTHON.stamp"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -1,21 +1,22 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
-Change Dir: /home/gnuradio/gr-itais/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ais/itais/gr-itais/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_6e4d5/fast && /usr/bin/make -f CMakeFiles/cmTC_6e4d5.dir/build.make CMakeFiles/cmTC_6e4d5.dir/build
-make[1]: Entering directory '/home/gnuradio/gr-itais/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_6e4d5.dir/src.c.o
-/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD   -std=gnu11 -o CMakeFiles/cmTC_6e4d5.dir/src.c.o   -c /home/gnuradio/gr-itais/build/CMakeFiles/CMakeTmp/src.c
-Linking C executable cmTC_6e4d5
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6e4d5.dir/link.txt --verbose=1
-/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD    CMakeFiles/cmTC_6e4d5.dir/src.c.o  -o cmTC_6e4d5 
-/usr/bin/ld: CMakeFiles/cmTC_6e4d5.dir/src.c.o: in function `main':
-src.c:(.text+0x46): undefined reference to `pthread_create'
-/usr/bin/ld: src.c:(.text+0x52): undefined reference to `pthread_detach'
-/usr/bin/ld: src.c:(.text+0x63): undefined reference to `pthread_join'
+Run Build Command(s):/usr/bin/gmake cmTC_234e7/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_234e7.dir/build.make CMakeFiles/cmTC_234e7.dir/build
+gmake[1]: Entering directory '/home/ais/itais/gr-itais/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_234e7.dir/src.c.o
+/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD -std=gnu11 -o CMakeFiles/cmTC_234e7.dir/src.c.o -c /home/ais/itais/gr-itais/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_234e7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_234e7.dir/link.txt --verbose=1
+/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD CMakeFiles/cmTC_234e7.dir/src.c.o -o cmTC_234e7 
+/usr/bin/ld: CMakeFiles/cmTC_234e7.dir/src.c.o: in function `main':
+src.c:(.text+0x34): undefined reference to `pthread_create'
+/usr/bin/ld: src.c:(.text+0x3c): undefined reference to `pthread_detach'
+/usr/bin/ld: src.c:(.text+0x44): undefined reference to `pthread_cancel'
+/usr/bin/ld: src.c:(.text+0x50): undefined reference to `pthread_join'
 collect2: error: ld returned 1 exit status
-make[1]: *** [CMakeFiles/cmTC_6e4d5.dir/build.make:87: cmTC_6e4d5] Error 1
-make[1]: Leaving directory '/home/gnuradio/gr-itais/build/CMakeFiles/CMakeTmp'
-make: *** [Makefile:121: cmTC_6e4d5/fast] Error 2
+gmake[1]: *** [CMakeFiles/cmTC_234e7.dir/build.make:106: cmTC_234e7] Error 1
+gmake[1]: Leaving directory '/home/ais/itais/gr-itais/build/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:140: cmTC_234e7/fast] Error 2
 
 
 Source file was:
@@ -31,6 +32,7 @@ int main(void)
   pthread_t thread;
   pthread_create(&thread, NULL, test_func, NULL);
   pthread_detach(thread);
+  pthread_cancel(thread);
   pthread_join(thread, NULL);
   pthread_atfork(NULL, NULL, NULL);
   pthread_exit(NULL);
@@ -39,20 +41,20 @@ int main(void)
 }
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /home/gnuradio/gr-itais/build/CMakeFiles/CMakeTmp
+Change Dir: /home/ais/itais/gr-itais/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_e916a/fast && /usr/bin/make -f CMakeFiles/cmTC_e916a.dir/build.make CMakeFiles/cmTC_e916a.dir/build
-make[1]: Entering directory '/home/gnuradio/gr-itais/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_e916a.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -std=gnu11 -o CMakeFiles/cmTC_e916a.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
-Linking C executable cmTC_e916a
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e916a.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_e916a.dir/CheckFunctionExists.c.o  -o cmTC_e916a  -lpthreads 
+Run Build Command(s):/usr/bin/gmake cmTC_0276b/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0276b.dir/build.make CMakeFiles/cmTC_0276b.dir/build
+gmake[1]: Entering directory '/home/ais/itais/gr-itais/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0276b.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -std=gnu11 -o CMakeFiles/cmTC_0276b.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.18/Modules/CheckFunctionExists.c
+Linking C executable cmTC_0276b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0276b.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_0276b.dir/CheckFunctionExists.c.o -o cmTC_0276b  -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-make[1]: *** [CMakeFiles/cmTC_e916a.dir/build.make:87: cmTC_e916a] Error 1
-make[1]: Leaving directory '/home/gnuradio/gr-itais/build/CMakeFiles/CMakeTmp'
-make: *** [Makefile:121: cmTC_e916a/fast] Error 2
+gmake[1]: *** [CMakeFiles/cmTC_0276b.dir/build.make:106: cmTC_0276b] Error 1
+gmake[1]: Leaving directory '/home/ais/itais/gr-itais/build/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:140: cmTC_0276b/fast] Error 2
 
 
 

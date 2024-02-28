@@ -37,7 +37,7 @@ import itais
 import potumbral 
 #import igualarpotencias
 from gnuradio import zeromq
-import example
+#import example
 
 #hier block encapsulating all the signal processing after the source
 #could probably be split into its own file
