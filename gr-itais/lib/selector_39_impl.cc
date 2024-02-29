@@ -26,7 +26,8 @@
 #include "selector_39_impl.h"
 #include <cstring>
 #include <stdexcept>
-
+#include <chrono>
+#include <iostream>
 
 namespace gr {
   namespace itais {
@@ -114,7 +115,14 @@ void selector_39_impl::handle_msg_input_index(pmt::pmt_t msg)
 
     if (pmt::is_integer(data)) {
         const unsigned int new_port = pmt::to_long(data);
-        printf("Transmitiendo en canal %u\n", new_port);
+        auto current_time = std::chrono::high_resolution_clock::now();
+        auto current_time_ns = std::chrono::time_point_cast<std::chrono::nanoseconds>(current_time);
+        auto time_since_minute_start = current_time_ns - std::chrono::time_point_cast<std::chrono::minutes>(current_time_ns);
+        auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
+        auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
+        auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
+	std::cout << "Received new port value: " << new_port << " at " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
+//        printf("Transmitiendo en canal %u\n", new_port);
         if (new_port < d_num_inputs)
             set_input_index(new_port);
         else

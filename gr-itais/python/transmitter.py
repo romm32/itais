@@ -193,6 +193,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                     if self.es_menor0 or (self.current_slot == self.prox_18-self.diff) or (self.current_slot + 1 == self.prox_18-self.diff):
                         PMT_msg = pmt.cons(pmt.PMT_NIL, pmt.from_long(self.canal_actual)) #pmt.intern(self.canal_actual)
                         self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
+                        print("se manda el canal actual ", time_elapsed.total_seconds())
                         self.candidatos_18 = self.slot_selection(self.prox_18) #[self.prox_18-5,self.prox_18-4,self.prox_18-3,self.prox_18-2,self.prox_18-1, self.prox_18,self.prox_18+1,self.prox_18+2,self.prox_18+3,self.prox_18+4]#
                         self.transmitiendo[0] = True
                         print("transmitiendo 18", self.current_slot)
@@ -226,6 +227,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                             
                         PMT_msg = pmt.cons(pmt.PMT_NIL, pmt.from_long(self.canal_actual)) #pmt.intern(self.canal_actual)
                         self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
+                        print("se manda el canal actual ", time_elapsed.total_seconds())
                         self.candidatos_24 = self.slot_selection(self.prox_24) #[self.prox_24-5,self.prox_24-4,self.prox_24-3,self.prox_24-2,self.prox_24-1, self.prox_24,self.prox_24+1,self.prox_24+2,self.prox_24+3,self.prox_24+4] #
                         self.transmitiendo[1] = True
                         print("transmitiendo 24", self.current_slot)
@@ -265,7 +267,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                     
                 self.candidatos_18 = np.full(10, -1)
                     
-                print("reinicia 30s", self.current_slot)
+                print("reinicia 18", self.current_slot)
                 #print("slot ", self.current_slot)
                 #print("slot y puedo", self.slot_y_puedo[0])
                 

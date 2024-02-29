@@ -180,7 +180,7 @@ class potumbral(gr.sync_block):
                     self.umbral = 1.9e-5
                 self.subintervalos = 0 
                 self.subint = self.subint+1
-                print("4s mas ", self.subint, self.canal, time_elapsed.total_seconds())
+                #print("4s mas ", self.subint, self.canal, time_elapsed.total_seconds())
 			
             if self.slot_actual in self.slots_candidatos and self.cambio: #Nos fijamos si estamos en un slot en donde se desee transmitir.
                 if self.contador_muestra >= 41 and self.contador_muestra < 99: #Nos fijamos si estamos en una muestra donde se debe medir el canal para determinar si el slot está libre o en uso.
