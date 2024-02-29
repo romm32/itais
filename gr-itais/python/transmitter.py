@@ -65,6 +65,8 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
         self.ultimo_slot = -1
         self.cambio = False
         self.canal_actual = 0 # 0 es A, 1 es B
+        self.canal24A = 0 # Necesito guardar el canal en el que se transmitió el mensaje 24, parte A, para que sea
+        		   # el mismo en el que se transmite el mensaje 24, parte B.
         self.transmitio = False
         self.inicio2 = 0
         self.final2 = 0
@@ -132,7 +134,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
             
             
             self.inicio_18 = self.current_slot
-            self.inicio_24 = self.current_slot - 10
+            self.inicio_24 = (self.current_slot - 100)%2250
             self.ultimo_slot = self.current_slot
             
             print("inicializo")
@@ -143,7 +145,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
             self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
             
             if input_items[0][0] > 2: #### verificar en qué unidad nos da la velocidad el gps
-                print(input_items[0][0])
+                print("velocidad", input_items[0][0])
                 self.prox_18 = (self.inicio_18 + 1125)%2250 # transmito cada 30 seg
             else:
                 self.prox_18 = (self.inicio_18 + 2250*2) # transmito cada 3 min, ver abajo explicacion de por que solo sumo 2 mins
@@ -188,7 +190,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                 
                     if self.prox_18-self.diff < 0:
                         self.es_menor0 = True
-                    if self.es_menor0 or (self.current_slot == self.prox_18-self.diff):
+                    if self.es_menor0 or (self.current_slot == self.prox_18-self.diff) or (self.current_slot + 1 == self.prox_18-self.diff):
                         PMT_msg = pmt.cons(pmt.PMT_NIL, pmt.from_long(self.canal_actual)) #pmt.intern(self.canal_actual)
                         self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
                         self.candidatos_18 = self.slot_selection(self.prox_18) #[self.prox_18-5,self.prox_18-4,self.prox_18-3,self.prox_18-2,self.prox_18-1, self.prox_18,self.prox_18+1,self.prox_18+2,self.prox_18+3,self.prox_18+4]#
@@ -215,7 +217,13 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                 if (not self.transmitiendo[0]) and (((self.prox_24-self.diff)%2250 - 2) < self.current_slot) and (self.current_slot <= ((self.prox_24-self.diff)%2250 + 3)): #Se da prioridad al mensaje 18 por ser de información dinámica en el caso de que ambos mensajes quieran transmitir a la vez. ### and (self.current_slot != self.inicio_24): ### ver segunda condicion
                     if self.prox_24-self.diff < 0:
                         self.es_menor0 = True
-                    if self.es_menor0 or (self.current_slot == self.prox_24-self.diff):
+                    if self.es_menor0 or (self.current_slot == self.prox_24-self.diff) or (self.current_slot + 1 == self.prox_24-self.diff):
+                    
+                        if self.mensaje24_a_transmitir == "A": # las partes A y B se mandan en el mismo canal
+                            self.canal24A = self.canal_actual
+                        else:
+                            self.canal_actual = self.canal24A
+                            
                         PMT_msg = pmt.cons(pmt.PMT_NIL, pmt.from_long(self.canal_actual)) #pmt.intern(self.canal_actual)
                         self.message_port_pub(pmt.intern(self.portChannel), PMT_msg)
                         self.candidatos_24 = self.slot_selection(self.prox_24) #[self.prox_24-5,self.prox_24-4,self.prox_24-3,self.prox_24-2,self.prox_24-1, self.prox_24,self.prox_24+1,self.prox_24+2,self.prox_24+3,self.prox_24+4] #
@@ -272,7 +280,29 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                     self.transmitio = True
                     PMT_msg = pmt.to_pmt(self.candidatos.tolist())
                     self.message_port_pub(pmt.intern(self.portNameB), PMT_msg)      
-                        
+                    
+            # En este último caso, pasaba que tenía que transmitir el 18 y lo pudo transmitir. En el siguiente subcaso,
+            # se arregla transmitiendo[0] en False luego de que pase el tiempo de transmisión del 18 y no se haya podido
+            # enviar.
+            if self.transmitiendo[0] and self.prox_18 < 2250 and (self.current_slot == (self.prox_18+200)%2250 or (self.current_slot == (self.prox_18+201)%2250)): #((self.current_slot > self.prox_18 + 187 and self.prox_18 >= 400) or (self.prox_18 < 400 and (self.current_slot+400)%2250 > self.prox_18+187)):
+                self.transmitiendo[0] = False
+                self.inicio_18 = self.current_slot
+                print("fallo transmision 18")
+                if input_items[0][0] > 2: #### verificar en qué unidad nos da la velocidad el gps
+                    self.prox_18 = (self.inicio_18 + 1125)%2250 # transmito cada 30 seg
+                else:
+                    self.prox_18 = (self.inicio_18 + 2250*2) # transmito cada 3 min    ### ver mod 2250
+                print("fijo prox ", self.prox_18, "ahora es ", self.current_slot)
+                
+                self.candidatos = np.full(10, -1)
+                if self.canal_actual == 0:
+                    PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                    self.message_port_pub(pmt.intern(self.portNameA), PMT_msg)
+                else:
+                    PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                    self.message_port_pub(pmt.intern(self.portNameB), PMT_msg)
+                                
+            # En el siguiente subcaso, se tiene que transmitir el mensaje 24 y se logra transmitir            
             if self.transmitiendo[1] and (self.slot_y_puedo[0] in self.candidatos_24) and np.real(self.slot_y_puedo[1]) == 1 and (not (self.slot_y_puedo[0] in self.candidatos_18) or (self.primero_en_pedir == 24)) and self.current_slot == self.slot_y_puedo[0]:
                 
                 if self.mensaje24_a_transmitir == "A":
@@ -316,7 +346,27 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                     self.message_port_pub(pmt.intern(self.portNameB), PMT_msg)
                     self.transmitio = True
                     
-        
+            # En el siguiente subcaso, se tenía que transmitir el mensaje 24 y no se pudo transmitir, así que se vuelve a poner 
+            # transmitiendo[1] en False, y según el mensaje que haya que transmitir se reinicia el temporizador
+            if self.transmitiendo[1] and self.prox_24 < 2250 and (self.current_slot == (self.prox_24+200)%2250 or self.current_slot == (self.prox_24+201)%2250):  #((self.current_slot > self.prox_24 + 187 and self.prox_24 >= 400) or (self.prox_24 < 400 and (self.current_slot+400)%2250 > self.prox_24+187)):
+                self.transmitiendo[1] = False
+                self.inicio_24 = self.current_slot
+                print("fallo transmision 24")
+                if self.mensaje24_a_transmitir == "A":
+                    self.prox_24 = (self.inicio_24 + 2250*5) ### Si no se pudo transmitir el A, no tiene sentido transmitir el B después
+                else:
+                    self.prox_24 = (self.inicio_24 + 2250*5) ### Si no se pudo transmitir el B, se inicia de nuevo el mensaje 24
+                    self.mensaje24_a_transmitir = "A"
+                
+                self.candidatos = np.full(10, -1)
+                if self.canal_actual == 0:
+                    PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                    self.message_port_pub(pmt.intern(self.portNameA), PMT_msg)
+                else:
+                    PMT_msg = pmt.to_pmt(self.candidatos.tolist())
+                    self.message_port_pub(pmt.intern(self.portNameB), PMT_msg)
+                    
+            
             if self.cambio:
                 self.final2 = time.time()
                 #print(self.final2-self.inicio2) #, self.current_slot)

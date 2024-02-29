@@ -59,7 +59,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         self.course = -1
         self.ts = -1
         
-        self.mmsi = 247320162 #Default. tiene que tener 9 dígitos
+        self.mmsi = 123456789 #Default. tiene que tener 9 dígitos
         self.payload = ""
         
         self.slots_per_minute = 2250
@@ -159,25 +159,31 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         slot_index = (milliseconds_elapsed)*self.slots_per_minute/60000 #Cantidad de slots desde que empezó el minuto.
         
         if (self.message == 18):
-            self. payload = self.encode_18(int(self.mmsi), float(self.speed), float(self.long), float(self.lat), float(self.course), int(self.ts))
-            PMT_msg = pmt.to_pmt(self.payload)
-            self.message_port_pub(pmt.intern(self.portName), PMT_msg)
-            self.message = 0
-            print("mando 18")
+            if self.speed != 0 and self.long != 0 and self.lat != 0 and self.course != 0: # Si no tenemos datos de GPS 
+            										     # válidos, no mandamos nada
+                self. payload = self.encode_18(int(self.mmsi), float(self.speed), float(self.long), float(self.lat), float(self.course), int(self.ts))
+                PMT_msg = pmt.to_pmt(self.payload)
+                self.message_port_pub(pmt.intern(self.portName), PMT_msg)
+                self.message = 0
+                print("mando 18")
             
         elif (self.message == 240):
-            self.payload = self.encode_24(int(self.mmsi), "A", self.vessel_name)
-            PMT_msg = pmt.to_pmt(self.payload)
-            self.message_port_pub(pmt.intern(self.portName), PMT_msg)
-            self.message = 0
-            print("mando 240")
+            if self.speed != 0 and self.long != 0 and self.lat != 0 and self.course != 0: # Si no tenemos datos de GPS 
+            										     # válidos, no mandamos nada
+                self.payload = self.encode_24(int(self.mmsi), "A", self.vessel_name)
+                PMT_msg = pmt.to_pmt(self.payload)
+                self.message_port_pub(pmt.intern(self.portName), PMT_msg)
+                self.message = 0
+                print("mando 240")
             
         elif (self.message == 241):
-            self.payload = self.encode_24(int(self.mmsi), "B", self.vessel_name, "@@@@@@@", str(self.vessel_length), str(self.vessel_beam), int(self.vessel_type))
-            PMT_msg = pmt.to_pmt(self.payload)
-            self.message_port_pub(pmt.intern(self.portName), PMT_msg)
-            self.message = 0
-            print("mando 241")
+            if self.speed != 0 and self.long != 0 and self.lat != 0 and self.course != 0: # Si no tenemos datos de GPS 
+            										     # válidos, no mandamos nada
+                self.payload = self.encode_24(int(self.mmsi), "B", self.vessel_name, "@@@@@@@", str(self.vessel_length), str(self.vessel_beam), int(self.vessel_type))
+                PMT_msg = pmt.to_pmt(self.payload)
+                self.message_port_pub(pmt.intern(self.portName), PMT_msg)
+                self.message = 0
+                print("mando 241")
         
             
         return (256)

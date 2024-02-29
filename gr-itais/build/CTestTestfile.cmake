@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
-# Source directory: /home/ais/itais/gr-itais
-# Build directory: /home/ais/itais/gr-itais/build
+# Source directory: /home/gnuradio/gr-itais
+# Build directory: /home/gnuradio/gr-itais/build
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.

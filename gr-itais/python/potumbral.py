@@ -187,8 +187,8 @@ class potumbral(gr.sync_block):
                     self.intervalo_evaluado.pop(-1)
                     self.intervalo_evaluado.insert(0, self.salida_db[1] < self.salida_db[0])
 					
-                elif self.contador_muestra >= 99 and self.contador_muestra <= 110: #Si ya se recorrieron todas las muestras donde se debe evaluar el slot, ya se actualizaron las 11 entradas del arreglo y se puede determinar si el slot está libre o no.
-                    self.puedo_usar = int(np.sum(self.intervalo_evaluado) > 2) #Si las 11 entradas son True (suma 11), la potencia es menor al umbral en todo el tramo y se puede usar ese slot, está libre.
+                elif self.contador_muestra >= 99 and self.contador_muestra <= 110: #Si ya se recorrieron todas las muestras donde se debe evaluar el slot, ya se actualizaron las 5 entradas del arreglo y se puede determinar si el slot está libre o no.
+                    self.puedo_usar = int(np.sum(self.intervalo_evaluado) > 2) #Si 3 o más de las 5 entradas son True (suma más de 2), la potencia es menor al umbral en todo el tramo y se puede usar ese slot, está libre.
 
                     self.salida_slot[1] = self.puedo_usar #Se fija si el slot está libre o no en la salida.
                     self.salida_slot[0] = self.slot_actual #Se fija el numero de slot en la salida

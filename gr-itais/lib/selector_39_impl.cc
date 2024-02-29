@@ -114,7 +114,7 @@ void selector_39_impl::handle_msg_input_index(pmt::pmt_t msg)
 
     if (pmt::is_integer(data)) {
         const unsigned int new_port = pmt::to_long(data);
-
+        printf("Transmitiendo en canal %u\n", new_port);
         if (new_port < d_num_inputs)
             set_input_index(new_port);
         else

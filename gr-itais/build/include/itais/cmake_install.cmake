@@ -1,4 +1,4 @@
-# Install script for directory: /home/ais/itais/gr-itais/include/itais
+# Install script for directory: /home/gnuradio/gr-itais/include/itais
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -37,23 +37,18 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-# Set default install directory permissions.
-if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "/usr/bin/objdump")
-endif()
-
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/itais" TYPE FILE FILES
-    "/home/ais/itais/gr-itais/include/itais/api.h"
-    "/home/ais/itais/gr-itais/include/itais/corr_est_cc.h"
-    "/home/ais/itais/gr-itais/include/itais/freqest.h"
-    "/home/ais/itais/gr-itais/include/itais/invert.h"
-    "/home/ais/itais/gr-itais/include/itais/pdu_to_nmea.h"
-    "/home/ais/itais/gr-itais/include/itais/msk_timing_recovery_cc.h"
-    "/home/ais/itais/gr-itais/include/itais/Build_Frame.h"
-    "/home/ais/itais/gr-itais/include/itais/nrz_to_nrzi.h"
-    "/home/ais/itais/gr-itais/include/itais/DebugME.h"
-    "/home/ais/itais/gr-itais/include/itais/selector_39.h"
+    "/home/gnuradio/gr-itais/include/itais/api.h"
+    "/home/gnuradio/gr-itais/include/itais/corr_est_cc.h"
+    "/home/gnuradio/gr-itais/include/itais/freqest.h"
+    "/home/gnuradio/gr-itais/include/itais/invert.h"
+    "/home/gnuradio/gr-itais/include/itais/pdu_to_nmea.h"
+    "/home/gnuradio/gr-itais/include/itais/msk_timing_recovery_cc.h"
+    "/home/gnuradio/gr-itais/include/itais/Build_Frame.h"
+    "/home/gnuradio/gr-itais/include/itais/nrz_to_nrzi.h"
+    "/home/gnuradio/gr-itais/include/itais/DebugME.h"
+    "/home/gnuradio/gr-itais/include/itais/selector_39.h"
     )
 endif()
 

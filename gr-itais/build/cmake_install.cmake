@@ -1,4 +1,4 @@
-# Install script for directory: /home/ais/itais/gr-itais
+# Install script for directory: /home/gnuradio/gr-itais
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -37,24 +37,19 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-# Set default install directory permissions.
-if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "/usr/bin/objdump")
-endif()
-
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/itais" TYPE FILE FILES "/home/ais/itais/gr-itais/cmake/Modules/itaisConfig.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/cmake/itais" TYPE FILE FILES "/home/gnuradio/gr-itais/cmake/Modules/itaisConfig.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/ais/itais/gr-itais/build/include/itais/cmake_install.cmake")
-  include("/home/ais/itais/gr-itais/build/lib/cmake_install.cmake")
-  include("/home/ais/itais/gr-itais/build/apps/cmake_install.cmake")
-  include("/home/ais/itais/gr-itais/build/docs/cmake_install.cmake")
-  include("/home/ais/itais/gr-itais/build/swig/cmake_install.cmake")
-  include("/home/ais/itais/gr-itais/build/python/cmake_install.cmake")
-  include("/home/ais/itais/gr-itais/build/grc/cmake_install.cmake")
+  include("/home/gnuradio/gr-itais/build/include/itais/cmake_install.cmake")
+  include("/home/gnuradio/gr-itais/build/lib/cmake_install.cmake")
+  include("/home/gnuradio/gr-itais/build/apps/cmake_install.cmake")
+  include("/home/gnuradio/gr-itais/build/docs/cmake_install.cmake")
+  include("/home/gnuradio/gr-itais/build/swig/cmake_install.cmake")
+  include("/home/gnuradio/gr-itais/build/python/cmake_install.cmake")
+  include("/home/gnuradio/gr-itais/build/grc/cmake_install.cmake")
 
 endif()
 
@@ -66,5 +61,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/ais/itais/gr-itais/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/gnuradio/gr-itais/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

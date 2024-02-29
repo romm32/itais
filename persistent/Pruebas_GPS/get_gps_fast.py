@@ -8,7 +8,7 @@ import pynmea2
 import zmq
 import time
 
-serial_port = '/dev/ttyACM0'
+serial_port = '/dev/ttyACM1'
 ser = serial.Serial(serial_port, baudrate=9600, timeout=0.00001)
 
 context = zmq.Context()
@@ -31,9 +31,9 @@ while True:
     try:
     # Se lee una línea o un dato desde el GPS
         line = ser.readline().decode('utf-8').strip()
-
+        #print(line)
     except serial.SerialException as e:
-        #print(f"Serial exception occurred: {e}")
+        print(f"Serial exception occurred: {e}")
         continue
     
     if line.startswith('$GPRMC'):
@@ -41,17 +41,17 @@ while True:
             # Se parsea con NMEA la línea leída, se generan las estructuras de datos
             # necesarias para la transmisión a través del socket, y se envía.
             packet = pynmea2.parse(line)
-            #print(packet.fields)
+            #print(packet)
             latitude = packet.latitude
             longitude = packet.longitude
             speed = packet.spd_over_grnd
             if speed is None: # sometimes we don't have access to gps data
-                speed_in_knots = 4
+                speed_in_knots = 0
             else:    
                 speed_in_knots = speed*1.94384
             course = packet.true_course
             if course is None:
-                course = 2
+                course = 0
             gps_time_str = packet.timestamp
             #gps_time_datetime = datetime.strptime(gps_time_str, "%Y-%m-%dT%H:%M:%S.%fZ")
             utc_second = gps_time_str.second
