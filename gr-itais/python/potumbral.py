@@ -94,22 +94,25 @@ class potumbral(gr.sync_block):
         self.portName = 'slot_y_puedo'
         self.message_port_register_out(pmt.intern(self.portName))
         
+        self.umb = True
+        
     def process_message(self, message):
         # Retrieve message payload and save it to a variable
         self.slots_candidatos = pmt.to_python(message) # lista con los candidatos
         print("llegaron candidatos", self.designator, self.slots_candidatos)
         
     def work(self, input_items, output_items):
-		
-        if self.unavez:
-        	print("inicializo potumbral")
-        	self.unavez = False
         	
         current_utc_time = datetime.utcnow()
         start_of_minute = current_utc_time.replace(second=0, microsecond=0)
         time_elapsed = current_utc_time - start_of_minute
         milliseconds_elapsed = time_elapsed.total_seconds() * 1000
         slot_index = (milliseconds_elapsed)*self.slots_per_minute/60000 #Cantidad de slots desde que empezó el minuto.
+        
+        if self.unavez:
+        	print("inicializo potumbral")
+        	self.unavez = False
+        	print("tiempo de inicio", time_elapsed.total_seconds(), self.designator)
 		
         self.slot_actual = int(slot_index) #Se guarda el slot actual donde estamos parados
         self.contador_muestra = int((slot_index-self.slot_actual)*self.samples_per_slot) #Cantidad de tiempo que pasó desde que empezó el slot en cantidad de muestras. Es decir si 1 sot son 1333 muestras, se guarda cuantas muestras hay en 0.(algo) slots.
@@ -145,6 +148,9 @@ class potumbral(gr.sync_block):
                 
             self.contador_muestra += 10
             #muestra_actual = input_items[0][self.i]
+            if ((self.umbral_actual > -95) and (self.umb) and (self.umbral_actual != 1)):
+                print("umbral cambio", self.umbral_actual, time_elapsed.total_seconds(), self.designator)
+                self.umb = False
 
             self.pow_actual = input_items[0][self.i]#np.abs(muestra_actual)**2 #Paso la muestra actual compleja a un real con la potencia del complejo. Esto implica que se tendrá una muestra de potencia cada 0,2ms (o 200 micro).
             if self.pow_actual == 0: #Caso de borde

@@ -42,7 +42,8 @@ def get_gps_data():
 			dict = {"speed": speed_in_knots, "lon": longitude, "lat": latitude, "course": course, "UTC_sec": utc_second}
 			socket.send_string(f"{dict}")
 		else:
-			print("Waiting for a GPS fix...")
+		dict = {"speed": 0, "lon": 0, "lat": 0, "course": 0, "UTC_sec": 0}
+		socket.send_string(f"{dict}")
 
 	except Exception as e:
 		print(f"Error: {e}")

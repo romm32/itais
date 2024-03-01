@@ -168,6 +168,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
                 print("mando 18")
             else:
                 print("Se descartó mensaje por falta de GPS fix")
+                self.message = 0
             
         elif (self.message == 240):
             if self.speed != 0 and self.long != 0 and self.lat != 0 and self.course != 0: # Si no tenemos datos de GPS 
@@ -179,6 +180,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
                 print("mando 240")
             else:
                 print("Se descartó mensaje por falta de GPS fix")
+                self.message = 0
             
         elif (self.message == 241):
             if self.speed != 0 and self.long != 0 and self.lat != 0 and self.course != 0: # Si no tenemos datos de GPS 
@@ -190,6 +192,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
                 print("mando 241")
             else:
                 print("Se descartó mensaje por falta de GPS fix")
+                self.message = 0
         
             
         return (256)
