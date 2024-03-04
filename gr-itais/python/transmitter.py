@@ -249,6 +249,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                 self.mensaje = 18 ### mensaje a mandar a messages
                 PMT_msg = pmt.to_pmt(self.mensaje)
                 self.message_port_pub(pmt.intern(self.portNameMsg), PMT_msg)
+                print("se envia mensaje 18 ", time_elapsed.total_seconds())
                 self.transmitiendo[0] = False
                 if self.transmitiendo[1]: # Se debe a que el mensaje 18 tiene prioridad sobre el 24, así que
                 			# si el mensaje 24 estaba transmitiendo, se "borra" su estado y se reinicia
@@ -311,6 +312,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                     self.mensaje = 240 ### mensaje a mandar a messages, es el 24-0 que indica 24-A
                     PMT_msg = pmt.to_pmt(self.mensaje)
                     self.message_port_pub(pmt.intern(self.portNameMsg), PMT_msg)
+                    print("se envia mensaje 24 A ", time_elapsed.total_seconds())
                     self.mensaje24_a_transmitir = "B"
                         
                     print("Envio mensaje 24 A")
@@ -319,6 +321,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                     self.mensaje = 241 ### mensaje a mandar a messages, es el 24-1 que indica 24-B
                     PMT_msg = pmt.to_pmt(self.mensaje)
                     self.message_port_pub(pmt.intern(self.portNameMsg), PMT_msg)
+                    print("se envia mensaje 24 B ", time_elapsed.total_seconds())
                     self.mensaje24_a_transmitir = "A"
                         
                     print("Envio mensaje 24 B")

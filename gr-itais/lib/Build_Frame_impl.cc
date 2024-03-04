@@ -32,6 +32,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <chrono>
 
 #define LEN_PREAMBLE 24
 #define LEN_START 8
@@ -493,9 +494,16 @@ int Build_Frame_impl::work(int noutput_items,
 
         // NRZI Conversion
         nrz_to_nrzi(frame, len_frame_real);
-        printf("Sent Frame (NRZI enabled) = ");
+        //printf("Sent Frame (NRZI enabled) = ");
+        auto current_time = std::chrono::high_resolution_clock::now();
+        auto current_time_ns = std::chrono::time_point_cast<std::chrono::nanoseconds>(current_time);
+        auto time_since_minute_start = current_time_ns - std::chrono::time_point_cast<std::chrono::minutes>(current_time_ns);
+        auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
+        auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
+        auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
+	    std::cout << "Sent new frame at: " << " at " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
 
-        dump_buffer(frame, len_frame_real);
+        //dump_buffer(frame, len_frame_real);
 
         // Binary conversion (to use with GMSK mod's byte_to_symb
         byte_packing(frame, byte_frame, len_frame_real);
@@ -530,9 +538,17 @@ int Build_Frame_impl::work(int noutput_items,
 
         // NRZI Conversion
         nrz_to_nrzi(frame, len_frame_real);
-        printf("Sent Frame (NRZI enabled) = ");
+        //printf("Sent Frame (NRZI enabled) = ");
 
-        dump_buffer(frame, len_frame_real);
+        auto current_time = std::chrono::high_resolution_clock::now();
+        auto current_time_ns = std::chrono::time_point_cast<std::chrono::nanoseconds>(current_time);
+        auto time_since_minute_start = current_time_ns - std::chrono::time_point_cast<std::chrono::minutes>(current_time_ns);
+        auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
+        auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
+        auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
+	    std::cout << "Sent new frame at: " << " at " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
+
+        //dump_buffer(frame, len_frame_real);
 
         // Binary conversion (to use with GMSK mod's byte_to_symb
         byte_packing(frame, byte_frame, len_frame_real);
