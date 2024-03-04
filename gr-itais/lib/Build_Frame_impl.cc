@@ -501,7 +501,7 @@ int Build_Frame_impl::work(int noutput_items,
         auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
         auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
         auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
-	    std::cout << "Sent new frame at: " << " at " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
+	    std::cout << "Sent new frame at: " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
 
         //dump_buffer(frame, len_frame_real);
 
@@ -546,7 +546,7 @@ int Build_Frame_impl::work(int noutput_items,
         auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
         auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
         auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
-	    std::cout << "Sent new frame at: " << " at " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
+	    std::cout << "Sent new frame at: " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
 
         //dump_buffer(frame, len_frame_real);
 

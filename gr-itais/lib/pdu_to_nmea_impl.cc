@@ -131,6 +131,13 @@ namespace gr {
     }
 
     void pdu_to_nmea_impl::print(pmt::pmt_t msg) {
+        auto current_time = std::chrono::high_resolution_clock::now();
+        auto current_time_ns = std::chrono::time_point_cast<std::chrono::nanoseconds>(current_time);
+        auto time_since_minute_start = current_time_ns - std::chrono::time_point_cast<std::chrono::minutes>(current_time_ns);
+        auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
+        auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
+        auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
+	    std::cout << "Received new message at: " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
         std::cout << msg_to_sentence(msg) << std::endl;
     }
 
