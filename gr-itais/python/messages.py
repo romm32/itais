@@ -35,7 +35,7 @@ import itais
 class messages(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
     """Embedded Python Block example - a simple multiply const"""
 
-    def __init__(self, vessel_length = 18, vessel_beam = 14, vessel_name = "ROMA", vessel_type = 30):  # only default arguments here
+    def __init__(self, vessel_length = 8, vessel_beam = 4, vessel_name = "ROMA", vessel_type = 30):  # only default arguments here
         """arguments to this function show up as parameters in GRC"""
         gr.sync_block.__init__(
             self,
@@ -69,6 +69,11 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         self.portName_in = 'Msg'
         self.message_port_register_in(pmt.intern(self.portName_in))
         self.set_msg_handler(pmt.intern("Msg"), self.process_message)
+        
+        self.mensaje24A = 00000000
+        self.mensaje24B = 00000000
+        
+        self.once = True
         
         
     def process_message(self, message):
@@ -119,7 +124,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         
         return _type+_repeat+_mmsi+_reserved+_speed+_accurancy+_long+_lat+_course+_true_heading+_ts+_flags+_rstatus
         
-    def encode_24(self, __mmsi, __part, __vname="NAN", __callsign="NAN", __vsize1="18", __vsize2="14", __vtype=50):
+    def encode_24(self, __mmsi, __part, __vname="NAN", __callsign="NAN", __vsize1="8", __vsize2="4", __vtype=50):
         _type = '{0:b}'.format(24).rjust(6,'0') # 24
         _repeat = "00" # repeat (directive to an AIS transceiver that this message should be rebroadcast.)
         _mmsi = '{0:b}'.format(__mmsi).rjust(30,'0') # 30 bits (247320162)
@@ -158,6 +163,11 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         milliseconds_elapsed = time_elapsed.total_seconds() * 1000
         slot_index = (milliseconds_elapsed)*self.slots_per_minute/60000 #Cantidad de slots desde que empezó el minuto.
         
+        if (self.once):
+            self.once = False
+            self.mensaje24A = self.encode_24(int(self.mmsi), "A", self.vessel_name)
+            self.mensaje24B = self.encode_24(int(self.mmsi), "B", self.vessel_name, "@@@@@@@", str(self.vessel_length), str(self.vessel_beam), int(self.vessel_type))
+        
         if (self.message == 18):
             if self.speed != 0 and self.long != 0 and self.lat != 0 and self.course != 0: # Si no tenemos datos de GPS 
             										     # válidos, no mandamos nada
@@ -173,7 +183,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         elif (self.message == 240):
             if self.speed != 0 and self.long != 0 and self.lat != 0 and self.course != 0: # Si no tenemos datos de GPS 
             										     # válidos, no mandamos nada
-                self.payload = self.encode_24(int(self.mmsi), "A", self.vessel_name)
+                self.payload = self.mensaje24A 
                 PMT_msg = pmt.to_pmt(self.payload)
                 self.message_port_pub(pmt.intern(self.portName), PMT_msg)
                 self.message = 0
@@ -185,7 +195,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         elif (self.message == 241):
             if self.speed != 0 and self.long != 0 and self.lat != 0 and self.course != 0: # Si no tenemos datos de GPS 
             										     # válidos, no mandamos nada
-                self.payload = self.encode_24(int(self.mmsi), "B", self.vessel_name, "@@@@@@@", str(self.vessel_length), str(self.vessel_beam), int(self.vessel_type))
+                self.payload = self.mensaje24B
                 PMT_msg = pmt.to_pmt(self.payload)
                 self.message_port_pub(pmt.intern(self.portName), PMT_msg)
                 self.message = 0

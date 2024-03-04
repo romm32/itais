@@ -78,51 +78,16 @@ class ais_rx(gr.hier_block2):
         ##Empiezan modifs
         # Create a ZMQ Pub block
         if (designator == "A"):
-            self.zmq_pub = zeromq.pub_sink(gr.sizeof_float, 2, 'tcp://127.0.0.1:5610', 1, False, -1)
-            self.zmq_sub = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5605', 1, False, -1)
+            self.connect(self, self.filter)
         else:
-            self.zmq_pub = zeromq.pub_sink(gr.sizeof_float, 2, 'tcp://127.0.0.1:5611', 1, False, -1)
-            self.zmq_sub = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5606', 1, False, -1)
+            self.null_sink = blocks.null_sink(gr.sizeof_gr_complex)
+            self.connect(self, self.null_sink)
             
-
-        self.blocks_vector_to_stream_0 = blocks.vector_to_stream(gr.sizeof_float*2, 1)
-        self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, 10)
-        self.blocks_complex_to_mag_squared_0 = blocks.complex_to_mag_squared(1)
-        
-        #self.example_tag_to_msg_0 = example.tag_to_msg(gr.sizeof_float*1, '', "latency_strobe")
-        #self.example_latency_manager_0 = example.latency_manager(2000, 1000, gr.sizeof_float*1)
-
-
-        #self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, rate,True)
-        #self.blocks_multiply_const_vxx_1 = blocks.multiply_const_cc(1/((2**15)-1))
-        
-        self.potumbral = itais.potumbral(designator)
-        
-        self.rational_resampler_xxx_0 = filter.rational_resampler_ccc(
-                interpolation=1,
-                decimation=3,
-                taps=None,
-                fractional_bw=0.4)
-                
-        self.rational_resampler_xxx_1 = filter.rational_resampler_ccc(
-                interpolation=1,
-                decimation=3,
-                taps=None,
-                fractional_bw=0.4)
-        
-        self.blocks_null_sink_0 = blocks.null_sink(gr.sizeof_gr_complex*1)
-        
-        self.connect(self, (self.rational_resampler_xxx_0, 0), self.filter2,  self.blocks_complex_to_mag_squared_0, (self.potumbral, 0)) #self.example_latency_manager_0, (self.potumbral, 0))
-        #self.msg_connect((self.example_tag_to_msg_0, 'msg'), (self.example_latency_manager_0, 'token'))
-        #self.connect((self.potumbral, 0), self.example_tag_to_msg_0)
+            self.zmq_sub = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5612', 1, False, -1)
+            self.connect(self.zmq_sub, self.filter)
         
         
-        self.connect((self.potumbral, 0), (self.blocks_vector_to_stream_0, 0), (self.zmq_pub, 0))
-        #self.connect((self.potumbral, 0), (self.zmq_pub, 0))
-        self.connect((self.zmq_sub, 0), (self.blocks_stream_to_vector_0, 0), (self.potumbral, 1))
-      
-        self.connect(self, self.rational_resampler_xxx_1,             
-                     self.filter,
+        self.connect(self.filter,
                      self.demod,
                      self.deframer)
         self.msg_connect(self.deframer, "out", self.nmea, "print")
@@ -137,7 +102,7 @@ class ais_radio (gr.top_block, pubsub):
     if options.source == "pluto":
     	self._rate = 750000/3 # el pluto necesita que usemos un sample rate mayor a 500kHz aprox, entonces usamos 750kHz. Luego lo dividimos entre 3 en el flujo de datos usando un rationalresampler, pero a los efectos de todas las veces que se usa la variable rate, tiene sentido inicializarla como 250kHz.
     else:
-    	self._rate = self.get_rate()
+    	self._rate = 50000 #self.get_rate()
     #self._rate = self.get_rate()
     print("Rate is %i" % (self._rate,))
 
@@ -264,7 +229,9 @@ class ais_radio (gr.top_block, pubsub):
         src = iio.pluto_source('ip:192.168.2.1', 162000000, 750000, 20000000, 32768, True, True, True, 'manual', 20, '', True)
         #src.get_samp_rate = src.get_sample_rate #alias for UHD compatibility
         
-        
+    elif options.source == "zmq":
+        src = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5611', 1, False, -1)
+    
     else:
       #semantically detect whether it's ip.ip.ip.ip:port or filename
       self._rate = options.rate

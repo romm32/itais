@@ -51,12 +51,19 @@ class itais_tx(gr.hier_block2):
         self.connect(self, self.rational_resampler_A, self.filter_A)
         
         # channel A ais messages reception
-        self.demod_A = itais.ais_demod(options) #ais_demod takes in complex baseband and spits out 1-bit unpacked bitstream
-        self.deframer_A = digital.hdlc_deframer_bp(11,64) #takes bytes, deframes, unstuffs, CRCs, and emits PDUs with frame contents
-        self.nmea_A = itais.pdu_to_nmea("A") #turns data PDUs into NMEA sentences
         
-        self.connect(self.filter_A, self.demod_A, self.deframer_A)
-        self.msg_connect(self.deframer_A, "out", self.nmea_A, "print")
+        #self.zmq_pub_A = zeromq.pub_sink(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5611', 1, False, -1)
+
+        
+        #self.demod_A = itais.ais_demod(options) #ais_demod takes in complex baseband and spits out 1-bit unpacked bitstream
+        #self.deframer_A = digital.hdlc_deframer_bp(11,64) #takes bytes, deframes, unstuffs, CRCs, and emits PDUs with frame contents
+        #self.nmea_A = itais.pdu_to_nmea("A") #turns data PDUs into NMEA sentences
+        
+        #self.connect(self.filter_A, self.demod_A, self.deframer_A)
+        #self.msg_connect(self.deframer_A, "out", self.nmea_A, "print")
+        
+        #self.connect(self.rational_resampler_A, self.zmq_pub_A)
+        
         
         # channel A reception blocks
         self.blocks_complex_to_mag_squared_A = blocks.complex_to_mag_squared(1)
@@ -81,12 +88,16 @@ class itais_tx(gr.hier_block2):
         self.connect(self, self.rational_resampler_B, self.filter_B)
         
         # channel B ais messages reception
-        self.demod_B = itais.ais_demod(options) #ais_demod takes in complex baseband and spits out 1-bit unpacked bitstream
-        self.deframer_B = digital.hdlc_deframer_bp(11,64) #takes bytes, deframes, unstuffs, CRCs, and emits PDUs with frame contents
-        self.nmea_B = itais.pdu_to_nmea("B") #turns data PDUs into NMEA sentences
+        #self.demod_B = itais.ais_demod(options) #ais_demod takes in complex baseband and spits out 1-bit unpacked bitstream
+        #self.deframer_B = digital.hdlc_deframer_bp(11,64) #takes bytes, deframes, unstuffs, CRCs, and emits PDUs with frame contents
+        #self.nmea_B = itais.pdu_to_nmea("B") #turns data PDUs into NMEA sentences
         
-        self.connect(self.filter_B, self.demod_B, self.deframer_B)
-        self.msg_connect(self.deframer_B, "out", self.nmea_B, "print")
+        #self.zmq_pub_B = zeromq.pub_sink(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5612', 1, False, -1)
+                
+        #self.connect(self.filter_B, self.demod_B, self.deframer_B)
+        #self.msg_connect(self.deframer_B, "out", self.nmea_B, "print")
+        #self.connect(self.rational_resampler_B, self.zmq_pub_B)
+        
         
         # channel B reception blocks
         self.blocks_complex_to_mag_squared_B = blocks.complex_to_mag_squared(1)
