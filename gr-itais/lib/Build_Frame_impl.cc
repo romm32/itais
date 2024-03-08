@@ -42,6 +42,9 @@
 #define PREAMBLE_MARK 101010101010101010101010(24 bits)
 #define START_MARK 01111110(8 bits)
 
+#define PREAMBLE_MARK_ZERO 000000000000000000000000(24 bits)
+#define START_MARK_ZERO 00000000(8 bits)
+
 #define DEBUG 0
 
 namespace gr {
@@ -408,10 +411,10 @@ int Build_Frame_impl::work(int noutput_items,
             payload[i] = sentence[i] - 48;
 
         printf("Detected a payload which is *not* multiple of 8 (%d bits). Padding with "
-               "%d bits to %d\n",
-               LEN_PAYLOAD,
-               PADDING_TO_EIGHT,
-               LEN_PAYLOAD + PADDING_TO_EIGHT);
+            "%d bits to %d\n",
+            LEN_PAYLOAD,
+            PADDING_TO_EIGHT,
+            LEN_PAYLOAD + PADDING_TO_EIGHT);
         memset(payload + LEN_PAYLOAD, 0x0, PADDING_TO_EIGHT);
 
         LEN_PAYLOAD += PADDING_TO_EIGHT; // update PAYLOAD LENGHT
@@ -429,43 +432,9 @@ int Build_Frame_impl::work(int noutput_items,
     // reverse
     reverse_bit_order(payload, LEN_PAYLOAD + LEN_CRC);
 
-
-    // clang-format off
-    // B3co>HP00                                              P      ;8           ;56                RD           =Is3                     w      sU           kP06                     CRC
-    // 010010000011101011110111001110011000100000000000000000 100000 001011001000 001011000101000110 100010010100 001101011001111011000011 111111 111011100101 110011100000000000000110 0011000010001111
-    // clang-format on
-
-    // printf("\nENCODING:\t%s\n", sentence);
-    // printf("LEN_SENTENCE:\t%d\n", LEN_SENTENCE); printf("LEN_PAYLOAD:\t%d\n",
-    // LEN_PAYLOAD); 		printf("LEN_CRC:\t%d\n", LEN_CRC);
-
-    //		// payload encoding
-    //		char buffer[6];
-
-    //		for (int i=0; i<LEN_SENTENCE; i++) {
-    //			pack((int)d_sentence[i], buffer, 6);
-    //			memcpy (payload+(i*6), buffer , 6);
-    //			//p = payload+(i*6); //PASTA moved and corrected in the next IF
-    ////			if (DEBUG)	printf("(len(payload)=%d) (len(sentence)=%d) %c
-    ///-> %s \n", strlen(payload), i+1, sentence[i], payload);
-    //		}
-
-
-    //		// crc
-    //		char crc[16];	// 2 gnuradio bytes of CRC
-    //		char input_crc[LEN_PAYLOAD];
-    //		memcpy (input_crc, payload, LEN_PAYLOAD);
-    //		compute_crc (input_crc, crc, LEN_PAYLOAD);
-    //		memcpy (payload+LEN_PAYLOAD, crc, LEN_CRC);
-
-    // reverse bits (payload + crc)
-    //		reverse_bit_order (payload, LEN_PAYLOAD+LEN_CRC);
-    ////		printf("Dump buffer after reverse + crc= ");
-    ////		dump_buffer(payload, LEN_PAYLOAD+LEN_CRC);
-
     // stuffing (payload + crc)
-    if (LEN_PAYLOAD <= 168) {
-
+    
+    if (LEN_PAYLOAD == 155) {
         char stuffed_payload[LEN_FRAME_MAX];
         int LEN_STUFFED_PAYLOAD = stuff(payload, stuffed_payload, LEN_PAYLOAD + LEN_CRC);
 
@@ -475,21 +444,21 @@ int Build_Frame_impl::work(int noutput_items,
         memset(frame, 0x0, LEN_FRAME_MAX);
 
         // headers
-        memcpy(frame, "\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1", LEN_PREAMBLE);
-        memcpy(frame + LEN_PREAMBLE, "\0\1\1\1\1\1\1\0", LEN_START);
+        memcpy(frame, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", LEN_PREAMBLE);
+        memcpy(frame + LEN_PREAMBLE, "\0\0\0\0\0\0\0\0", LEN_START);
         // payload + crc
         memcpy(frame + LEN_PREAMBLE + LEN_START, stuffed_payload, LEN_STUFFED_PAYLOAD);
         // trailer
         memcpy(frame + LEN_PREAMBLE + LEN_START + LEN_STUFFED_PAYLOAD,
-               "\0\1\1\1\1\1\1\0",
-               8);
+            "\0\0\0\0\0\0\0\0",
+            8);
 
         // padding
         int LEN_PADDING =
             LEN_FRAME_MAX - (LEN_PREAMBLE + LEN_START + LEN_STUFFED_PAYLOAD + LEN_START);
         memset(frame + LEN_PREAMBLE + LEN_START + LEN_STUFFED_PAYLOAD + LEN_START,
-               0x0,
-               LEN_PADDING);
+            0x0,
+            LEN_PADDING);
         int len_frame_real = LEN_FRAME_MAX; // 256
 
         // NRZI Conversion
@@ -501,7 +470,7 @@ int Build_Frame_impl::work(int noutput_items,
         auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
         auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
         auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
-	    std::cout << "Sent new frame at: " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
+        std::cout << "Sent new frame at: " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
 
         //dump_buffer(frame, len_frame_real);
 
@@ -511,65 +480,121 @@ int Build_Frame_impl::work(int noutput_items,
         // output
         memcpy(out, byte_frame, len_frame_real / 8);
         noutput_items = len_frame_real / 8;
+        
+        d_repeat_cnt++;
+        // Reset state
+        d_curr_len = 0;
 
-
-    } else {
-
-        char stuffed_payload[1024];
-        int LEN_STUFFED_PAYLOAD = stuff(payload, stuffed_payload, LEN_PAYLOAD + LEN_CRC);
-
-        //// frame generation /////
-        int LEN_FRAME = LEN_PREAMBLE + LEN_START * 2 + LEN_STUFFED_PAYLOAD;
-        char frame[LEN_FRAME];
-        unsigned char byte_frame[LEN_FRAME / 8]; // PASTA
-        memset(frame, 0x0, LEN_FRAME);
-
-        // headers
-        memcpy(frame, "\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1", LEN_PREAMBLE);
-        memcpy(frame + LEN_PREAMBLE, "\0\1\1\1\1\1\1\0", LEN_START);
-        // payload + crc
-        memcpy(frame + LEN_PREAMBLE + LEN_START, stuffed_payload, LEN_STUFFED_PAYLOAD);
-        // trailer
-        memcpy(frame + LEN_PREAMBLE + LEN_START + LEN_STUFFED_PAYLOAD,
-               "\0\1\1\1\1\1\1\0",
-               8);
-
-        int len_frame_real = LEN_FRAME;
-
-        // NRZI Conversion
-        nrz_to_nrzi(frame, len_frame_real);
-        //printf("Sent Frame (NRZI enabled) = ");
-
-        auto current_time = std::chrono::high_resolution_clock::now();
-        auto current_time_ns = std::chrono::time_point_cast<std::chrono::nanoseconds>(current_time);
-        auto time_since_minute_start = current_time_ns - std::chrono::time_point_cast<std::chrono::minutes>(current_time_ns);
-        auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
-        auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
-        auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
-	    std::cout << "Sent new frame at: " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
-
-        //dump_buffer(frame, len_frame_real);
-
-        // Binary conversion (to use with GMSK mod's byte_to_symb
-        byte_packing(frame, byte_frame, len_frame_real);
-
-        // output
-        memcpy(out, byte_frame, len_frame_real / 8);
-        noutput_items = len_frame_real / 8;
+        // Tell runtime system how many output items we produced.
+        return noutput_items;
     }
+    
+    else {
+        if (LEN_PAYLOAD <= 168) {
+            char stuffed_payload[LEN_FRAME_MAX];
+            int LEN_STUFFED_PAYLOAD = stuff(payload, stuffed_payload, LEN_PAYLOAD + LEN_CRC);
 
-    d_repeat_cnt++;
-    // Reset state
-    d_curr_len = 0;
+            //// frame generation /////
+            char frame[LEN_FRAME_MAX];
+            unsigned char byte_frame[LEN_FRAME_MAX / 8]; // PASTA
+            memset(frame, 0x0, LEN_FRAME_MAX);
 
-    // return nout;
+            // headers
+            memcpy(frame, "\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1", LEN_PREAMBLE);
+            memcpy(frame + LEN_PREAMBLE, "\0\1\1\1\1\1\1\0", LEN_START);
+            // payload + crc
+            memcpy(frame + LEN_PREAMBLE + LEN_START, stuffed_payload, LEN_STUFFED_PAYLOAD);
+            // trailer
+            memcpy(frame + LEN_PREAMBLE + LEN_START + LEN_STUFFED_PAYLOAD,
+                "\0\1\1\1\1\1\1\0",
+                8);
+
+            // padding
+            int LEN_PADDING =
+                LEN_FRAME_MAX - (LEN_PREAMBLE + LEN_START + LEN_STUFFED_PAYLOAD + LEN_START);
+            memset(frame + LEN_PREAMBLE + LEN_START + LEN_STUFFED_PAYLOAD + LEN_START,
+                0x0,
+                LEN_PADDING);
+            int len_frame_real = LEN_FRAME_MAX; // 256
+
+            // NRZI Conversion
+            nrz_to_nrzi(frame, len_frame_real);
+            //printf("Sent Frame (NRZI enabled) = ");
+            auto current_time = std::chrono::high_resolution_clock::now();
+            auto current_time_ns = std::chrono::time_point_cast<std::chrono::nanoseconds>(current_time);
+            auto time_since_minute_start = current_time_ns - std::chrono::time_point_cast<std::chrono::minutes>(current_time_ns);
+            auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
+            auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
+            auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
+            std::cout << "Sent new frame at: " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
+
+            //dump_buffer(frame, len_frame_real);
+
+            // Binary conversion (to use with GMSK mod's byte_to_symb
+            byte_packing(frame, byte_frame, len_frame_real);
+
+            // output
+            memcpy(out, byte_frame, len_frame_real / 8);
+            noutput_items = len_frame_real / 8;
+        } 
+    
+        else {
+            char stuffed_payload[1024];
+            int LEN_STUFFED_PAYLOAD = stuff(payload, stuffed_payload, LEN_PAYLOAD + LEN_CRC);
+
+            //// frame generation /////
+            int LEN_FRAME = LEN_PREAMBLE + LEN_START * 2 + LEN_STUFFED_PAYLOAD;
+            char frame[LEN_FRAME];
+            unsigned char byte_frame[LEN_FRAME / 8]; // PASTA
+            memset(frame, 0x0, LEN_FRAME);
+
+            // headers
+            memcpy(frame, "\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1", LEN_PREAMBLE);
+            memcpy(frame + LEN_PREAMBLE, "\0\1\1\1\1\1\1\0", LEN_START);
+            // payload + crc
+            memcpy(frame + LEN_PREAMBLE + LEN_START, stuffed_payload, LEN_STUFFED_PAYLOAD);
+            // trailer
+            memcpy(frame + LEN_PREAMBLE + LEN_START + LEN_STUFFED_PAYLOAD,
+                "\0\1\1\1\1\1\1\0",
+                8);
+
+            int len_frame_real = LEN_FRAME;
+
+            // NRZI Conversion
+            nrz_to_nrzi(frame, len_frame_real);
+            //printf("Sent Frame (NRZI enabled) = ");
+
+            auto current_time = std::chrono::high_resolution_clock::now();
+            auto current_time_ns = std::chrono::time_point_cast<std::chrono::nanoseconds>(current_time);
+            auto time_since_minute_start = current_time_ns - std::chrono::time_point_cast<std::chrono::minutes>(current_time_ns);
+            auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
+            auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
+            auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
+            std::cout << "Sent new frame at: " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
+
+            //dump_buffer(frame, len_frame_real);
+
+            // Binary conversion (to use with GMSK mod's byte_to_symb
+            byte_packing(frame, byte_frame, len_frame_real);
+
+            // output
+            memcpy(out, byte_frame, len_frame_real / 8);
+            noutput_items = len_frame_real / 8;
+        }
+
+        d_repeat_cnt++;
+        // Reset state
+        d_curr_len = 0;
+
+        // return nout;
 
 
-    // Tell runtime system how many output items we produced.
-    return noutput_items;
-}
+        // Tell runtime system how many output items we produced.
+        return noutput_items;
+    }
 
 } /* namespace AISTX */
 } /* namespace gr */
+}
 
 

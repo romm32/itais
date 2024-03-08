@@ -28,6 +28,7 @@ class itais_tx(gr.hier_block2):
         self._samples_per_symbol = 5
         self.coeffs = filter.firdes.low_pass(1, rate, 11000, 1000)
         self._filter_decimation = int(rate/(self._bits_per_sec*self._samples_per_symbol))
+        self.fs = 1000000
         options = {}
         options[ "samples_per_symbol" ] = (rate/self._filter_decimation)/self._bits_per_sec
         options[ "clockrec_gain" ] = 0.04
@@ -129,29 +130,40 @@ class itais_tx(gr.hier_block2):
         ### TRANSMISSION        
         #self.selector = itais.selector_itais()
 
-        self.AISTX_Build_Frame = itais.Build_Frame(True, True, 'packet_len')
+        self.AISTX_Build_Frame = itais.Build_Frame(True, True, 'packet_len') # me parece que la primera entrada tiene que estar en false para que no se repita la trama enviada?
         # self.rational_resampler_tx = filter.rational_resampler_ccc(
         #         interpolation=20, # interpolamos por 5 para subir a 250 kHz, despues por 3 para subir a 750 kHz
         #         decimation=1,
         #         taps=None,
         #         fractional_bw=0.4)
-        self.digital_gmsk_mod = digital.gmsk_mod(int(1000000/9600), bt=0.4, verbose=False, log=False) #Se fijan los mismos parámetros que en gr-aistx.
+        self.digital_gmsk_mod = digital.gmsk_mod(int(self.fs/9600), bt=0.4, verbose=False, log=False) #Se fijan los mismos parámetros que en gr-aistx.
         #self.blocks_selector = blocks.selector(gr.sizeof_gr_complex*1,1,0)
         #self.blocks_selector.set_enabled(True)
         self.selector = itais.selector_39(gr.sizeof_gr_complex*1,0,0)
         self.selector.set_enabled(True)
+        self.rational_resampler_tx1 = filter.rational_resampler_ccc(
+                  interpolation=5, # interpolamos por 5 y después por 4 para pasar de 50kHz a 1M.
+                  decimation=1,
+                  taps=None,
+                  fractional_bw=0.4)
+                  
+        self.rational_resampler_tx2 = filter.rational_resampler_ccc(
+                  interpolation=4,
+                  decimation=1,
+                  taps=None,
+                  fractional_bw=0.4)
         
         self.blocks_multiply_A = blocks.multiply_vcc(1)
         self.blocks_multiply_B = blocks.multiply_vcc(1)
-        self.blocks_multiply_const_A = blocks.multiply_const_cc(0.9)
+        self.blocks_multiply_const_A = blocks.multiply_const_cc(0.85)
         #self.blocks_multiply_const_vxx_2 = blocks.multiply_const_cc(.45)
-        self.blocks_multiply_const_B = blocks.multiply_const_cc(0.9)
+        self.blocks_multiply_const_B = blocks.multiply_const_cc(0.85)
         #self.blocks_multiply_const_vxx_0 = blocks.multiply_const_cc(.45)
         #self.blocks_add = blocks.add_vcc(1)
-        self.analog_sig_source_A = analog.sig_source_c(1000000, analog.GR_SIN_WAVE, -25000, 1, 0, 0)
-        self.analog_sig_source_B = analog.sig_source_c(1000000, analog.GR_SIN_WAVE, 25000, 1, 0, 0)
+        self.analog_sig_source_A = analog.sig_source_c(self.fs, analog.GR_SIN_WAVE, -25000, 1, 0, 0)
+        self.analog_sig_source_B = analog.sig_source_c(self.fs, analog.GR_SIN_WAVE, 25000, 1, 0, 0) 
                 
-        self.iio_pluto_sink = iio.pluto_sink('ip:192.168.2.1', 162000000, 1000000, 20000000, 32768, False, 10.0, '', True)
+        self.iio_pluto_sink = iio.pluto_sink('ip:192.168.2.1', 162000000, 1000000, 20000000, 32768, False, 20.0, '', True)
         
         self.msg_connect((self.messages, 'bits_Out'), (self.AISTX_Build_Frame, 'sentence'))
         self.connect((self.AISTX_Build_Frame, 0), (self.digital_gmsk_mod, 0))
@@ -169,8 +181,10 @@ class itais_tx(gr.hier_block2):
         self.connect((self.blocks_multiply_const_A, 0), (self.selector, 0))
         self.connect((self.blocks_multiply_const_B, 0), (self.selector, 1))
         self.msg_connect((self.transmitter, 'canal'), (self.selector, 'iindex'))
+        #self.msg_connect((self.transmitter, 'canal'), (self.messages, 'Current_channel'))
+        #self.msg_connect((self.messages, 'canal_actual'), (self.selector, 'iindex'))
 
-        self.connect((self.selector, 0), (self.iio_pluto_sink, 0))
+        self.connect((self.selector, 0), (self.iio_pluto_sink, 0)) #(self.rational_resampler_tx1, 0), (self.rational_resampler_tx2, 0), (self.iio_pluto_sink, 0))
         
 
 class itais_clase (gr.top_block, pubsub):

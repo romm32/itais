@@ -34,6 +34,10 @@ import time
 import sys
 import re
 import itais
+import potumbral 
+#import igualarpotencias
+from gnuradio import zeromq
+#import example
 
 #hier block encapsulating all the signal processing after the source
 #could probably be split into its own file
@@ -52,6 +56,11 @@ class ais_rx(gr.hier_block2):
                                                      self.coeffs,
                                                      freq,
                                                      rate)
+                                                     
+        self.filter2 = filter.freq_xlating_fir_filter_ccf(self._filter_decimation,
+                                                     self.coeffs,
+                                                     freq,
+                                                     rate)     
 #        self.resamp = pfb.arb_resampler_ccf((self._bits_per_sec*self._samples_per_symbol)/int(rate/self._filter_decimation))
         options = {}
         options[ "samples_per_symbol" ] = (rate/self._filter_decimation)/self._bits_per_sec
@@ -63,13 +72,13 @@ class ais_rx(gr.hier_block2):
         self.demod = itais.ais_demod(options) #ais_demod takes in complex baseband and spits out 1-bit unpacked bitstream
         self.deframer = digital.hdlc_deframer_bp(11,64) #takes bytes, deframes, unstuffs, CRCs, and emits PDUs with frame contents
         self.nmea = itais.pdu_to_nmea(designator) #turns data PDUs into NMEA sentences
-#        self.msgq = ais.pdu_to_msgq(queue) #posts PDUs to message queue for main program to parse at will
-#        self.parse = ais.parse(queue, designator) #ais_parse.cc, calculates CRC, parses data into NMEA AIVDM message, moves data onto queue
-
+        
+        print("El designador es:", designator)
+        
         self.connect(self,
-                     self.filter,
-                     self.demod,
-                     self.deframer)
+        	      self.filter,
+        	      self.demod,
+        	      self.deframer)
         self.msg_connect(self.deframer, "out", self.nmea, "print")
 
 class ais_radio (gr.top_block, pubsub):
@@ -79,7 +88,11 @@ class ais_radio (gr.top_block, pubsub):
     self._options = options
 
     self._u = self._setup_source(options)
-    self._rate = self.get_rate()
+    if options.source == "pluto":
+    	self._rate = 750000/3 # el pluto necesita que usemos un sample rate mayor a 500kHz aprox, entonces usamos 750kHz. Luego lo dividimos entre 3 en el flujo de datos usando un rationalresampler, pero a los efectos de todas las veces que se usa la variable rate, tiene sentido inicializarla como 250kHz.
+    else:
+    	self._rate = 50000 #self.get_rate()
+    #self._rate = self.get_rate()
     print("Rate is %i" % (self._rate,))
 
     if options.singlechannel is True:
@@ -103,7 +116,7 @@ class ais_radio (gr.top_block, pubsub):
 
     #Choose source
     group.add_option("-s","--source", type="string", default="uhd",
-                      help="Choose source: uhd, osmocom, <filename>, or <ip:port> [default=%default]")
+                      help="Choose source: uhd, osmocom, pluto, <filename>, or <ip:port> [default=%default]")
 
     #UHD/Osmocom args
     group.add_option("-R", "--subdev", type="string",
@@ -125,7 +138,7 @@ class ais_radio (gr.top_block, pubsub):
     parser.add_option_group(group)
 
   def live_source(self):
-    return self._options.source=="uhd" or self._options.source=="osmocom"
+    return self._options.source=="uhd" or self._options.source=="osmocom" or self._options.source=="pluto"
 
   def set_gain(self, gain):
     if self.live_source():
@@ -197,7 +210,17 @@ class ais_radio (gr.top_block, pubsub):
             options.gain = 34
         src.set_gain(options.gain)
         print("Gain is %i" % src.get_gain())
-
+        
+    elif options.source == "pluto": #adalm pluto 
+        import iio
+        #src = iio.pluto_source()
+        # frecuencia central en 162MHz porque ais_rx (al usar dos canales) directo nos lo traslada a -25kHz y +25kHz.
+        src = iio.pluto_source('ip:192.168.2.1', 162000000, 750000, 20000000, 32768, True, True, True, 'manual', 20, '', True)
+        #src.get_samp_rate = src.get_sample_rate #alias for UHD compatibility
+        
+    elif options.source == "zmq":
+        src = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5611', 1, False, -1)
+    
     else:
       #semantically detect whether it's ip.ip.ip.ip:port or filename
       self._rate = options.rate
@@ -206,8 +229,9 @@ class ais_radio (gr.top_block, pubsub):
           ip, port = re.search("(.*)\:(\d{1,5})", options.source).groups()
         except:
           raise Exception("Please input UDP source e.g. 192.168.10.1:12345")
-        src = blocks.udp_source(gr.sizeof_gr_complex, ip, int(port))
-        print("Using UDP source %s:%s" % (ip, port))
+        payload_size = 8972
+        src = blocks.udp_source(gr.sizeof_short*1, ip, int(port),payload_size,True)
+        print("Using UDP source %s:%s and Payload Size %s" % (ip, port,payload_size))
       else:
         src = blocks.file_source(gr.sizeof_gr_complex, options.source)
         print("Using file source %s" % options.source)

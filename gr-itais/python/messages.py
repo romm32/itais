@@ -31,6 +31,7 @@ from gnuradio import blocks
 from gnuradio import analog
 from math import pi
 import itais
+import time
 
 class messages(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
     """Embedded Python Block example - a simple multiply const"""
@@ -74,11 +75,25 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         self.mensaje24B = 00000000
         
         self.once = True
+        self.payload_ceros = '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+        #self.current_channel = 0
+        
+        #self.portCurrentChannel = 'Current_channel'
+        #self.message_port_register_in(pmt.intern(self.portCurrentChannel))
+        #self.set_msg_handler(pmt.intern("Current_channel"), self.process_message_channel)
+        
+        #self.portChannel_Cu = 'canal_actual'
+        #self.message_port_register_out(pmt.intern(self.portChannel_Cu))
         
         
     def process_message(self, message):
         # Retrieve message payload and save it to a variable
         self.message = pmt.to_python(message) # lista con los candidatos
+        
+    #def process_message_channel(self, message):
+        # Retrieve message payload and save it to a variable
+    #    self.current_channel = pmt.to_python(message)[1] # lista con los candidatos
+    #    print("llego canal a messages", self.current_channel)
     
     def encode_string(self, string):
         vocabolary = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^- !\"#$%&'()*+,-./0123456789:;<=>?"
@@ -174,7 +189,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
                 self. payload = self.encode_18(int(self.mmsi), float(self.speed), float(self.long), float(self.lat), float(self.course), int(self.ts))
                 PMT_msg = pmt.to_pmt(self.payload)
                 self.message_port_pub(pmt.intern(self.portName), PMT_msg)
-                self.message = 0
+                self.message = 50
                 print("mando 18")
             else:
                 print("Se descartó mensaje por falta de GPS fix")
@@ -186,7 +201,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
                 self.payload = self.mensaje24A 
                 PMT_msg = pmt.to_pmt(self.payload)
                 self.message_port_pub(pmt.intern(self.portName), PMT_msg)
-                self.message = 0
+                self.message = 50
                 print("mando 240")
             else:
                 print("Se descartó mensaje por falta de GPS fix")
@@ -198,13 +213,27 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
                 self.payload = self.mensaje24B
                 PMT_msg = pmt.to_pmt(self.payload)
                 self.message_port_pub(pmt.intern(self.portName), PMT_msg)
-                self.message = 0
+                self.message = 50
                 print("mando 241")
             else:
                 print("Se descartó mensaje por falta de GPS fix")
                 self.message = 0
         
-            
+        elif (self.message == 50):
+        	PMT_msg = pmt.to_pmt(self.payload_ceros)
+        	self.message_port_pub(pmt.intern(self.portName), PMT_msg)
+        	self.message = 0
+        	print("mando 0")
+        	
+        #elif (self.message == 50):
+        #    self.message = 0
+        #    time.sleep(10)
+            #PMT_msg = pmt.to_pmt(self.current_channel)
+            #self.message_port_pub(pmt.intern(self.portChannel_Cu), PMT_msg)
+        #    PMT_msg = pmt.cons(pmt.PMT_NIL, pmt.from_long(self.current_channel)) #pmt.intern(self.canal_actual)
+        #    self.message_port_pub(pmt.intern(self.portChannel_Cu), PMT_msg)
+        #    print("se manda el canal actual en messages ", time_elapsed.total_seconds()+10)            
+        
         return (256)
         
         

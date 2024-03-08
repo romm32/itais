@@ -159,7 +159,10 @@ void selector_39_impl::forecast(int noutput_items, gr_vector_int& ninput_items_r
     for (unsigned i = 0; i < ninputs; i++) {
         ninput_items_required[i] = 0;
     }
-    ninput_items_required[d_input_index] = noutput_items;
+    //ninput_items_required[d_input_index] = 256; // noutput_items;
+    ninput_items_required[0] = 4096;
+    ninput_items_required[1] = 4096;
+    //std::cout << "ninputreq: " << ninput_items_required[d_input_index] << "\n";
 }
 
 

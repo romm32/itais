@@ -101,7 +101,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
     def process_message_B(self, message):
         # Retrieve message payload and save it to a variable
         self.slot_y_puedo_B = pmt.to_python(message) # lista con los candidatos
-        print("llegaron slot y puedo", "B", self.slot_y_puedo_B)
+        print("llegaron slot y puedo", "B", self.slot_y_puedo_B)    
     
     def slot_selection(self, NTT):
         selected = np.random.randint(NTT-187, NTT+187+1, size=10)
