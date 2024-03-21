@@ -1,5 +1,5 @@
 """
-Bloque que implementa un mecanismo análogo a "Potumbral"
+Bloque que implementa un mecanismo 
 para el cálculo de la potencia de las muestras.
 """
 

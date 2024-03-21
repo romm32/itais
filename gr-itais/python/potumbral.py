@@ -42,11 +42,11 @@ class potumbral(gr.sync_block):
         self.N_muestras = []
         self.pow_4s = np.zeros(200)
         
-        self.pow_minuto = [2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14] #Se inicializa el arreglo para que el umbral de -107dBm=2e-14
+        self.pow_minuto = [-137, -137, -137, -137, -137, -137, -137, -137, -137, -137, -137, -137, -137, -137, -137] #[2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14, 2e-14] #Se inicializa el arreglo para que el umbral de -107dBm=2e-14=-42dB
         
-        self.arr_pow_actual = np.full(5, 2e-14) #Se inicializa el arreglo que determina la potencia actual con el promedio. Se toma un promedio movil del ultimo ms (5 muestras) iniciando con una potencia inicial igual al umbral minimo  
+        self.arr_pow_actual = np.full(5, -137) #Se inicializa el arreglo que determina la potencia actual con el promedio. Se toma un promedio movil del ultimo ms (5 muestras) iniciando con una potencia inicial igual al umbral minimo  
         
-        self.umbral = 2e-14
+        self.umbral = -137
         
         self.umb_y_pow_actual = np.zeros(2) #Se crea este arreglo que es lo que se le pasa al transmisor. Un umbral y una potencia actual en ese orden para que sepa interpretarlo.
         self.salida_db = np.zeros(2) #Se crea este arreglo que es lo que se le pasa al transmisor. Un umbral y una potencia actual en ese orden para que sepa interpretarlo.
@@ -60,7 +60,7 @@ class potumbral(gr.sync_block):
         
         self.salida = np.zeros(2)
 
-        self.pow_avg = 2e-7
+        self.pow_avg = 0
         
         self.slot_actual = 0 #Variable que se utiliza para saber en qué slot del frame actual se está        
         self.contador_muestra = -10 #Variable que permite determinar qué muestra del slot actual se está procesando, se inicializa en -10 porque la primera vez se le suma 10.  
@@ -145,23 +145,24 @@ class potumbral(gr.sync_block):
             if self.slot_actual != self.ultimo_slot:
                 self.ultimo_slot = self.slot_actual
                 self.cambio = True
+
                 
             self.contador_muestra += 10
             #muestra_actual = input_items[0][self.i]
-            if ((self.umbral_actual > -95) and (self.umb) and (self.umbral_actual != 1)):
+            if ((self.umbral_actual > -126) and (self.umb) and (self.umbral_actual != 1)):
                 print("umbral cambio", self.umbral_actual, time_elapsed.total_seconds(), self.designator)
                 self.umb = False
 
             self.pow_actual = input_items[0][self.i]#np.abs(muestra_actual)**2 #Paso la muestra actual compleja a un real con la potencia del complejo. Esto implica que se tendrá una muestra de potencia cada 0,2ms (o 200 micro).
+            self.pow_actual = 10*math.log10(self.pow_actual)
+            self.pow_actual = 0.9941*self.pow_actual - 12.99            
             if self.pow_actual == 0: #Caso de borde
                 self.pow_actual = 1e-20
 
-            self.umbral_actual = (10*math.log10(self.umbral/0.001)) + 10 #Se le suma 10dB al umbral, el umbral actual es el ultimo calculado que se actualiza cada 4s. 	
+            self.umbral_actual = self.umbral + 10 #(10*math.log10(self.umbral)) + 10 #Se le suma 10dB al umbral, el umbral actual es el ultimo calculado que se actualiza cada 4s. 	
 			
             self.salida_db[0] = self.umbral_actual 
-            self.salida_db[1] = 10*math.log10(self.pow_actual/0.001)
-            
-            self.salida_db[1] = 0.9941*self.salida_db[1] + 6.893 
+            self.salida_db[1] = self.pow_actual
             
 			
             self.N_muestras = np.append(self.N_muestras, self.pow_actual) #Se acumulan las 1000 muestras que se corresponde con 100 ejecuciones del while que acumula de a 10 muestras. Así se forman los 20ms, esto se acumula independientemente del calculo de la potencia actual del canal.
@@ -180,10 +181,10 @@ class potumbral(gr.sync_block):
                 self.pow_minuto.insert(0, po_4)
 
                 self.umbral = np.min(self.pow_minuto)
-                if self.umbral < 2e-14: #Si la potencia es menor a -107dBm se pone en -107dBm.
-                    self.umbral = 2e-14
-                elif self.umbral > 1.9e-5: #Si la potencia es mayor a -17dBm se pone en -17dBm (porque se suma 10dB después).
-                    self.umbral = 1.9e-5
+                if self.umbral < -137: #Si la potencia es menor a -107dBm se pone en -107dBm.
+                    self.umbral = -137
+                elif self.umbral > -47: #Si la potencia es mayor a -17dBm se pone en -17dBm (porque se suma 10dB después).
+                    self.umbral = -47
                 self.subintervalos = 0 
                 self.subint = self.subint+1
                 #print("4s mas ", self.subint, self.canal, time_elapsed.total_seconds())
@@ -218,7 +219,7 @@ class potumbral(gr.sync_block):
         self.puedo_usar = 0
         self.i = 0
         		
-        return 16 #len(input_items[0])
+        return 256 #len(input_items[0])
         
         
         
