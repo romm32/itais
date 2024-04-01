@@ -8,7 +8,7 @@ import pynmea2
 import zmq
 import time
 
-serial_port = '/dev/ttyACM0'
+serial_port = '/dev/ttyACM1'
 ser = serial.Serial(serial_port, baudrate=9600, timeout=0.00001)
 
 context = zmq.Context()

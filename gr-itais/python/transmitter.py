@@ -104,7 +104,7 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
         print("llegaron slot y puedo", "B", self.slot_y_puedo_B)    
     
     def slot_selection(self, NTT):
-        selected = np.random.randint(NTT-187, NTT+187+1, size=10)
+        selected = np.random.choice(np.arange(NTT-187, NTT+187+1), size=10, replace=False)
         selected = np.array(sorted(selected))
         if NTT-187 < 0:
             shift = 2250
@@ -386,6 +386,6 @@ class transmitter(gr.sync_block):  # other base classes are basic_block, decim_b
                 self.transmitio = False
                 self.canal_actual = 0
 
-        return 16 #len(output_items[0])
+        return 16#256 #len(output_items[0])
         
         

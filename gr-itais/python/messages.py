@@ -184,40 +184,43 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
             self.mensaje24B = self.encode_24(int(self.mmsi), "B", self.vessel_name, "@@@@@@@", str(self.vessel_length), str(self.vessel_beam), int(self.vessel_type))
         
         if (self.message == 18):
-            if self.speed != 0 and self.long != 0 and self.lat != 0 and self.course != 0: # Si no tenemos datos de GPS 
+            if self.speed == 0 and self.long == 0 and self.lat == 0 and self.course == 0: # Si no tenemos datos de GPS 
             										     # válidos, no mandamos nada
+                print("Se descartó mensaje por falta de GPS fix")
+                self.message = 0
+                
+            else:
                 self. payload = self.encode_18(int(self.mmsi), float(self.speed), float(self.long), float(self.lat), float(self.course), int(self.ts))
                 PMT_msg = pmt.to_pmt(self.payload)
                 self.message_port_pub(pmt.intern(self.portName), PMT_msg)
                 self.message = 50
                 print("mando 18")
-            else:
-                print("Se descartó mensaje por falta de GPS fix")
-                self.message = 0
             
         elif (self.message == 240):
-            if self.speed != 0 and self.long != 0 and self.lat != 0 and self.course != 0: # Si no tenemos datos de GPS 
+            if self.speed == 0 and self.long == 0 and self.lat == 0 and self.course == 0: # Si no tenemos datos de GPS 
             										     # válidos, no mandamos nada
+                print("Se descartó mensaje por falta de GPS fix")
+                self.message = 0
+                
+            else:
                 self.payload = self.mensaje24A 
                 PMT_msg = pmt.to_pmt(self.payload)
                 self.message_port_pub(pmt.intern(self.portName), PMT_msg)
                 self.message = 50
                 print("mando 240")
-            else:
-                print("Se descartó mensaje por falta de GPS fix")
-                self.message = 0
             
         elif (self.message == 241):
-            if self.speed != 0 and self.long != 0 and self.lat != 0 and self.course != 0: # Si no tenemos datos de GPS 
+            if self.speed == 0 and self.long == 0 and self.lat == 0 and self.course == 0: # Si no tenemos datos de GPS 
             										     # válidos, no mandamos nada
+                print("Se descartó mensaje por falta de GPS fix")
+                self.message = 0
+                
+            else:
                 self.payload = self.mensaje24B
                 PMT_msg = pmt.to_pmt(self.payload)
                 self.message_port_pub(pmt.intern(self.portName), PMT_msg)
                 self.message = 50
                 print("mando 241")
-            else:
-                print("Se descartó mensaje por falta de GPS fix")
-                self.message = 0
         
         elif (self.message == 50):
         	PMT_msg = pmt.to_pmt(self.payload_ceros)

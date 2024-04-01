@@ -163,7 +163,7 @@ class itais_tx(gr.hier_block2):
         self.analog_sig_source_A = analog.sig_source_c(self.fs, analog.GR_SIN_WAVE, -25000, 1, 0, 0)
         self.analog_sig_source_B = analog.sig_source_c(self.fs, analog.GR_SIN_WAVE, 25000, 1, 0, 0) 
                 
-        self.iio_pluto_sink = iio.pluto_sink('ip:192.168.2.1', 162000000, 1000000, 20000000, 32768, False, 20.0, '', True)
+        self.iio_pluto_sink = iio.pluto_sink('ip:192.168.2.1', 162000000, 1000000, 20000000, 32768, False, 5.0, '', True)
         
         self.msg_connect((self.messages, 'bits_Out'), (self.AISTX_Build_Frame, 'sentence'))
         self.connect((self.AISTX_Build_Frame, 0), (self.digital_gmsk_mod, 0))
