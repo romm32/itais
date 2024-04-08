@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# Script creado para entender cómo se envían e interpretan los taps desde un ZMQ PUB.
+
 import pmt
 import zmq
 import numpy as np
