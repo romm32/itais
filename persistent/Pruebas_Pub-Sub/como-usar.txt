@@ -1,5 +1,5 @@
-Para ver que el pub sub está funcionando bien, lo que hay que hacer:
+Para ver que la dupla PUB-SUB está funcionando bien, se debe hacer lo siguiente.
 1-Ejecutar el grc pruebaPub.
-2-Dejar el grc corriendo en el background y desde la misma terminal ejecutar el script de python sub-prueba.py. Esto va a imprimir un montón de palabras que indican que está funcionando de forma correcta. Los taps de las muestras capturadas se guardan en el taps.txt.
+2-Dejar el grc corriendo en el background y desde la misma terminal ejecutar el script de python sub-prueba.py. Esto va a imprimir palabras que indican que está funcionando de forma correcta. Los taps de las muestras capturadas se guardan en un archivo llamado taps.txt.
 
 
