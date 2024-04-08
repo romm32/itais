@@ -1,8 +1,9 @@
 """
-Bloque utilizado para verificar el comportamiento de Potumbral. Aquí se envian arreglos de
-dimensión 2 para comprobar la comunicación con arreglos de dos dimensiones. 
-Este comportamiento se pretendía utilizar en Potumbral para mandar el slot y si es posible
-transmitir en él.
+Bloque utilizado para simular el comportamiento de Potumbral. Aquí se envian arreglos de
+dimensión 2 para que los bloques que necesitan esto como entrada puedan empezar a 
+funcionar. Como en GNU Radio se necesita que los bloques que tienen entradas tengan algún 
+valor para empezar a correr se creó este bloque.
+
 """
 
 import numpy as np
