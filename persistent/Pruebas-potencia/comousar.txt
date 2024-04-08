@@ -1,0 +1,1 @@
+Se reciben muestras del canal desde radio.py. En pruebas-potencia procesan las mismas de forma análoga a una versión inicial de Potumbral y se guardan en un archivo. Se tiene también un script "lectura-umb-pow" que permite leer ese txt.
