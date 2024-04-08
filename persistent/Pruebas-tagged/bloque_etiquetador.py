@@ -1,9 +1,7 @@
 """
-Embedded Python Blocks:
-
-Each time this file is saved, GRC will instantiate the first class it finds
-to get ports and parameters of your block. The arguments to __init__  will
-be the parameters. All of them are required to have default values!
+Bloque que simula parte del comportamiento que tendría potumbral, donde las muestras
+entre la 41 y la 98 deberían llevar una etiqueta. Esto finalmente no se usó pues no
+funcionó.
 """
 
 import numpy as np
@@ -13,25 +11,18 @@ import zmq
 import struct
 from datetime import datetime
 
-class blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
-    """Embedded Python Block example - a simple multiply const"""
+class blk(gr.sync_block): 
 
-    def __init__(self, example_param=1.0):  # only default arguments here
-        """arguments to this function show up as parameters in GRC"""
+    def __init__(self, example_param=1.0): 
         gr.sync_block.__init__(
             self,
-            name='Embedded Python Block',   # will show up in GRC
+            name='Embedded Python Block', 
             in_sig=[np.complex64, np.float32],
             out_sig=[np.complex64]
         )
-        #context = zmq.Context() # no es posible definir el socket arriba del todo, y definirlo una sola vez. gnu radio no funciona.
-        #socket = context.socket(zmq.PUB)
-        #socket.bind("tcp://127.0.0.1:5580")
         
         self.topic = "valores_umbral_potencia"
         
-        # if an attribute with the same name as a parameter is found,
-        # a callback is registered (properties work, too).
         self.example_param = example_param
         
         self.contador = 1
@@ -61,13 +52,9 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
     	if msj == 1:
     		self.recibi = True
     		#print("llego mensaje, enviando")
-    		#print("len input items0:", len(input_items[0]))
-    		#print("len input items1:", len(input_items[1]))
     	
     	
     	if self.recibi:
-    		#print("recibi len input items0:", len(input_items[0]))
-    		#print("recibi len input items1:", len(input_items[1]))
     	
     		context = zmq.Context()
     		socket = context.socket(zmq.PUB)

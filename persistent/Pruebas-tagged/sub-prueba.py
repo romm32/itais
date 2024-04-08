@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# zmq_REQ_REP_server.py
-
-# This server program capitalizes received strings and returns them.
-# NOTES:
-#   1) To comply with the GNU Radio view, messages are received on the REQ socket and sent on the REP socket.
-#   2) The REQ and REP messages must be on separate port numbers.
+#Archivo que pretendía ser la subscripción a lo enviado por el esquema de GNU Radio.
 
 import pmt
 import zmq
@@ -14,12 +9,11 @@ import numpy as np
 import struct
 from datetime import datetime
 
-debug = 0          # set to zero to turn off diagnostics
+debug = 0         
 
-# Set up ZMQ SUB socket
 context = zmq.Context()
 subscriber = context.socket(zmq.SUB)
-subscriber.connect("tcp://127.0.0.1:5580")  # Connect to the same port as in your GNU Radio script
+subscriber.connect("tcp://127.0.0.1:5580")
 subscriber.setsockopt_string(zmq.SUBSCRIBE, "")
 
 context = zmq.Context()
@@ -57,8 +51,6 @@ try:
 		except:
 			float_bytes = struct.pack('!f', 1)
 			socket.send(float_bytes)
-			#float_bytes = struct.pack('!f', 0)
-			#socket.send(float_bytes)
 			print("reenvio")
 		
 
@@ -75,7 +67,7 @@ try:
 			#print(f"Received raw message: {raw_message}")
 			topic, message = raw_message.split(' ', 1)
 			
-			# Se procesa el mensaje en función del topic del que viene.
+			#Se procesa el mensaje en función del topic del que viene.
 			if topic == "valores_umbral_potencia":
 				data_dict = eval(message)
 				#print(f"Received threshold message: {data_dict}")
@@ -84,9 +76,7 @@ try:
 
 			if cant_muestras_recibidas >= 500 and cant_muestras_recibidas < 510:
 				if cant_muestras_recibidas == 500:
-					# Get the current time
 					current_time = datetime.now()
-					# Format the current time as a string
 					formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
 
 					print("tx llego a 500", formatted_time)

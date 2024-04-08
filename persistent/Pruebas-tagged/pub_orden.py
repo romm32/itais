@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#Prueba para el envío que se usó con sub_orden
 
 import zmq
 
