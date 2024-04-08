@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-# Este script fue escrito para obtener información de posición desde el GPS. La información
-# se enviará a través de socket a la función que quiera armar los mensajes NMEA a transmitir.
+# Script para probar la recepción de información GPS a través del socket.
 import zmq
 
 context = zmq.Context()
 socket = context.socket(zmq.SUB)
-socket.setsockopt_string(zmq.SUBSCRIBE, "")  # Subscribe to all topics
-socket.setsockopt(zmq.RECONNECT_IVL, 1000)  # Reconnect every 1 second
+socket.setsockopt_string(zmq.SUBSCRIBE, "")  
+socket.setsockopt(zmq.RECONNECT_IVL, 1000) 
 socket.connect("tcp://127.0.0.1:5570")
 
 topic_utc = "UTC"

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-# Este script fue escrito para obtener información de posición desde el GPS. La información
-# se enviará a través de socket a la función que quiera armar los mensajes NMEA a transmitir.
+# Versión antigua del script para obtener datos GPS.
 
 import serial
 import pynmea2 

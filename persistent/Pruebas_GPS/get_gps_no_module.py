@@ -34,12 +34,10 @@ while True:
     time_elapsed = current_utc_time - start_of_minute
     utc_second = time_elapsed.total_seconds()
             
-    # Print the information
-    #print(f"Latitude: {latitude}, Longitude: {longitude}, Speed: {speed_in_knots} knots, Course: {course}, UTC second: {utc_second}")
     dict = {"speed": speed_in_knots, "lon": longitude, "lat": latitude, "course": course, "UTC_sec": utc_second}
     socket.send_string(f"{dict}")
 
-    time.sleep(0.00001) # no cambia nada esto por ahora
+    time.sleep(0.00001) 
 
         
         

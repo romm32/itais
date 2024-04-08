@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+# Versión antigua del script para obtener datos GPS.
+
 from gps import *
 import time
 

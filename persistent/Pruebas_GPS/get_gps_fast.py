@@ -2,11 +2,18 @@
 
 # Este script fue escrito para obtener información de posición desde el GPS. La información
 # se enviará a través de socket a la función que quiera armar los mensajes NMEA a transmitir.
+# Puede utilizarse cuando el módulo GPS está conectado por USB.
 
 import serial
 import pynmea2 
 import zmq
 import time
+
+# Puede ser que haya problemas con esta línea dentro del Docker. Se tienen dos fuentes de error:
+# 1. Cambió el nombre del dispositivo. Puede ser ttyACM0, ttyACM1 o ttyS0. Para saber cuál es,
+# es posible ejecutar cat /dev/[nombre] y ver cuál de los tres funciona.
+# 2. No se tienen permisos sobre el dispositivo (esto podría afectar la prueba 1.). Ejecutar el siguiente
+# comando: sudo chmod 666 /dev/[nombre]
 
 serial_port = '/dev/ttyACM1'
 ser = serial.Serial(serial_port, baudrate=9600, timeout=0.00001)
@@ -31,7 +38,6 @@ while True:
     try:
     # Se lee una línea o un dato desde el GPS
         line = ser.readline().decode('utf-8').strip()
-        #print(line)
     except serial.SerialException as e:
         print(f"Serial exception occurred: {e}")
         continue
@@ -41,25 +47,21 @@ while True:
             # Se parsea con NMEA la línea leída, se generan las estructuras de datos
             # necesarias para la transmisión a través del socket, y se envía.
             packet = pynmea2.parse(line)
-            #print(packet)
+
             latitude = packet.latitude
             longitude = packet.longitude
             speed = packet.spd_over_grnd
-            if speed is None: # sometimes we don't have access to gps data
+            if speed is None: # A veces no tenemos datos de velocidad
                 speed_in_knots = 0
             else:    
-                speed_in_knots = speed*1.94384
+                speed_in_knots = speed*1.94384 # La velocidad viene en m/s
             course = packet.true_course
             if course is None:
                 course = 0
             gps_time_str = packet.timestamp
-            #gps_time_datetime = datetime.strptime(gps_time_str, "%Y-%m-%dT%H:%M:%S.%fZ")
             utc_second = gps_time_str.second
-			# Print the information
-            #print(f"Latitude: {latitude}, Longitude: {longitude}, Speed: {speed_in_knots} knots, Course: {course}, UTC second: {utc_second}")
             dict = {"speed": speed_in_knots, "lon": longitude, "lat": latitude, "course": course, "UTC_sec": utc_second}
             socket.send_string(f"{dict}")
-
 
         except pynmea2.ParseError as e:
             print(f"Error parsing NMEA sentence: {e}")
@@ -69,9 +71,7 @@ while True:
 
     else:
         socket.send_string(f"{dict}")
-        #print(f"Latitude: {latitude}, Longitude: {longitude}, Speed: {speed_in_knots} knots, Course: {course}, UTC second: {utc_second}")
     
-    time.sleep(0.00001) # no cambia nada esto por ahora
-
+    time.sleep(0.00001) 
         
         
