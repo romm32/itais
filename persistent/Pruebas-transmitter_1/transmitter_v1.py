@@ -1,9 +1,11 @@
 """
-Embedded Python Blocks:
-
-Each time this file is saved, GRC will instantiate the first class it finds
-to get ports and parameters of your block. The arguments to __init__  will
-be the parameters. All of them are required to have default values!
+Primera versión del bloque transmitter. Recibe un arrgelo de 2 posiciones que indica si
+se puede transmitir o no en el slot considerado (slot que debía estar dentro de los 
+candidatos). También recibe un entero que será la velocidad medida por el GPS. Según esta 
+velocidad se fijará el siguiente slot donde transmitir. 
+En este bloque se envían los 10 slots candidatos como arreglo. Ese arreglo lo recibía 
+Potumbral. También se enviaba un entero a messages con el tipo de mensaje que debía
+enviarse.
 """
 
 import numpy as np
@@ -12,14 +14,12 @@ import time
 from datetime import datetime, timedelta
 
 
-class blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
-    """Embedded Python Block example - a simple multiply const"""
+class blk(gr.sync_block):
 
-    def __init__(self):  # only default arguments here
-        """arguments to this function show up as parameters in GRC"""
+    def __init__(self):
         gr.sync_block.__init__(
             self,
-            name='Transmitter',   # will show up in GRC
+            name='Transmitter',
             in_sig=[(np.complex64,2), np.float32],
             out_sig=[(np.complex64,10), np.float32]
         )
@@ -54,7 +54,6 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         return(selected)
     
     def work(self, input_items, output_items):
-        """example: multiply with constant"""
         self.slot_y_puedo = input_items[0][0]
         
         if self.inicializando:
@@ -77,7 +76,7 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
             print("empiezan temporizadores")
             print("slot ", self.current_slot)
             
-            if input_items[1][0] > 2: #### verificar en qué unidad nos da la velocidad el gps
+            if input_items[1][0] > 2:
                 self.prox_18 = (self.inicio_18 + 1125)%2250 # transmito cada 30 seg
             else:
                 self.prox_18 = (self.inicio_18 + 2250*2) # transmito cada 3 min, ver abajo explicacion de por que solo sumo 2 mins
