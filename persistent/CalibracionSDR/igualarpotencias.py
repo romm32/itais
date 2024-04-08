@@ -6,7 +6,7 @@ para el cálculo de la potencia de las muestras.
 import numpy as np
 from gnuradio import gr
 
-# Bloque de Python utilizado al momento de calibrar el SDR con el analizador de espectros.
+# Bloque de Python utilizado inicialmente para calibrar el SDR con el analizador de espectros.
 
 
 class blk(gr.sync_block): 
