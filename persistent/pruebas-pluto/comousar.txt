@@ -1,0 +1,1 @@
+Prueba para verificar que es posible tener una instancia de un Pluto Source y un Pluto Sink en un mismo flowgraph de GNU Radio.
