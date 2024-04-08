@@ -1,9 +1,5 @@
 """
-Embedded Python Blocks:
-
-Each time this file is saved, GRC will instantiate the first class it finds
-to get ports and parameters of your block. The arguments to __init__  will
-be the parameters. All of them are required to have default values!
+Bloque de prueba de Sub_GPS
 """
 
 import numpy as np
@@ -16,7 +12,7 @@ class sub_gps(gr.sync_block):
         
         gr.sync_block.__init__(
             self,
-            name='SUBGPS',   # will show up in GRC
+            name='SUBGPS', 
             in_sig=[],
             out_sig=[(np.float32, 4), np.float32]
         )
@@ -27,7 +23,7 @@ class sub_gps(gr.sync_block):
     	
     	context = zmq.Context()
     	subscriber = context.socket(zmq.SUB)
-    	subscriber.connect("tcp://127.0.0.1:5600")  # Connect to the same port as in your GNU Radio script
+    	subscriber.connect("tcp://127.0.0.1:5600") 
     	subscriber.setsockopt_string(zmq.SUBSCRIBE, "")
     	
     	msj = subscriber.recv_string()
