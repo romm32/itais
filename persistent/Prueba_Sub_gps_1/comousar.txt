@@ -1,4 +1,4 @@
-Se prueba el funcionamiento del bloque "Sub_GPS". Se cuenta con un flowgraph de GNU Radio que permite probarlo.
+Se prueba el funcionamiento de una primera versión del bloque "Sub_GPS". Se cuenta con un flowgraph de GNU Radio que permite probarlo.
 Se cuenta con el código para el Python Block utilizado de prueba, además de dos scripts de Python. Uno de ellos
 permite una primera prueba con información de GPS falsa (get_fake_gps). El otro archivo debe ejecutarse de forma
 simultánea con algún script de obtención de datos del módulo GPS, de forma de probar la inyección de dicha información
