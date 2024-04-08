@@ -1,9 +1,6 @@
 """
-Embedded Python Blocks:
-
-Each time this file is saved, GRC will instantiate the first class it finds
-to get ports and parameters of your block. The arguments to __init__  will
-be the parameters. All of them are required to have default values!
+Primera versión del bloque "Messages". Es la que fue probada en esta prueba.
+No es idéntica a la versión final. Se toma código del proyecto "gr-aistx".
 """
 
 import numpy as np
@@ -11,14 +8,13 @@ from gnuradio import gr
 import pmt
 from datetime import datetime, timedelta
 
-class blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
-    """Embedded Python Block example - a simple multiply const"""
+class blk(gr.sync_block): 
+    """Primera versión del bloque "Messages"."""
 
-    def __init__(self, vessel_length = 18, vessel_beam = 14, vessel_name = "ROMA", vessel_type = 30):  # only default arguments here
-        """arguments to this function show up as parameters in GRC"""
+    def __init__(self, vessel_length = 18, vessel_beam = 14, vessel_name = "ROMA", vessel_type = 30):  
         gr.sync_block.__init__(
             self,
-            name='Messages',   # will show up in GRC
+            name='Messages',   
             in_sig=[np.float32, (np.float32, 5)],
             out_sig=[]
         )
@@ -38,7 +34,7 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         self.course = -1
         self.ts = -1
         
-        self.mmsi = 247320162 #Default. tiene que tener 9 dígitos
+        self.mmsi = 247320162 # Default. tiene que tener 9 dígitos
         self.payload = ""
         
         self.slots_per_minute = 2250
@@ -60,27 +56,25 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
             index = vocabolary.find(c)
             encoded_string += '{0:b}'.format(index).rjust(6,'0')
         return encoded_string
-        
-        
-    #We add a mask to tell python how long is our rapresentation (overwise on negative integers, it cannot do the complement 2).
+   
     def compute_long_lat (self, __long, __lat):
         _long = '{0:b}'.format(int(round(__long*600000)) & 0b1111111111111111111111111111).rjust(28,'0')
         _lat =  '{0:b}'.format(int(round(__lat*600000))  & 0b111111111111111111111111111).rjust(27,'0')
         return (_long, _lat)
         
     def encode_18(self, __mmsi, __speed, __long, __lat, __course, __ts):
-        _type = '{0:b}'.format(18).rjust(6,'0') # 18
-        _repeat = "00"	#repeat (directive to an AIS transceiver that this message should be rebroadcast.)
-        _mmsi = '{0:b}'.format(__mmsi).rjust(30,'0') # 30 bits (247320162)
+        _type = '{0:b}'.format(18).rjust(6,'0') 
+        _repeat = "00"	
+        _mmsi = '{0:b}'.format(__mmsi).rjust(30,'0') 
         _reserved = '0'*8
-        _speed = '{0:b}'.format(int(round(__speed*10))).rjust(10,'0')	# Speed over ground is in 0.1-knot resolution from 0 to 102 knots. value 1023 indicates speed is not available, value 1022 indicates 102.2 knots or higher.
-        _accurancy = '0' # > 10m
+        _speed = '{0:b}'.format(int(round(__speed*10))).rjust(10,'0')	
+        _accurancy = '0'
         
         (_long, _lat) = self.compute_long_lat(__long, __lat)
         
-        _course = '{0:b}'.format(int(round(__course*10))).rjust(12,'0') # 0.1 resolution. Course over ground will be 3600 (0xE10) if that data is not available.
-        _true_heading = '1'*9	# 511 (N/A)
-        _ts = '{0:b}'.format(__ts).rjust(6,'0') # Second of UTC timestamp.
+        _course = '{0:b}'.format(int(round(__course*10))).rjust(12,'0') 
+        _true_heading = '1'*9
+        _ts = '{0:b}'.format(__ts).rjust(6,'0') 
         
         _flags = '001000000'
         # '00': Regional reserved
@@ -93,29 +87,28 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         # '0': Raim flag
         
         _rstatus = '11100000000000000110'
-        # '11100000000000000110' : Radio status
         
         return _type+_repeat+_mmsi+_reserved+_speed+_accurancy+_long+_lat+_course+_true_heading+_ts+_flags+_rstatus
         
     def encode_24(self, __mmsi, __part, __vname="NAN", __callsign="NAN", __vsize1="18", __vsize2="14", __vtype=50):
-        _type = '{0:b}'.format(24).rjust(6,'0') # 24
-        _repeat = "00" # repeat (directive to an AIS transceiver that this message should be rebroadcast.)
-        _mmsi = '{0:b}'.format(__mmsi).rjust(30,'0') # 30 bits (247320162)
+        _type = '{0:b}'.format(24).rjust(6,'0') 
+        _repeat = "00" 
+        _mmsi = '{0:b}'.format(__mmsi).rjust(30,'0')
         if __part == "A":
             _part = "00"
             _vname = self.encode_string(__vname)
-            _padding = '0'*(156-6-2-30-2-len(_vname))		# 160 bits per RFC -> 4 bits padding added in Build_Frame_imple.cc
+            _padding = '0'*(156-6-2-30-2-len(_vname))
             return _type+_repeat+_mmsi+_part+_vname+_padding
         
         else:
             _part = "01"
-            _vtype = '{0:b}'.format(__vtype).rjust(8,'0')   #30 = fishing
-            _vendorID = "0"*42 #vendor ID
+            _vtype = '{0:b}'.format(__vtype).rjust(8,'0') 
+            _vendorID = "0"*42
             
             _tmp = self.encode_string(__callsign)
-            _callsign = _tmp + "0"*(42-len(_tmp)) #7 six-bit characters
+            _callsign = _tmp + "0"*(42-len(_tmp)) 
             
-            _hl=int(__vsize1)/2 # AIS antenna in the middle of the boat
+            _hl=int(__vsize1)/2 
             _hw=int(__vsize2)/2
             _half_length='{0:b}'.format(int(_hl)).rjust(9,'0')
             _half_width='{0:b}'.format(int(_hw)).rjust(6,'0')
@@ -134,7 +127,7 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         start_of_minute = current_utc_time.replace(second=0, microsecond=0)
         time_elapsed = current_utc_time - start_of_minute
         milliseconds_elapsed = time_elapsed.total_seconds() * 1000
-        slot_index = (milliseconds_elapsed)*self.slots_per_minute/60000 #Cantidad de slots desde que empezó el minuto.
+        slot_index = (milliseconds_elapsed)*self.slots_per_minute/60000 # Cantidad de slots desde que empezó el minuto.
         
         if (self.message == 18 and self.primera18):
             self. payload = self.encode_18(int(self.mmsi), float(self.speed), float(self.long), float(self.lat), float(self.course), int(self.ts))
