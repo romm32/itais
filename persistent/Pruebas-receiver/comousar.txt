@@ -1,0 +1,1 @@
+Se tienen flowgraphs de GNU Radio para probar el envío y la recepción de información a través de sockets en GNU Radio. Para esto, se tiene un script "pruebasrx" en el que se simula la presencia del bloque Transmitter.

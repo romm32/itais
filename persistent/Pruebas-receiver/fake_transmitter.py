@@ -1,9 +1,5 @@
 """
-Embedded Python Blocks:
-
-Each time this file is saved, GRC will instantiate the first class it finds
-to get ports and parameters of your block. The arguments to __init__  will
-be the parameters. All of them are required to have default values!
+Bloque que imita el funcionamiento de una versión inicial de Transmitter.
 """
 
 import numpy as np
@@ -11,19 +7,16 @@ from gnuradio import gr
 from datetime import datetime, timedelta
 
 
-class blk(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
-    """Embedded Python Block example - a simple multiply const"""
+class blk(gr.sync_block): 
 
-    def __init__(self, example_param=1.0):  # only default arguments here
-        """arguments to this function show up as parameters in GRC"""
+    def __init__(self, example_param=1.0):
         gr.sync_block.__init__(
             self,
-            name='Embedded Python Block',   # will show up in GRC
+            name='Embedded Python Block',  
             in_sig=[(np.float32, 2)],
             out_sig=[(np.complex64,10)]
         )
-        # if an attribute with the same name as a parameter is found,
-        # a callback is registered (properties work, too).
+
         self.NTT = 700
         self.candidatos = np.full(10, -1)
         self.slot_y_puedo = np.zeros(10) #[2, 2]
@@ -37,22 +30,13 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
         self.s_y_p_numero = 0
 
     def work(self, input_items, output_items):
-        """example: multiply with constant"""
         current_utc_time = datetime.utcnow()
         start_of_minute = current_utc_time.replace(second=0, microsecond=0)
         time_elapsed = current_utc_time - start_of_minute
         milliseconds_elapsed = time_elapsed.total_seconds() * 1000
-        self.current_slot = int((milliseconds_elapsed)*self.slots_per_minute/60000) #Cantidad de slots desde que empezó el minuto.
+        self.current_slot = int((milliseconds_elapsed)*self.slots_per_minute/60000) # Cantidad de slots desde que empezó el minuto.
         
         self.slot_y_puedo = input_items[0][0]
-        
-        #self.s_y_p_numero = int(input_items[0][0])
-
-        #if len(str(self.s_y_p_numero)) != 1:
-        #    self.slot_y_puedo[0] = int(str(self.s_y_p_numero)[0:len(str(self.s_y_p_numero))-1])
-        #else:
-        #    self.slot_y_puedo[0] = 0
-        #self.slot_y_puedo[1] = int(str(self.s_y_p_numero)[-1]) # slot y puedo
         
         if self.current_slot != self.ultimo_slot:
             self.ultimo_slot = self.current_slot
@@ -61,10 +45,6 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
             #print("s_y_p", self.slot_y_puedo)
             if self.current_slot in self.candidatos:
                 print("B", self.current_slot, input_items[0])
-            # and self.slot_y_puedo[0] == self.current_slot:
-                #print("s_y_p", self.slot_y_puedo)
-                #print(np.count_nonzero(self.slot_y_puedo[0]))
-                
 
         if self.slot_y_puedo[1] == 1 and self.slot_y_puedo[0] in self.candidatos and self.cambio:
             print(self.slot_y_puedo, "B")
