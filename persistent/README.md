@@ -1,6 +1,6 @@
 # Persistent folder
 
-Most of this project was developed inside a Docker environment. This meant that all data that wasn't specifically saved would be lost. For this reason, a _persistent_ folder (conveniently called "Persistent") was created. In this folder, you will find the code and flowgraphs for modular tests we ran. We also make the code for the simple simulator we wrote available. It was created to test the effects of adding different types of AIS stations to a certain channel configuration.
+Most of this project was developed inside a Docker environment. This meant that all data that wasn't specifically saved would be lost. For this reason, a _persistent_ folder (conveniently called "Persistent") was created. In this folder, you will find the code and flowgraphs for modular tests we ran. We also make available the code for the simple simulator we wrote. It was created to test the effects of adding different types of AIS stations to a certain channel configuration.
 
 A few disclaimers:
 
