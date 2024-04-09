@@ -124,7 +124,6 @@ RUN git clone -b upgrade-3.8 https://github.com/analogdevicesinc/gr-iio.git /hom
 RUN cd /home/gnuradio/gr-iio && cmake . && make && make install
 RUN ldconfig
 
-ADD gr-aistx /home/gnuradio/gr-aistx 
 ADD gr-itais /home/gnuradio/gr-itais
 
 RUN pip install pyserial
