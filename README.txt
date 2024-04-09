@@ -27,3 +27,6 @@ persistent (para que me apareciera afuera del docker en el sistema de
 archivos) y después la saqué de persistent y la puse en itais como carpeta
 externa. creo que no habría necesidad de volver a hacer esto en el futuro.
 por las dudas escribí la nota.
+
+aclarar que no hay interfaz grafica para los bloques.
+las carpetas que no se tocaron son: docs, grc. esas tienen cosas de nuestro proyecto pero nosotros no las modificamos
