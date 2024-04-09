@@ -125,7 +125,6 @@ void selector_39_impl::handle_msg_input_index(pmt::pmt_t msg)
         auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
         auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
 	std::cout << "Received new port value: " << new_port << " at " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
-//        printf("Transmitiendo en canal %u\n", new_port);
         if (new_port < d_num_inputs)
             set_input_index(new_port);
         else
@@ -162,10 +161,8 @@ void selector_39_impl::forecast(int noutput_items, gr_vector_int& ninput_items_r
     for (unsigned i = 0; i < ninputs; i++) {
         ninput_items_required[i] = 0;
     }
-    //ninput_items_required[d_input_index] = 256; // noutput_items;
     ninput_items_required[0] = 4096;
     ninput_items_required[1] = 4096;
-    //std::cout << "ninputreq: " << ninput_items_required[d_input_index] << "\n";
 }
 
 
