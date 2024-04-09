@@ -1,4 +1,4 @@
-﻿En el archivo Prueba_Potumbral.ipynb se encuentra una prueba del código utilizado en radio.py para poder calcular correctamente el umbral y medir la potencia actual del canal. Si bien en este archivo no se tendrán entradas reales en el canal se crean valores complejos para las muestras para corroborar que el cálculo se hace como fue pretendido (y como lo establece la norma).
+En el archivo Prueba_Potumbral.ipynb se encuentra una prueba del código utilizado en radio.py para poder calcular correctamente el umbral y medir la potencia actual del canal. Si bien en este archivo no se tendrán entradas reales en el canal se crean valores complejos para las muestras para corroborar que el cálculo se hace como fue pretendido (y como lo establece la norma).
 
 
 El código se encuentra comentado indicando cómo es que se crea el archivo con las muestras y cómo funciona la función que crea dicho archivo. En este archivo se explicarán los distintos casos de prueba y cómo los resultados arrojados por cada uno verificaban el funcionamiento deseado o despejaba un posible caso de falla. 
