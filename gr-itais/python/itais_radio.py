@@ -14,8 +14,6 @@ from gnuradio import analog
 import iio
 
 
-#hier block encapsulating all the signal processing after the source
-#could probably be split into its own file
 class itais_tx(gr.hier_block2):
     def __init__(self, rate):
         gr.hier_block2.__init__(self,
@@ -34,7 +32,7 @@ class itais_tx(gr.hier_block2):
         options[ "clockrec_gain" ] = 0.04
         options[ "omega_relative_limit" ] = 0.01
         options[ "bits_per_sec" ] = self._bits_per_sec
-        options[ "fftlen" ] = 1024 #trades off accuracy of freq estimation in presence of noise, vs. delay time.
+        options[ "fftlen" ] = 1024 
         options[ "samp_rate" ] = self._bits_per_sec * self._samples_per_symbol
 
         ### CHANNEL A
@@ -50,20 +48,6 @@ class itais_tx(gr.hier_block2):
                                                      -25000, # the center freq is 162 MHz, so this way we sample 161.975 MHz
                                                      rate)
         self.connect(self, self.rational_resampler_A, self.filter_A)
-        
-        # channel A ais messages reception
-        
-        #self.zmq_pub_A = zeromq.pub_sink(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5611', 1, False, -1)
-
-        
-        #self.demod_A = itais.ais_demod(options) #ais_demod takes in complex baseband and spits out 1-bit unpacked bitstream
-        #self.deframer_A = digital.hdlc_deframer_bp(11,64) #takes bytes, deframes, unstuffs, CRCs, and emits PDUs with frame contents
-        #self.nmea_A = itais.pdu_to_nmea("A") #turns data PDUs into NMEA sentences
-        
-        #self.connect(self.filter_A, self.demod_A, self.deframer_A)
-        #self.msg_connect(self.deframer_A, "out", self.nmea_A, "print")
-        
-        #self.connect(self.rational_resampler_A, self.zmq_pub_A)
         
         
         # channel A reception blocks
@@ -88,17 +72,6 @@ class itais_tx(gr.hier_block2):
                                                      rate)
         self.connect(self, self.rational_resampler_B, self.filter_B)
         
-        # channel B ais messages reception
-        #self.demod_B = itais.ais_demod(options) #ais_demod takes in complex baseband and spits out 1-bit unpacked bitstream
-        #self.deframer_B = digital.hdlc_deframer_bp(11,64) #takes bytes, deframes, unstuffs, CRCs, and emits PDUs with frame contents
-        #self.nmea_B = itais.pdu_to_nmea("B") #turns data PDUs into NMEA sentences
-        
-        #self.zmq_pub_B = zeromq.pub_sink(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5612', 1, False, -1)
-                
-        #self.connect(self.filter_B, self.demod_B, self.deframer_B)
-        #self.msg_connect(self.deframer_B, "out", self.nmea_B, "print")
-        #self.connect(self.rational_resampler_B, self.zmq_pub_B)
-        
         
         # channel B reception blocks
         self.blocks_complex_to_mag_squared_B = blocks.complex_to_mag_squared(1)
@@ -116,10 +89,6 @@ class itais_tx(gr.hier_block2):
         self.msg_connect((self.potumbral_B, 'slot_y_puedo'), (self.transmitter, 'slot_y_puedo_B'))
         self.connect((self.sub_gps, 1), (self.transmitter, 0)) # se considera la salida con velocidades del sub_gps y la entrada para velocidades del tx
 
-        # hay que agregar las salidas de transmitter que sean de tipo message, sacar las que tiene ahora,
-        # y acordarse de modificar la salida que va a messages (que probablemente pase a ser la 0).
-        # tambien va a haber que modificar potumbral (las entradas ponerlas como de mensajes, y cambiar
-        # los indices de entradas que se usen)
         self.msg_connect((self.transmitter, 'candidatos_A'), (self.potumbral_A, 'candidatos'))
         self.msg_connect((self.transmitter, 'candidatos_B'), (self.potumbral_B, 'candidatos'))
         self.msg_connect((self.transmitter, 'Mensajes'), (self.messages, 'Msg')) # se considera la salida 1 del tx, que avisa qué mensaje es relevante ahora mismo, y la entrada 0 de messages, que recibe pedids de mensajes.
@@ -128,17 +97,10 @@ class itais_tx(gr.hier_block2):
         
 
         ### TRANSMISSION        
-        #self.selector = itais.selector_itais()
 
         self.AISTX_Build_Frame = itais.Build_Frame(True, True, 'packet_len') # me parece que la primera entrada tiene que estar en false para que no se repita la trama enviada?
-        # self.rational_resampler_tx = filter.rational_resampler_ccc(
-        #         interpolation=20, # interpolamos por 5 para subir a 250 kHz, despues por 3 para subir a 750 kHz
-        #         decimation=1,
-        #         taps=None,
-        #         fractional_bw=0.4)
+
         self.digital_gmsk_mod = digital.gmsk_mod(int(self.fs/9600), bt=0.4, verbose=False, log=False) #Se fijan los mismos parámetros que en gr-aistx.
-        #self.blocks_selector = blocks.selector(gr.sizeof_gr_complex*1,1,0)
-        #self.blocks_selector.set_enabled(True)
         self.selector = itais.selector_39(gr.sizeof_gr_complex*1,0,0)
         self.selector.set_enabled(True)
         self.rational_resampler_tx1 = filter.rational_resampler_ccc(
@@ -156,10 +118,7 @@ class itais_tx(gr.hier_block2):
         self.blocks_multiply_A = blocks.multiply_vcc(1)
         self.blocks_multiply_B = blocks.multiply_vcc(1)
         self.blocks_multiply_const_A = blocks.multiply_const_cc(0.85)
-        #self.blocks_multiply_const_vxx_2 = blocks.multiply_const_cc(.45)
         self.blocks_multiply_const_B = blocks.multiply_const_cc(0.85)
-        #self.blocks_multiply_const_vxx_0 = blocks.multiply_const_cc(.45)
-        #self.blocks_add = blocks.add_vcc(1)
         self.analog_sig_source_A = analog.sig_source_c(self.fs, analog.GR_SIN_WAVE, -25000, 1, 0, 0)
         self.analog_sig_source_B = analog.sig_source_c(self.fs, analog.GR_SIN_WAVE, 25000, 1, 0, 0) 
                 
@@ -181,10 +140,8 @@ class itais_tx(gr.hier_block2):
         self.connect((self.blocks_multiply_const_A, 0), (self.selector, 0))
         self.connect((self.blocks_multiply_const_B, 0), (self.selector, 1))
         self.msg_connect((self.transmitter, 'canal'), (self.selector, 'iindex'))
-        #self.msg_connect((self.transmitter, 'canal'), (self.messages, 'Current_channel'))
-        #self.msg_connect((self.messages, 'canal_actual'), (self.selector, 'iindex'))
 
-        self.connect((self.selector, 0), (self.iio_pluto_sink, 0)) #(self.rational_resampler_tx1, 0), (self.rational_resampler_tx2, 0), (self.iio_pluto_sink, 0))
+        self.connect((self.selector, 0), (self.iio_pluto_sink, 0)) 
         
 
 class itais_clase (gr.top_block, pubsub):
@@ -319,9 +276,7 @@ class itais_clase (gr.top_block, pubsub):
         #src = iio.pluto_source()
 
         # frecuencia central en 162MHz porque itais_tx (al usar dos canales) directo nos lo traslada a -25kHz y +25kHz.
-        src = iio.pluto_source('ip:192.168.2.1', 162000000, 750000, 20000000, 32768, True, True, True, 'manual', 20, '', True)
-        #src.get_samp_rate = src.get_sample_rate #alias for UHD compatibility
-        
+        src = iio.pluto_source('ip:192.168.2.1', 162000000, 750000, 20000000, 32768, True, True, True, 'manual', 20, '', True)        
         
     else:
       #semantically detect whether it's ip.ip.ip.ip:port or filename

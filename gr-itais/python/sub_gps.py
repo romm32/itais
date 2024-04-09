@@ -30,7 +30,7 @@ class sub_gps(gr.sync_block):
         
         gr.sync_block.__init__(
             self,
-            name='sub_gps',   # will show up in GRC
+            name='sub_gps', 
             in_sig=[],
             out_sig=[(np.float32, 5), np.float32]
         )
@@ -42,7 +42,10 @@ class sub_gps(gr.sync_block):
     	socket = context.socket(zmq.SUB)
     	socket.setsockopt(zmq.RECONNECT_IVL, 1000)
     	socket.setsockopt_string(zmq.SUBSCRIBE, "")
-    	socket.connect("tcp://127.0.0.1:5600")  # Connect to the same port as in your GNU Radio script    	
+    	socket.connect("tcp://127.0.0.1:5600")  # Se conecta al socket que está definido en el script get_gps.
+												# Se realiza la conexión en cada ejecución del work porque
+												# no se puede inicializar el socket en el init (GNU Radio no
+												# lo permite).  	
     	msj = socket.recv_string()
     	data_dict = eval(msj)
     	
@@ -51,9 +54,7 @@ class sub_gps(gr.sync_block):
     	self.arr[2] = data_dict["lat"]
     	self.arr[3] = data_dict["course"]
     	self.arr[4] = data_dict["UTC_sec"]
-    	
-    	#dict = {"speed": speed, "lon": longitude, "lat": latitude, "course": course, "UTC_sec": utc_second}
-    	
+    	    	
     	output_items[0][:] = self.arr # velocidad, longitud, latitud, curso, ts second
     	output_items[1][:] = data_dict["speed"] # velocidad
     		

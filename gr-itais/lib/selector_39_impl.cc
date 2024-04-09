@@ -124,7 +124,7 @@ void selector_39_impl::handle_msg_input_index(pmt::pmt_t msg)
         auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
         auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
         auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
-	std::cout << "Received new port value: " << new_port << " at " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
+//	std::cout << "Received new port value: " << new_port << " at " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
         if (new_port < d_num_inputs)
             set_input_index(new_port);
         else

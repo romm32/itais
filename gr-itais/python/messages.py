@@ -33,14 +33,12 @@ from math import pi
 import itais
 import time
 
-class messages(gr.sync_block):  # other base classes are basic_block, decim_block, interp_block
-    """Embedded Python Block example - a simple multiply const"""
+class messages(gr.sync_block):  
 
-    def __init__(self, vessel_length = 8, vessel_beam = 4, vessel_name = "ROMA", vessel_type = 30):  # only default arguments here
-        """arguments to this function show up as parameters in GRC"""
+    def __init__(self, vessel_length = 8, vessel_beam = 4, vessel_name = "ROMA", vessel_type = 30):  
         gr.sync_block.__init__(
             self,
-            name='messages',   # will show up in GRC
+            name='messages', 
             in_sig=[(np.float32, 5)],
             out_sig=[]
         )
@@ -60,7 +58,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         self.course = -1
         self.ts = -1
         
-        self.mmsi = 123456789 #Default. tiene que tener 9 dígitos
+        self.mmsi = 123456789 # Default. tiene que tener 9 dígitos
         self.payload = ""
         
         self.slots_per_minute = 2250
@@ -76,24 +74,11 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         
         self.once = True
         self.payload_ceros = '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
-        #self.current_channel = 0
-        
-        #self.portCurrentChannel = 'Current_channel'
-        #self.message_port_register_in(pmt.intern(self.portCurrentChannel))
-        #self.set_msg_handler(pmt.intern("Current_channel"), self.process_message_channel)
-        
-        #self.portChannel_Cu = 'canal_actual'
-        #self.message_port_register_out(pmt.intern(self.portChannel_Cu))
         
         
     def process_message(self, message):
-        # Retrieve message payload and save it to a variable
-        self.message = pmt.to_python(message) # lista con los candidatos
-        
-    #def process_message_channel(self, message):
-        # Retrieve message payload and save it to a variable
-    #    self.current_channel = pmt.to_python(message)[1] # lista con los candidatos
-    #    print("llego canal a messages", self.current_channel)
+        # Se obtiene información a través del puerto de tipo mensaje. 
+        self.message = pmt.to_python(message) 
     
     def encode_string(self, string):
         vocabolary = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^- !\"#$%&'()*+,-./0123456789:;<=>?"
@@ -104,7 +89,6 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         return encoded_string
         
         
-    #We add a mask to tell python how long is our rapresentation (overwise on negative integers, it cannot do the complement 2).
     def compute_long_lat (self, __long, __lat):
         _long = '{0:b}'.format(int(round(__long*600000)) & 0b1111111111111111111111111111).rjust(28,'0')
         _lat =  '{0:b}'.format(int(round(__lat*600000))  & 0b111111111111111111111111111).rjust(27,'0')
@@ -165,7 +149,6 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
             return _type+_repeat+_mmsi+_part+_vtype+_vendorID+_callsign+_half_length+_half_length+_half_width+_half_width+"000000"
         
     def work(self, input_items, output_items):
-        #self.message = input_items[0][0]
         self.speed = input_items[0][0][0]
         self.long = input_items[0][0][1]
         self.lat = input_items[0][0][2]
@@ -176,7 +159,7 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
         start_of_minute = current_utc_time.replace(second=0, microsecond=0)
         time_elapsed = current_utc_time - start_of_minute
         milliseconds_elapsed = time_elapsed.total_seconds() * 1000
-        slot_index = (milliseconds_elapsed)*self.slots_per_minute/60000 #Cantidad de slots desde que empezó el minuto.
+        slot_index = (milliseconds_elapsed)*self.slots_per_minute/60000 # Cantidad de slots desde que empezó el minuto.
         
         if (self.once):
             self.once = False
@@ -222,20 +205,11 @@ class messages(gr.sync_block):  # other base classes are basic_block, decim_bloc
                 self.message = 50
                 print("mando 241")
         
-        elif (self.message == 50):
+        elif (self.message == 50): # Envío de mensaje Dummy
         	PMT_msg = pmt.to_pmt(self.payload_ceros)
         	self.message_port_pub(pmt.intern(self.portName), PMT_msg)
         	self.message = 0
-        	print("mando 0")
-        	
-        #elif (self.message == 50):
-        #    self.message = 0
-        #    time.sleep(10)
-            #PMT_msg = pmt.to_pmt(self.current_channel)
-            #self.message_port_pub(pmt.intern(self.portChannel_Cu), PMT_msg)
-        #    PMT_msg = pmt.cons(pmt.PMT_NIL, pmt.from_long(self.current_channel)) #pmt.intern(self.canal_actual)
-        #    self.message_port_pub(pmt.intern(self.portChannel_Cu), PMT_msg)
-        #    print("se manda el canal actual en messages ", time_elapsed.total_seconds()+10)            
+        	print("mando 0")      
         
         return (256)
         

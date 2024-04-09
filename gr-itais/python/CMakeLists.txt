@@ -37,11 +37,8 @@ GR_PYTHON_INSTALL(
     transmitter.py
     potumbral.py
     gmsk_sync.py
-    radio.py
     ais_demod.py
-    rf.py
-    itais_radio.py
-    selector_itais.py DESTINATION ${GR_PYTHON_DIR}/itais
+    itais_radio.py DESTINATION ${GR_PYTHON_DIR}/itais
 )
 
 ########################################################################
