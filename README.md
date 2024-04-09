@@ -1,12 +1,41 @@
-organización:
+# ITAIS project: Implementing a lowcost AIS transceiver using SDR technology
+This Gitlab repository contains the implementation of an AIS transceiver _out of tree_ module for GNU Radio 3.8. The project was carried out within the framework of the thesis of authors Romina García and Máximo Pirri, undergraduate students in the Faculty of Engineering of the University of the Republic. The software development is based on the ITU-R M.1371-5 specification for the Automatic Identification System (AIS) technology. Not all requirements are met. The detailed process of implementation, including functionalities, tests and results can be found in the documentation for the project (which will shortly be available online and referenced here). The thesis, as well as most of the comments in this Gitlab repository, are written in Spanish. Should anyone have any question, please do not hesitate to contact the authors.
 
-1. hablar del proyecto itais, citar nuestra tesis y nuestro paper tal vez. mencionar que esto es un transmisor que cumple ciertas cosas de la norma. decir que está muy basado en gr-ais y gr-aistx, citarlos y decir que se tomaron sus bloques.
+This project features new blocks created within the ITAIS project, as well as blocks or scripts previously available in other open source projects. Specifically, the general format of scripts and blocks uses [gr-ais](https://github.com/bistromath/gr-ais) as reference, including some unmodified code from said repository. Blocks and scripts from [a GNU Radio 3.8 version of gr-aistx](https://github.com/bmagistro/gr-aistx/tree/src-formatting) are also modified and used. New blocks were written in Python (_Transmitter, Messages, Sub_GPS, Potumbral_) or adapted in C++ (such as a modified version of the GNU Radio 3.9 _Selector_ block, that was inserted into GNU Radio 3.8). 
 
-2. dependencies: decir que hay dos opciones, o bajar docker (citar el tutorial) y correrlo dentro del entorno del docker, o bajar todas las dependencias una a una e instalarlo directo en alguna compu.
+## Dependencies
+### Software requirements
+Most of the development was done inside a Docker environment. The Dockerfile, as well as the _build_ and _run_ scripts, can be found in this repository. Working inside de Docker environment is called "Option 1" from now on in this documentation. This option requires no dependencies but to have [installed Docker](https://docs.docker.com/engine/install/) and have followed [the post installation steps](https://docs.docker.com/engine/install/linux-postinstall/). Users can also choose to test the code outside of a Docker environment. This will be referred to as "Option 2". Several dependencies need to be installed in order for everything to work smoothly. These dependencies are described, as well as installation references, in the "Option2_dependencies" file.
 
-3. installation: poner los comandos para clonar el gitlab y hacer el build de todo.
+### Hardware requirements
+There are no specific hardware requirements for the computer in which this code is running. However, we detail the devices in which the code was tested and presented good results. The best results were obtained using an Intel NUC with an i3 processor. This computer also 
+
+It is worth noting that an SDR device for transmission is needed, along with an extra SDR dongle if reception of messages wants to be carried out. The project was tested using an ADALM-PLUTO device for transmission and all following commands imply its usage. It is the only transmission SDR currently supported. This could be easily adapted in the _itais_radio_ script and you are encouraged to do so if you want to test the module using other SDR devices. As for reception, the code used is straight from the _gr-ais_ repository. This allows for use of RTL SDR dongles (which were used during testing of the module), along with other devices specified in their _radio_ script. 
+
+
+
+## Installation
+Installation steps are divided into two, according to the option chosen by the user.
+
+### Option 1 
+1. Clone the _itais_ repository.
+`git clone https://gitlab.fing.edu.uy/rominag/itais`
+
+2.
+
+### Option 2
+1. Once all the detailed dependencies in the "Option2_dependencies" file have been installed, this repository should be cloned.
+`git clone https://gitlab.fing.edu.uy/rominag/itais`
+
+
+## Usage instructions
 
 4. usage instructions: dar las dos opciones, decir que con el docker es necesario primero hacer lo de sh buiild.sh y lo de run, y que de la otra forma vas directo a los comandos. decir que es necesario correr el script del gps (si no tienen gps, pueden usar no gps module), luego el script del tx con el pluto conectado, y si quieren el script de gr-ais (que hay que descargar aparte) con un rtl sdr extra.
+
+## Contact information
+You can use the "Issues" section of this Gitlab repository to post any trouble you might find while trying to use this module. You can also email the authors to the following email addresses: rominag@fing.edu.uy (Romina García) and mpirri@fing.edu.uy (Máximo Pirri). Contact can be done in Spanish, English or German.
+
+
 
 
 después:
