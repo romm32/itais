@@ -14,6 +14,7 @@ A few disclaimers:
 - CalibracionSDR, used to calibrate the ADALM-PLUTO device in comparison to a spectrum analyzer. 
 - DemoGMSK, used to understand better the GMSK modulation scheme.
 - Prueba_Messages, used to test an early version of the "Messages" block.
+- Prueba_Potumbral, used to test an early version of the "Potumbral" block.
 - Prueba_Sub_gps, used to test an early verison of the "Sub_GPS" block.
 - Prueba_bloqueGNU, used to test GNU Radio's "Python block".
 - Pruebas_Elevar2, used to compare Potumbral's computation of instant power of samples to GNU Radio's "Complex to Mag2" block.
