@@ -125,6 +125,7 @@ RUN cd /home/gnuradio/gr-iio && cmake . && make && make install
 RUN ldconfig
 
 ADD gr-itais /home/gnuradio/gr-itais
+ADD GPS-communication /home/gnuradio/GPS-communication
 
 RUN pip install pyserial
 RUN pip install pynmea2
