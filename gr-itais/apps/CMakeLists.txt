@@ -22,8 +22,6 @@ include(GrPython)
 
 GR_PYTHON_INSTALL(
     PROGRAMS
-    ais_rx #
-    ais_tx #
     itais_tx
     DESTINATION bin
 )
