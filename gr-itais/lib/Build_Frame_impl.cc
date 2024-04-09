@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2024 trendmicro, bmagistro.
+ * Copyright 2024 trendmicro, bmagistro. Modified in the ITAIS project.
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,9 +133,6 @@ void Build_Frame_impl::pack(int orig_ascii, char* ret, int bits_per_byte)
     if (ascii > 39)
         ascii -= 8;
 
-    /*	if (DEBUG)*/
-    /*		printf ("\nAscii: orig=%d scaled=%d\n", orig_ascii, ascii);*/
-
     char binary[6];
     int y = 0;
 
@@ -165,8 +162,6 @@ void Build_Frame_impl::pack(int orig_ascii, char* ret, int bits_per_byte)
         ret[y] = binary[5 - y];
     ret[y] = '\0';
 
-    /*	if (DEBUG)*/
-    /*		printf("Binary = %s, Ret = %s\n", binary, ret );*/
 }
 
 void Build_Frame_impl::nrz_to_nrzi(char* data, int length)
@@ -257,13 +252,6 @@ void Build_Frame_impl::compute_crc(
     char temp[8];
     int datalen = len / 8;
 
-    //		// go to char (this can be optimized)
-    //		printf ("INPUT:");
-    //		for(int j=0;j<len;j++) {
-    //			buffer[j]=buffer[j]+0x30;
-    //			printf ("%x", buffer[j]); }
-    //		printf ("\n");
-
     char data[256];
     // this unpacks the data in preparation for calculating CRC
     for (int j = 0; j < datalen; j++) {
@@ -274,11 +262,8 @@ void Build_Frame_impl::compute_crc(
         crc = (crc >> 8) ^ crc_itu16_table[(crc ^ data[i]) & 0xFF];
 
     crc = (crc & 0xFFFF) ^ 0xFFFF;
-    //		printf("%X\n", crc);
 
     int2bin(crc, ret, 16);
-    //	 	printf ("CRC ASCII1 = %s\n", ret);
-    // dump_buffer(ret, 16);
 
     reverse_bit_order(ret, 16); // revert crc bit in byte
 
@@ -291,10 +276,6 @@ void Build_Frame_impl::compute_crc(
     for (int j = 0; j < 16; j++)
         ret[j] = ret[j] - 0x30;
 
-    //		if (DEBUG) {
-    //			printf("CRC 2=\n");
-    //			dump_buffer(ret,16);
-    //		}
 }
 
 void Build_Frame_impl::byte_packing(char* input_frame,
@@ -307,11 +288,7 @@ void Build_Frame_impl::byte_packing(char* input_frame,
         out_byte[i] = tmp[0] * 128 + tmp[1] * 64 + tmp[2] * 32 + tmp[3] * 16 +
                       tmp[4] * 8 + tmp[5] * 4 + tmp[6] * 2 + tmp[7];
 
-        // out_byte[i] =
-        // input_frame[i*8]*128+input_frame[i*8+1]*64+input_frame[i*8+2]*32+input_frame[i*8+3]*16+input_frame[i*8+4]*8+input_frame[i*8+5]*4+input_frame[i*8+6]*2+input_frame[i*8+7];
-        //			printf ("%X", out_byte[i]);
     }
-    //      printf("\n");
 }
 
 int Build_Frame_impl::calculate_output_stream_length(const gr_vector_int& ninput_items)
@@ -410,17 +387,10 @@ int Build_Frame_impl::work(int noutput_items,
         for (int i = 0; i < LEN_PAYLOAD; i++)
             payload[i] = sentence[i] - 48;
 
-        printf("Detected a payload which is *not* multiple of 8 (%d bits). Padding with "
-            "%d bits to %d\n",
-            LEN_PAYLOAD,
-            PADDING_TO_EIGHT,
-            LEN_PAYLOAD + PADDING_TO_EIGHT);
         memset(payload + LEN_PAYLOAD, 0x0, PADDING_TO_EIGHT);
 
         LEN_PAYLOAD += PADDING_TO_EIGHT; // update PAYLOAD LENGHT
     }
-
-    dump_buffer(payload, LEN_PAYLOAD);
 
     // crc
     char crc[16]; // 2 gnuradio bytes of CRC
@@ -434,6 +404,7 @@ int Build_Frame_impl::work(int noutput_items,
 
     // stuffing (payload + crc)
     
+    // generation of dummy message
     if (LEN_PAYLOAD == 155) {
         char stuffed_payload[LEN_FRAME_MAX];
         int LEN_STUFFED_PAYLOAD = stuff(payload, stuffed_payload, LEN_PAYLOAD + LEN_CRC);
@@ -470,9 +441,7 @@ int Build_Frame_impl::work(int noutput_items,
         auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
         auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
         auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
-        std::cout << "Sent new frame at: " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
-
-        //dump_buffer(frame, len_frame_real);
+        std::cout << "Sent dummy message\n"; //<< seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
 
         // Binary conversion (to use with GMSK mod's byte_to_symb
         byte_packing(frame, byte_frame, len_frame_real);
@@ -499,7 +468,7 @@ int Build_Frame_impl::work(int noutput_items,
             unsigned char byte_frame[LEN_FRAME_MAX / 8]; // PASTA
             memset(frame, 0x0, LEN_FRAME_MAX);
 
-            // headers
+            // headers. Preamble must begin with 0 in CSTDMA
             memcpy(frame, "\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1", LEN_PREAMBLE);
             memcpy(frame + LEN_PREAMBLE, "\0\1\1\1\1\1\1\0", LEN_START);
             // payload + crc
@@ -526,9 +495,7 @@ int Build_Frame_impl::work(int noutput_items,
             auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
             auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
             auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
-            std::cout << "Sent new frame at: " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
-
-            //dump_buffer(frame, len_frame_real);
+            std::cout << "Sent new message.\n";// << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
 
             // Binary conversion (to use with GMSK mod's byte_to_symb
             byte_packing(frame, byte_frame, len_frame_real);
@@ -548,7 +515,7 @@ int Build_Frame_impl::work(int noutput_items,
             unsigned char byte_frame[LEN_FRAME / 8]; // PASTA
             memset(frame, 0x0, LEN_FRAME);
 
-            // headers
+            // headers. Preamble must begin with 0 in CSTDMA
             memcpy(frame, "\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1", LEN_PREAMBLE);
             memcpy(frame + LEN_PREAMBLE, "\0\1\1\1\1\1\1\0", LEN_START);
             // payload + crc
@@ -570,9 +537,7 @@ int Build_Frame_impl::work(int noutput_items,
             auto seconds_elapsed = std::chrono::duration_cast<std::chrono::seconds>(time_since_minute_start).count();
             auto milliseconds_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_since_minute_start).count() % 1000;
             auto microseconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(time_since_minute_start).count() % 1000;
-            std::cout << "Sent new frame at: " << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
-
-            //dump_buffer(frame, len_frame_real);
+            std::cout << "Sent new message.\n"; // << seconds_elapsed << " seconds, " << milliseconds_elapsed << " milliseconds, and " << microseconds_elapsed << " microseconds since the current UTC minute started\n";
 
             // Binary conversion (to use with GMSK mod's byte_to_symb
             byte_packing(frame, byte_frame, len_frame_real);
