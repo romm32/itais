@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2024 gr-itais author.
+ * Copyright 2024 GNU Radio 3.9 block, adapted to GNU Radio 3.8 in the ITAIS project.
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
