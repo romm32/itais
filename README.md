@@ -32,21 +32,49 @@ git clone https://github.com/bistromath/gr-ais
 
 3. Build the Docker environment in the _itais_ folder. This will take a few minutes.
 
-`sh build.sh`
+```
+sh build.sh
+```
 
-4. Run the Docker environment.
+4. Run the Docker environment. The username inside is "gnuradio" and the password for sudo is also "gnuradio".
 
-`sh run.sh`
+```
+sh run.sh
+```
 
-5. The first time you use the Docker environment, you need to build the _gr-itais_ module. For this step, you need to use the _build_ folder that is already in this repository. The paths are correct for the Docker environment.
+5. The _build_ folder is already present in this repository, with the correct paths for the Docker environment. You need to build the module every time you run the Docker environment from scratch, but the _cmake_ command is not needed. The _make_ command will take a little long only the first time you run it (or if you ever modify the files inside the module). If you exit and reopen the Docker, it will take less time.
 
+```
+### Inside Docker 
 cd gr-itais
 cd build
+make
+sudo make install
+sudo ldconfig.
+```
+
+6. If you wish to use the receiver from _gr-ais_, you need to build said module from scratch inside the Docker environment. If you exit and reopen the Docker, there is no need to rerun the _cmake_ command.
+
+```
+### Inside Docker
+cd gr-ais
+mkdir build
+cd build
+cmake ../
+make
+sudo make install
+sudo ldconfig
+```
+
+7. Installation is complete. Remember some of the previous steps might be needed again in the future if you exit the Docker environment and reopen it. Please note that **all files that are not inside the _persistent_, the _gr-itais_ or the _gr-ais_ folders will be deleted if you exit the Docker.**
 
 ### Option 2
 1. Once all the detailed dependencies in the "Option2_dependencies" file have been installed, this repository should be cloned.
-`git clone https://gitlab.fing.edu.uy/rominag/itais`
 
+```
+git clone https://gitlab.fing.edu.uy/rominag/itais
+
+```
 
 ## Usage instructions
 
