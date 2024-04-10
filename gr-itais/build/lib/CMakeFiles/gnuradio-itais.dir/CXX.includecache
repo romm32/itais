@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/itais/api.h
+gnuradio/attributes.h
+-
+
+../include/itais/selector_39.h
+itais/api.h
+-
+gnuradio/block.h
+-
+
+/home/gnuradio/gr-itais/lib/selector_39_impl.cc
+config.h
+/home/gnuradio/gr-itais/lib/config.h
+gnuradio/io_signature.h
+-
+selector_39_impl.h
+/home/gnuradio/gr-itais/lib/selector_39_impl.h
+cstring
+-
+stdexcept
+-
+
+/home/gnuradio/gr-itais/lib/selector_39_impl.h
+itais/selector_39.h
+-
+gnuradio/thread/thread.h
+-
+

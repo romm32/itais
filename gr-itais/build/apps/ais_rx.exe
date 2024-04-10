@@ -1,0 +1,25 @@
+#!/usr/bin/python3
+#ais decoder, main app
+
+from gnuradio.eng_option import eng_option
+from optparse import OptionParser
+import itais
+
+import time
+import sys
+import socket
+
+def main():
+    # Create Options Parser
+    parser = OptionParser (option_class=eng_option, conflict_handler="resolve")
+    itais.radio.ais_radio.add_radio_options(parser)
+    (options, args) = parser.parse_args ()
+
+    tb = itais.radio.ais_radio(options)
+    tb.run()
+    tb.close()
+
+if __name__ == '__main__':
+    main()
+
+
