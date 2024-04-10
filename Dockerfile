@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
-MAINTAINER "Gonzalo Belcredi <gbelcredi fing.edu.uy>"
-# Based on https://github.com/git-artes/docker-gnuradio by Federico La Rocca <flarroca@fing.edu.uy>"
+MAINTAINER "Romina García, Máximo Pirri"
+# Based on https://github.com/git-artes/docker-gnuradio by Federico La Rocca <flarroca@fing.edu.uy> and https://gitlab.fing.edu.uy/comina/lab-integrador by Gonzalo Belcredi."
 
 ENV DEBIAN_FRONTEND=noninteractive
 
