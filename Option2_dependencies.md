@@ -1,4 +1,4 @@
-# Installation of the dependencies for Option 2.
+# Installation of the dependencies for Option 2
 The following commands are based on the Dockerfile used to develop the module. 
 
 ```
